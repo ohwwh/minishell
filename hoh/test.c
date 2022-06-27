@@ -5,7 +5,7 @@
 
 int main(void)
 {
-	char	str1[100] = "parent: ";
+	char	prompt[100] = "minishell-0.0$ ";
 	char	str2[100] = "child: ";
 	char	*pstr;
 	char	*cstr;
@@ -15,7 +15,7 @@ int main(void)
 		//write(1, str1, 8);
 		//printf("parent: ");
 		//read(0, str, 5);
-		pstr = readline(str1);
+		pstr = readline(prompt);
 		if (pstr[0] == 's')
 		{
 			pid = fork();
