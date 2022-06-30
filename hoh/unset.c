@@ -4,5 +4,5 @@ t_list env_list;
 
 int	main(void)
 {
-	
+    
 }

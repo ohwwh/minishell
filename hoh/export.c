@@ -37,14 +37,9 @@ char	**env_split_malloc(char *str)
 	j = 0;
     while (str[i ++] != 0)
 		j ++;
-	if (j)
-	{
-		ret[1] = (char *)malloc(sizeof(char) * (j + 1));
-		if (!ret[1])
-			return (env_split_clear(ret, 2));
-	}
-	else
-		ret[1] = 0;
+	ret[1] = (char *)malloc(sizeof(char) * (j + 1));
+	if (!ret[1])
+		return (env_split_clear(ret, 2));
 	return (ret);
 }
 
@@ -131,6 +126,16 @@ void	init_env(t_list **env_list, char *env[])
 		node = ft_lstnew((void *)content);
 		ft_lstadd_back(env_list, node);
 		i ++;
+	}
+}
+
+void	unset(t_list **env_list, char *key)
+{
+	t_list *node;
+	node = is_exist(env_list, key);
+	if (node)
+	{
+
 	}
 }
 
