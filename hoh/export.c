@@ -1,19 +1,6 @@
 #include "./libohw/includes/libft.h"
 #include <stdio.h>
 
-void	test_ft_lstclear(t_list **lst, void (*del)(void *))
-{
-	t_list	*delnode;
-
-	while (*lst)
-	{
-		delnode = *lst;
-		*lst = (*lst)-> next;
-		del(delnode -> content);
-		free(delnode);
-	}
-}
-
 char	**env_split_clear(char **ret, int index)
 {
 	int		i;
@@ -38,7 +25,8 @@ char	**env_split_malloc(char *str)
 	ret = (char **)malloc(sizeof(char *) * 2);
 	if (!ret)
 		return (0);
-    while (str[i] != '=' && str[i ++] != 0)
+    while (str[i] != '=' && str[i ++] != 0);
+
     ret[0] = (char *)malloc(sizeof(char) * (i + 1));
 	if (!ret[0])
 		return (env_split_clear(ret, 1));
@@ -93,27 +81,46 @@ void    print_node(void *content)
     char **str;
 
     str = (char **)content;
-    printf("key: %s\n", str[0]);
-    printf("value: %s\n", str[1]);
+	printf("%s=", str[0]);
+    printf("%s\n", str[1]);
 }
 
 void    delnode(void *content)
 {
     char    **str;
 
+	if (!content)
+		return ;
     str = (char **)content;
     free(str[0]);
     free(str[1]);
     free(str);
 }
 
-int main(int argc, char *argv[])
+void	init_env(t_list **env_list, char *env[])
+{
+	int	i;
+	char	**content;
+	t_list	*node;
+
+	i = 0;
+	while (env[i])
+	{
+		content = env_split(env[i]);
+		node = ft_lstnew((void *)content);
+		ft_lstadd_back(env_list, node);
+		i ++;
+	}
+}
+
+int main(int argc, char *argv[], char *env[])
 {
     t_list *env_list;
     t_list *node;
-    char    **content;
+    char    **content = 0;
 	int		i;
 
+	init_env(&env_list, env);
 	i = 1;
 	while (i < argc)
 	{
@@ -128,7 +135,5 @@ int main(int argc, char *argv[])
 		i ++;
 	}
 	ft_lstiter(env_list, &print_node);
-    test_ft_lstclear(&env_list, &delnode);
-	printf("%d\n", getpid());
-	while(1);
+    ft_lstclear(&env_list, &delnode);
 }

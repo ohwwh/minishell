@@ -1,6 +1,15 @@
 #include "./libohw/includes/libft.h"
 
+t_list env_list;
 
+void    print_env(void *content)
+{
+    char **str;
+
+    str = (char **)content;
+    printf("%s=", str[0]);
+    printf("%s\n", str[1]);
+}
 
 int main(int argc, char *argv[], char *env[])
 {
@@ -15,4 +24,5 @@ int main(int argc, char *argv[], char *env[])
         write(1, "\n", 1);
         i ++;
     }
+    ft_lstiter(&env_list, &print_env);
 }
