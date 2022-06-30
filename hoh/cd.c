@@ -1,10 +1,15 @@
 #include "minishell.h"
 
-int cd(int argc, char *argv[])
+
+
+int cd(t_list **env_list, char **command)
 {
-    if (argc == 1)
-        chdir("/~");
-    else if (chdir(argv[1]) == -1)
-        return (printf("cd: %s: No such file or directory\n", argv[1]));
+    char    *home;
+
+    home = get_env(*env_list, "HOME");
+    if (!command[1] || command[1][0] == '~')
+        chdir(home);
+    else if (chdir(command[1]) == -1)
+        return (printf("cd: %s: No such file or directory\n", command[1]));
     return (0);
 }

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*path;
+extern char	*path;
 
 char	**env_split_clear(char **ret, int index)
 {
@@ -87,23 +87,6 @@ void    delnode(void *content)
 	str = 0;
 }
 
-t_list	*is_exist(t_list *env_list, char *key)
-{
-	t_list	*ret;
-
-	ret = 0;
-	while (env_list && ret == 0)
-	{
-		if (!ft_strcmp(((char **)env_list -> content)[0], key))
-		{
-			ret = env_list;
-			break ;
-		}
-		env_list = env_list -> next;
-	}
-	return (ret);
-}
-
 void	init_env(t_list **env_list, char *env[])
 {
 	int	i;
@@ -122,7 +105,24 @@ void	init_env(t_list **env_list, char *env[])
 	}
 }
 
-int env_export(int argc, char *argv[], t_list **env_list)
+t_list	*is_exist(t_list *env_list, char *key)
+{
+	t_list	*ret;
+
+	ret = 0;
+	while (env_list && ret == 0)
+	{
+		if (!ft_strcmp(((char **)env_list -> content)[0], key))
+		{
+			ret = env_list;
+			break ;
+		}
+		env_list = env_list -> next;
+	}
+	return (ret);
+}
+
+int env_export(t_list **env_list, char **command)
 {
     t_list *node;
     char    **content;
@@ -130,13 +130,13 @@ int env_export(int argc, char *argv[], t_list **env_list)
 
 
 	i = 1;
-	while (i < argc)
+	while (command[i])
 	{
-		if (argv[i][0] == '=')
-			printf("export: '%s': not a valid identifier\n", argv[i]);
+		if (command[i][0] == '=')
+			printf("export: '%s': not a valid identifier\n", command[i]);
 		else
 		{
-			content = env_split(argv[i]);
+			content = env_split(command[i]);
 			node = is_exist(*env_list, content[0]);
 			if (!node)
 			{
@@ -155,8 +155,5 @@ int env_export(int argc, char *argv[], t_list **env_list)
 		}
 		i ++;
 	}
-	//ft_lstiter(env_list, &print_node);
-	//printf("%s\n", path);
-    //ft_lstclear(&env_list, &delnode);
 	return (0);
 }

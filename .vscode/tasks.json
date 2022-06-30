@@ -8,12 +8,15 @@
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
-				"${file}",
+				"minishell.c","cd.c","echo.c","env.c","exit.c","export.c","pwd.c","unset.c", "getenv.c",
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}",
 				"-lohw",
+				"-lreadline",
 				"-L./libohw",
-				"-I./libohw/incs"
+				"-L/Users/hoh/.brew/opt/readline/lib",
+				"-I./libohw/incs",
+				"-I/Users/hoh/.brew/opt/readline/include"
 			],
 			"options": {
 				"cwd": "${fileDirname}"

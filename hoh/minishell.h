@@ -7,13 +7,14 @@
 #include <readline/history.h>
 #include "./libohw/includes/libft.h"
 
-int cd(int argc, char *argv[]);
-int	pwd(int argc, char *argv[]);
-int echo(int argc, char *argv[]);
-int env(int argc, char *argv[], t_list **env_list);
+int cd(t_list **env_list, char **command);
+int	pwd(char **command);
+int echo(char **command);
+int env(t_list **env_list, char **command);
 void    shell_exit(int status, t_list **env_list);
-void	unset(int argc, char *argv[], t_list **env_list);
-int env_export(int argc, char *argv[], t_list **env_list);
+void	unset(t_list **env_list, char **command);
+int env_export(t_list **env_list, char **command);
 void    delnode(void *content);
 void	init_env(t_list **env_list, char *env[]);
 t_list	*is_exist(t_list *env_list, char *key);
+char    *get_env(t_list *env_list, char *key);

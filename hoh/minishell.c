@@ -2,25 +2,58 @@
 
 char	*path;
 
-int	execute_command(int argc, char *argv[], t_list **env_list, char *command)
+void	free_command(char **command)
+{
+	int	i;
+
+	i = 0;
+	while (command[i])
+		free(command[i ++]);
+	free(command);
+}
+
+int	excute_fork(t_list **env_list, char **command)
+{
+	char	**paths;
+	int		i;
+	int		pid;
+
+	i = 0;
+	pid = fork();
+	if (pid)
+	{
+		paths = ft_split(path, ':');
+		while (paths[i])
+		{
+			if (execve(paths[i], command, 0) == -1)
+				i ++;
+		}
+		free_command(paths);
+	}
+	return (0);
+}
+
+int	execute_command(t_list **env_list, char **command)
 {
 	int	ret;
 
 	ret = 0;
-	if (!ft_strcmp(command, "cd"))
-		cd(argc, argv);
-	if (!ft_strcmp(command, "echo"))
-		echo(argc, argv);
-	if (!ft_strcmp(command, "env"))
-		env(argc, argv, env_list);
-	if (!ft_strcmp(command, "exit"))
+	if (!ft_strcmp(command[0], "cd"))
+		cd(env_list, command);
+	else if (!ft_strcmp(command[0], "echo"))
+		echo(command);
+	else if (!ft_strcmp(command[0], "env"))
+		env(env_list, command);
+	else if (!ft_strcmp(command[0], "exit"))
 		shell_exit(0, env_list);
-	if (!ft_strcmp(command, "export"))
-		env_export(argc, argv, env_list);
-	if (!ft_strcmp(command, "pwd"))
-		pwd(argc, argv);
-	if (!ft_strcmp(command, "unset"))
-		unset(argc, argv, env_list);
+	else if (!ft_strcmp(command[0], "export"))
+		env_export(env_list, command);
+	else if (!ft_strcmp(command[0], "pwd"))
+		pwd(command);
+	else if (!ft_strcmp(command[0], "unset"))
+		unset(env_list, command);
+	else
+		excute_fork(env_list, command);
 	return (ret);
 }
 
@@ -38,32 +71,22 @@ int main(int argc, char *argv[], char *env[])
 	char	prompt[100] = "minishell-0.0$ ";
 	char	str2[100] = "child: ";
 	char	*pstr;
+	char	**command;
 	char	*cstr;
 	int 	pid;
 	t_list	*env_list;
 
+	printf("%d\n", getpid());
 	init_env(&env_list, env);
 	signal(SIGINT, handler);
 	while (1)
 	{
 		pstr = readline(prompt);
+		command = ft_split(pstr, ' ');
 		add_history(pstr);
-		if (pstr[0] == 's')
-		{
-			pid = fork();
-			if (pid > 0)
-			{
-				waitpid(pid, 0, 0);
-				free(pstr);
-			}
-			else
-				break ;
-		}
-		else
-			execute_command(argc, argv, &env_list, pstr);
+		execute_command(&env_list, command);
 		free(pstr);
-		ft_lstclear(&env_list, &delnode);
+		free_command(command);
 	}
-	cstr = readline(str2);
-	free(cstr);
+	ft_lstclear(&env_list, &delnode);
 }

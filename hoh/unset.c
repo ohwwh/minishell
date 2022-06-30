@@ -1,14 +1,14 @@
 #include "minishell.h"
 
-void	unset(int argc, char *argv[], t_list **env_list)
+void	unset(t_list **env_list, char **command)
 {
     int i;
 	t_list *node;
 
-    i = 1;
-    while (i < argc)
+    i = 0;
+    while (command[i])
     {
-        node = is_exist(*env_list, argv[i]);
+        node = is_exist(*env_list, command[i]);
         if (node)
             ft_lstdelnode(env_list, node, &delnode);
         i ++;
