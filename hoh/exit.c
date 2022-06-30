@@ -1,21 +1,7 @@
-#include "./libohw/includes/libft.h"
+#include "minishell.h"
 
-t_list env_list;
-
-void    delnode(void *content)
+void    shell_exit(int status, t_list **env_list)
 {
-    char    **str;
-
-	if (!content)
-		return ;
-    str = (char **)content;
-    free(str[0]);
-    free(str[1]);
-    free(str);
-}
-
-int exit(int status)
-{
-	ft_lstclear(&env_list, &delnode);
+	ft_lstclear(env_list, &delnode);
 	exit(status);
 }

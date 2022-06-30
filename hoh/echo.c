@@ -1,4 +1,4 @@
-#include "./libohw/includes/libft.h"
+#include "minishell.h"
 
 int	nflag(int i, char *argv[])
 {
@@ -24,7 +24,7 @@ int	nflag(int i, char *argv[])
 	return (0);
 }
 
-int	main(int argc, char *argv[])
+int	echo(int argc, char *argv[])
 {
 	int	i;
 	int	n;
@@ -46,4 +46,5 @@ int	main(int argc, char *argv[])
 	}
 	if (n == 0)
 		write(1, "\n", 1);
+	return (0);
 }

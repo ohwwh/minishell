@@ -1,5 +1,4 @@
-#include "./libohw/includes/libft.h"
-#include <stdio.h>
+#include "minishell.h"
 
 char	*path;
 
@@ -73,15 +72,6 @@ char    **env_split(char *str)
 	return (ret);
 }
 
-void    print_node(void *content)
-{
-    char **str;
-
-    str = (char **)content;
-	printf("%s=", str[0]);
-    printf("%s\n", str[1]);
-}
-
 void    delnode(void *content)
 {
     char    **str;
@@ -91,7 +81,10 @@ void    delnode(void *content)
     str = (char **)content;
     free(str[0]);
     free(str[1]);
+	str[0] = 0;
+	str[1] = 0;
     free(str);
+	str = 0;
 }
 
 t_list	*is_exist(t_list *env_list, char *key)
@@ -129,25 +122,13 @@ void	init_env(t_list **env_list, char *env[])
 	}
 }
 
-void	unset(t_list **env_list, char *key)
+int env_export(int argc, char *argv[], t_list **env_list)
 {
-	t_list *node;
-	node = is_exist(env_list, key);
-	if (node)
-	{
-
-	}
-}
-
-int main(int argc, char *argv[], char *env[])
-{
-    t_list *env_list;
     t_list *node;
     char    **content;
 	int		i;
 
 
-	init_env(&env_list, env);
 	i = 1;
 	while (i < argc)
 	{
@@ -155,12 +136,12 @@ int main(int argc, char *argv[], char *env[])
 			printf("export: '%s': not a valid identifier\n", argv[i]);
 		else
 		{
-			content = env_split(argv[i]); // 여기서 뭔가 문제가??
-			node = is_exist(env_list, content[0]);
+			content = env_split(argv[i]);
+			node = is_exist(*env_list, content[0]);
 			if (!node)
 			{
 				node = ft_lstnew((void *)content);
-				ft_lstadd_back(&env_list, node);	
+				ft_lstadd_back(env_list, node);
 			}
 			else
 			{
@@ -174,9 +155,8 @@ int main(int argc, char *argv[], char *env[])
 		}
 		i ++;
 	}
-	ft_lstiter(env_list, &print_node);
-	printf("%s\n", path);
-    ft_lstclear(&env_list, &delnode);
-	printf("%d\n", getpid());
-	while(1);
+	//ft_lstiter(env_list, &print_node);
+	//printf("%s\n", path);
+    //ft_lstclear(&env_list, &delnode);
+	return (0);
 }

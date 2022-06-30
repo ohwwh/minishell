@@ -1,6 +1,6 @@
-#include "./libohw/includes/libft.h"
+#include "minishell.h"
 
-int	main(int argc, char *argv[])
+int	pwd(int argc, char *argv[])
 {
 	char *pwd;
 
@@ -9,4 +9,5 @@ int	main(int argc, char *argv[])
 	write(1, "\n", 1);
 	free(pwd);
 	pwd = 0;
+	return (0);
 }
