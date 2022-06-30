@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:10 by jiheo             #+#    #+#             */
-/*   Updated: 2022/06/27 19:51:46 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/06/29 09:02:39 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 # include <stdbool.h>
 # include "Libft/libft.h"
 
+//	TODO:
+//		- parsing line
+//		- creating abstract syntax tree
+//		- error handling
+
 typedef enum e_error_type
 {
 	SYNTAX,
@@ -27,38 +32,34 @@ typedef enum e_error_type
 typedef enum e_token_type
 {
 	CMD,
-	WORD,
+	ARGS,
 	PIPE,
-	REDIR,
-	NONE,
+	REDIR_IN,
+	REDIR_OUT,
+	END,
 }	t_token_type;
 
 typedef struct s_token
 {
 	t_token_type	type;
 	char			*str;
+	struct s_token	*next;
 }	t_token;
 
-typedef struct s_map
+typedef struct s_token_list
 {
-	char	*key;
-	char	*value;
-}	t_map;
-
-t_map	*g_envs;
+	t_token	*head;
+	int		len;
+}	t_token_list;
 
 // parse.c
-t_token	*tokenize(const char *src);
+t_token_list	*tokenize(const char *src);
 
-// strings.c
-char	*single_strcpy(const char *src, int from, int to);
-char	*double_strcpy(const char *src, int from, int to);
-
-// envs.c
-char	*get_env(const char *key);
-
-// utils.c
-void	strcat(char **dst, const char *src);
+// token_list.c
+t_token_list	*new_token_list();
+void			destroy_token_list(t_token_list *l);
+t_token			*new_token(char *str, t_token_type t);
+void			append_token(t_token_list *l, t_token *ele);
 
 // errors.c
 void	exit_with_error(const char *msg, t_error_type et);

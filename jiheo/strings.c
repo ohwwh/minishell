@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   strings.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 16:26:07 by jiheo             #+#    #+#             */
-/*   Updated: 2022/06/27 20:06:45 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/06/28 13:38:12 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
-
-// TODO:
-//	malloc fail 처리 고민하기
 
 // single_strcpy 함수는 src 문자열에서 인덱스가 from ~ to인 전체 문자열을 반환
 char	*single_strcpy(const char *src, int from, int to)
@@ -37,7 +34,7 @@ char	*get_env_value(const char *src, int start_i, int end_i)
 	char	*res;
 	int		i;
 
-	key = (char *)malloc((end_i - start_i + 1) * sizeof(char));
+	key = (char *)malloc((end_i - start_i + 2) * sizeof(char));
 	if (key == NULL)
 		return (NULL);
 	i = 0;
@@ -46,7 +43,8 @@ char	*get_env_value(const char *src, int start_i, int end_i)
 		key[i] = src[i + start_i];
 		i++;
 	}
-	res = get_env(key);
+	key[i] = 0;
+	res = getenv(key);
 	free(key);
 	return (res);
 }

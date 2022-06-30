@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:03 by jiheo             #+#    #+#             */
-/*   Updated: 2022/06/27 19:49:14 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/06/28 17:14:31 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	test_parse(const char *s)
 		printf("str: %s\t", t[i].str);
 		if (t[i].type == CMD)
 			printf("type: cmd\n");
-		else if (t[i].type == WORD)
+		else if (t[i].type == ARGS)
 			printf("type: word\n");
 		else if (t[i].type == PIPE)
 			printf("type: pipe\n");
