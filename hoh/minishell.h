@@ -18,3 +18,4 @@ void    delnode(void *content);
 void	init_env(t_list **env_list, char *env[]);
 t_list	*is_exist(t_list *env_list, char *key);
 char    *get_env(t_list *env_list, char *key);
+char	**get_paths(char const *s, char c, char *command);
