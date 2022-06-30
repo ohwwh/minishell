@@ -1,6 +1,8 @@
 #include "./libohw/includes/libft.h"
 #include <stdio.h>
 
+char	*path;
+
 char	**env_split_clear(char **ret, int index)
 {
 	int		i;
@@ -97,6 +99,23 @@ void    delnode(void *content)
     free(str);
 }
 
+t_list	*is_exist(t_list *env_list, char *key)
+{
+	t_list	*ret;
+
+	ret = 0;
+	while (env_list && ret == 0)
+	{
+		if (!ft_strcmp(((char **)env_list -> content)[0], key))
+		{
+			ret = env_list;
+			break ;
+		}
+		env_list = env_list -> next;
+	}
+	return (ret);
+}
+
 void	init_env(t_list **env_list, char *env[])
 {
 	int	i;
@@ -107,6 +126,8 @@ void	init_env(t_list **env_list, char *env[])
 	while (env[i])
 	{
 		content = env_split(env[i]);
+		if (!ft_strcmp(content[0], "PATH"))
+			path = content[1];
 		node = ft_lstnew((void *)content);
 		ft_lstadd_back(env_list, node);
 		i ++;
@@ -117,8 +138,9 @@ int main(int argc, char *argv[], char *env[])
 {
     t_list *env_list;
     t_list *node;
-    char    **content = 0;
+    char    **content;
 	int		i;
+
 
 	init_env(&env_list, env);
 	i = 1;
@@ -128,12 +150,28 @@ int main(int argc, char *argv[], char *env[])
 			printf("export: '%s': not a valid identifier\n", argv[i]);
 		else
 		{
-			content = env_split(argv[i]);
-			node = ft_lstnew((void *)content);
-			ft_lstadd_back(&env_list, node);
+			content = env_split(argv[i]); // 여기서 뭔가 문제가??
+			node = is_exist(env_list, content[0]);
+			if (!node)
+			{
+				node = ft_lstnew((void *)content);
+				ft_lstadd_back(&env_list, node);	
+			}
+			else
+			{
+				free(((char **)node->content)[1]);
+				((char **)node->content)[1] = content[1];
+				if (!ft_strcmp(content[0], "PATH"))
+					path = content[1];
+				free(content[0]);
+				free(content);
+			}
 		}
 		i ++;
 	}
 	ft_lstiter(env_list, &print_node);
+	printf("%s\n", path);
     ft_lstclear(&env_list, &delnode);
+	printf("%d\n", getpid());
+	while(1);
 }

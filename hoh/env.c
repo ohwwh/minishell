@@ -23,6 +23,6 @@ int main(int argc, char *argv[], char *env[])
         ft_putstr_fd(env[i], 1);
         write(1, "\n", 1);
         i ++;
-    }
+    } //없애도 됨
     ft_lstiter(&env_list, &print_env);
 }

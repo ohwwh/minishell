@@ -10,7 +10,7 @@
             "request": "launch",
             "name": "Debug",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": ["shit=shit"],
+            "args": ["PATH=nooooo","PATH=yesssssss","PATH=yooooooo"],
             "cwd": "${workspaceFolder}"
         }
     ]
