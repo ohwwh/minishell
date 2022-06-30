@@ -41,7 +41,9 @@ int	execute_command(t_list **env_list, char **command, char *envp[])
 	int	ret;
 
 	ret = 0;
-	if (!ft_strcmp(command[0], "cd"))
+	if (*command == 0)
+		return (ret);
+	else if (!ft_strcmp(command[0], "cd"))
 		cd(env_list, command);
 	else if (!ft_strcmp(command[0], "echo"))
 		echo(command);
