@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:15 by jiheo             #+#    #+#             */
-/*   Updated: 2022/06/30 19:13:03 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/01 17:15:55 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 typedef enum e_node_type
 {
+	ROOT,
 	PIPE,
 	PRC,
 	REDIR,
@@ -40,23 +41,22 @@ typedef struct s_node
 	char			**arg;
 	struct s_node	*left;
 	struct s_node	*right;
-	t_meta			*meta;
 }	t_node;
 
 typedef struct s_tree
 {
-	t_node			*root;
-	struct s_tree	*next;
+	t_node	*root;
 }	t_tree;
 
-t_tree	*new_tree(int n);
+t_tree	*new_tree(void);
 void	destroy_nodes(t_node *n);
 void	destroy_tree(t_tree *t);
 t_node	*new_node(t_node_type nt);
-t_node	*get_empty_leaf(t_node *n);
+t_meta	*new_meta(char *s, int f, int t);
 
-int		count_pipes(t_meta *m);
-t_tree	*parse_to_tree(t_meta *m);
-void	parse_cl(t_meta *m, t_tree *n);
+t_node	*make_subtree(t_meta *m);
+t_tree	*parse_to_tree(char *s);
+void	pre_traversal(t_node *n, void (*f)(t_node *child_n));
+void	print_info(t_node *n);
 
 #endif // TREE_H

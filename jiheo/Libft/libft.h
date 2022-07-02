@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 21:07:08 by jiheo             #+#    #+#             */
-/*   Updated: 2021/11/22 15:01:09 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/01 17:11:28 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,19 @@
 # include "stdlib.h"
 # include "stdbool.h"
 
+typedef struct s_list_node
+{
+	void				*content;
+	struct s_list_node	*next;
+	struct s_list_node	*prev;
+}	t_list_node;
+
+
 typedef struct s_list
 {
-	void			*content;
-	struct s_list	*next;
+	t_list_node	*front;
+	t_list_node	*rear;
+	int			len;
 }			t_list;
 
 typedef long long		t_ll;
@@ -70,14 +79,13 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 
 // Bonus functions
-t_list	*ft_lstnew(void *content);
-void	ft_lstadd_front(t_list **lst, t_list *new);
-int		ft_lstsize(t_list *lst);
-t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_back(t_list **lst, t_list *new);
-void	ft_lstdelone(t_list *lst, void (*del)(void *));
-void	ft_lstclear(t_list **lst, void (*del)(void *));
-void	ft_lstiter(t_list *lst, void (*f)(void *));
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+t_list_node	*ft_new_node(void *item);
+t_list		*ft_lstnew(void);
+void		ft_lstadd_front(t_list *lst, void *item);
+int			ft_lstsize(t_list *lst);
+t_list_node	*ft_lstlast(t_list *lst);
+void		ft_lstadd_back(t_list *lst, void *item);
+void		ft_lstclear(t_list *lst, void (*del)(void *));
+void		ft_lstiter(t_list *lst, void (*f)(void *));
 
 #endif

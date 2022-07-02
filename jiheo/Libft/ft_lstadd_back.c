@@ -6,25 +6,31 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 12:34:12 by jiheo             #+#    #+#             */
-/*   Updated: 2021/11/11 14:51:08 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/01 20:41:32 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	ft_lstadd_back(t_list *lst, void *item)
 {
-	t_list	*back_ele;
+	t_list_node	*n;
 
 	if (lst == NULL)
 		return ;
-	if (*lst == NULL)
-	{
-		*lst = new;
+	n = ft_new_node(item);
+	if (n == NULL)
 		return ;
+	if (lst->front == NULL)
+	{
+		lst->front = n;
+		lst->rear = n;
 	}
-	back_ele = *lst;
-	while (back_ele->next != NULL)
-		back_ele = back_ele->next;
-	back_ele->next = new;
+	else
+	{
+		lst->rear->next = n;
+		n->prev = lst->rear;
+		lst->rear = n;
+	}
+	lst->len++;
 }

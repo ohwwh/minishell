@@ -6,24 +6,31 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:12 by jiheo             #+#    #+#             */
-/*   Updated: 2022/06/30 18:56:52 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/02 18:14:27 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tree.h"
 
-char	*range_strdup(const char *src, int from, int to)
+void	print_meta(t_meta *m)
+{
+	for (int i = m->from; i <= m->to; i++)
+		printf("%c", m->src[i]);
+	printf("\n");
+}
+
+char	*range_strdup(t_meta *m)
 {
 	char	*s;
 	int		i;
 
-	s = (char *)malloc((to - from + 2) * sizeof(char));
+	s = (char *)malloc((m->to - m->from + 2) * sizeof(char));
 	if (s == NULL)
 		return (NULL);
-	i = from;
-	while (i <= to)
+	i = m->from;
+	while (i <= m->to)
 	{
-		s[i - from] = src[i];
+		s[i - m->from] = m->src[i];
 		i++;
 	}
 	s[i] = 0;
@@ -35,94 +42,111 @@ bool	is_blank(char c)
 	return (c == ' ' || c == '\r' || c == '\n' || c == '\a' || c == '\t');
 }
 
-bool	is_seperator(char c)
+char	*_join(t_meta *m, bool is_env, char *res)
 {
-	return (c == ';' || c == '>' || c == '<' || c == '|' || is_blank(c));
-}
-
-char	*translate_env(const char *src, int from, int to)
-{
-	int		left = from;
-	int		right = from;
-	char	*res;
 	char	*tmp;
 	char	*dump;
 
-	res = NULL;
-	while (right <= to)
-	{
-		if (src[right] != '$')
-		{
-			while (right <= to && src[right] != '$')
-				right++;
-			tmp = ft_substr(src, (unsigned int)left, right - left);
-			dump = res;
-			res = ft_strjoin(res, tmp);
-			if (tmp != NULL)
-				free(tmp);
-			if (dump != NULL)
-				free(dump);
-			tmp = NULL;
-			dump = NULL;
-		}
-		if (src[right] == '$')
-		{
-			left = right + 1;
-			while (right <= to && ft_isalnum(src[++right]))
-				;
-			tmp = ft_substr(src, (unsigned int)left, right - left);
-			dump = res;
-			res = ft_strjoin(res, getenv(tmp));
-			if (tmp != NULL)
-				free(tmp);
-			if (dump != NULL)
-				free(dump);
-			tmp = NULL;
-			dump = NULL;
-		}
-		left = right;
-	}
+	tmp = ft_substr(m->src, (unsigned int)m->from, m->to - m->from);
+	dump = res;
+	if (is_env)
+		res = ft_strjoin(res, getenv(tmp));
+	else
+		res = ft_strjoin(res, tmp);
+	if (tmp != NULL)
+		free(tmp);
+	if (dump != NULL)
+		free(dump);
 	return (res);
 }
 
 static
-void	make_tree(t_node *node, int n)
+void	jump_string(const char *s, int *i)
 {
-	int	left_size;
-	int	right_size;
+	const char	c = s[*i];
 
-	if (n <= 0 || node == NULL)
-		return ;
-	if (n > 2)
-	{
-		node->left = new_node(PIPE);
-		node->right = new_node(PIPE);
-	}
-	else
-	{
-		node->left = new_node(PRC);
-		if (n == 2)
-			node->right = new_node(PRC);
-		return ;
-	}
-	left_size = (n - 2) / 2 + (n - 2) % 2;
-	left_size = (n - 2) / 2;
-	make_tree(node->left, left_size);
-	make_tree(node->right, right_size);
+	while (s[*i] && s[*i] != c)
+		(*i)++;
 }
 
-t_tree	*new_tree(int n)
+static
+void	jump_space(const char *s, int *i, int end)
+{
+	while (*i <= end && is_blank(s[*i]))
+		(*i)++;
+}
+
+char	*translate_line(char *s)
+{
+	t_meta	m;
+	int		i = 0;
+	char	*res = NULL;
+	char	*tmp;
+	char	*dump;
+
+	m.src = s;
+	while (s[i])
+	{
+		if (s[i] == '\'')
+		{
+			m.from = i;
+			while (s[i] && s[i] != '\'')
+				i++;
+			m.to = i;
+			res = _join(&m, false, res);
+		}
+		if (s[i] != '$')
+		{
+			m.from = i;
+			while (s[i] && s[i] != '$')
+				i++;
+			m.to = i;
+			res = _join(&m, false, res);
+		}
+		if (s[i] == '$')
+		{
+			m.from = ++i;
+			while (s[i] && ft_isalnum(s[i]))
+				i++;
+			m.to = i;
+			res = _join(&m, true, res);
+		}
+	}
+	return (res);
+}
+
+char	*getenv_from_meta(t_meta *m)
+{
+	char	*k;
+	char	*v;
+
+	k = range_strdup(m);
+	v = getenv(k);
+	free(k);
+	return (v);
+}
+
+t_meta	*new_meta(char *s, int f, int t)
+{
+	t_meta	*m;
+
+	m = (t_meta *)malloc(sizeof(t_meta));
+	if (m == NULL)
+		return (NULL);
+	m->from = f;
+	m->src = s;
+	m->to = t;
+	return (m);
+}
+
+t_tree	*new_tree(void)
 {
 	t_tree	*t;
 
 	t = (t_tree *)malloc(sizeof(t_tree));
 	if (t == NULL)
 		return (t);
-	t->next = NULL;
-	if (n == 0)
-		return (t);
 	t->root = new_node(PIPE);
-	make_tree(t->root, n);
 	return (t);
 }
 
@@ -131,7 +155,6 @@ void	destroy_tree(t_tree *t)
 	if (t == NULL)
 		return ;
 	destroy_nodes(t->root);
-	destroy_tree(t->next);
 }
 
 void    destroy_strings(char **strs)
@@ -167,110 +190,277 @@ t_node	*new_node(t_node_type nt)
 	return (n);
 }
 
-int		count_pipes(t_meta *m)
+char	**lst_to_arr(t_list *l)
 {
-	int		i;
-	char	c;
-	int		res;
+	char		**res;
+	t_list_node	*n;
+	int			i;
 
-	i = m->from;
-	res = 0;
-	while (i <= m->to)
+	res = (char **)malloc((l->len + 1) * sizeof(char *));
+	if (res == NULL)
+		return (NULL);
+	res[l->len] = NULL;
+	n = l->front;
+	i = 0;
+	while (n)
 	{
-		if (m->src[i] == ';')
-			return (res);
-		else if (m->src[i] == '\'' || m->src[i] == '"')
-		{
-			c = m->src[i++];
-			while (i <= m->to && m->src[i] != c)
-				i++;
-			if (i > m->to)
-				return (-1);
-		}
-		else
-		{
-			if (m->src[i] == '|')
-				res++;
-		}
-		i++;
+		res[i++] = (char *)n->content;
+		n = n->next;
 	}
 	return (res);
 }
 
-bool	is_leaf(t_node *n)
+char	*handle_quotes(t_meta *m, int *i)
 {
-	return (n->left == NULL && n->right == NULL && n->type != PIPE);
-}
+	char	c;
+	t_meta	tmp_m;
+	char	*src;
 
-t_node	*get_empty_leaf(t_node *n)
-{
-	if (n == NULL)
+	src = m->src;
+	c = src[*i];
+	tmp_m.src = src;
+	tmp_m.from = ++(*i);
+	while (*i <= m->to && src[*i] != c)
+		(*i)++;
+	if (!(src[*i]))
 		return (NULL);
-	if (is_leaf(n))
-		return (n);
-	else if (n->right == NULL)
-		return (get_empty_leaf(n->left));
+	tmp_m.to = *i - 1;
+	if (tmp_m.from > tmp_m.to)
+		return (NULL);
+	(*i)++;
+	return (range_strdup(&tmp_m));
 }
 
-t_tree	*parse_to_tree(t_meta *m)
+char	*handle_word(t_meta *m, int *i)
 {
-	t_tree	*t;
-	t_tree	*tmp_t;
-	t_meta	new_m;
+	t_meta	tmp_m;
+	char	*src;
+
+	src = m->src;
+	tmp_m.src = src;
+	tmp_m.from = *i;
+	while (*i <= m->to && !is_blank(src[*i]) && src[*i] != '>' && src[*i] != '<')
+		(*i)++;
+	tmp_m.to = *i - 1;
+	if (tmp_m.from > tmp_m.to)
+		return (NULL);
+	return (range_strdup(&tmp_m));
+}
+
+void	destroy_lst(t_list *lst)
+{
+	t_list_node	*n;
+	t_list_node	*target;
+
+	if (lst == NULL)
+		return ;
+	n = lst->front;
+	while (n)
+	{
+		target = n;
+		n = n->next;
+		free(target);
+		target = NULL;
+	}
+	free(lst);
+	lst = NULL;
+}
+
+t_node	*handle_cl(t_meta *m, int *i)
+{
+	bool 	cmd_flag;
+	t_node	*cl_node = NULL;
+	char	*tmp_s;
+	t_list	*arg_list = ft_lstnew();
+
+	cmd_flag = true;
+	while (*i <= m->to)
+	{
+		jump_space(m->src, i, m->to);
+		if (m->src[*i] == '\'' || m->src[*i] == '"')
+			tmp_s = handle_quotes(m, i);
+		else
+			tmp_s = handle_word(m, i);
+		if (cmd_flag && tmp_s)
+		{
+			cl_node = new_node(CL);
+			cl_node->cmd = tmp_s;
+			cmd_flag = false;
+		}
+		else if (tmp_s)
+			ft_lstadd_back(arg_list, (void *)tmp_s);
+		if (m->src[*i] == '>' || m->src[*i] == '<')
+			break ;
+	}
+	if (arg_list->len != 0)
+		cl_node->arg = lst_to_arr(arg_list);
+	destroy_lst(arg_list);
+	return (cl_node);
+}
+
+t_node	*handle_rd(t_meta *m, int *i)
+{
+	t_node	*rd_node = NULL;
+	t_node	*bridge_node;
+	t_node	*tmp_node;
+	char	*tmp_s;
+	t_meta	tmp_m;
+	t_list	*arg_list;
+
+	tmp_m.src = m->src;
+	tmp_m.to = m->to;
+	while (*i <= m->to)
+	{
+		arg_list = ft_lstnew();
+		jump_space(m->src, i, m->to);
+		if (m->src[*i] == '>' || m->src[*i] == '<')
+		{
+			tmp_node = new_node(REDIR);
+			tmp_node->cmd = (char *)malloc(sizeof(char) * 3);
+			if (tmp_node->cmd == NULL)
+			{
+				destroy_nodes(rd_node);
+				return (NULL);
+			}
+			tmp_node->cmd[0] = m->src[(*i)++];
+			tmp_node->cmd[1] = 0;
+			tmp_node->cmd[2] = 0;
+			if (m->src[*i - 1] == m->src[*i])
+				tmp_node->cmd[1] = m->src[(*i)++];
+			while (*i <= m->to && m->src[*i] != '>' && m->src[*i] != '<')
+			{
+				jump_space(m->src, i, m->to);
+				tmp_m.from = *i;
+				if (m->src[*i] == '\'' || m->src[*i] == '"')
+					tmp_s = handle_quotes(&tmp_m, i);
+				else
+					tmp_s = handle_word(&tmp_m, i);
+				ft_lstadd_back(arg_list, (void *)tmp_s);
+				(*i)++;
+			}
+			tmp_node->arg = lst_to_arr(arg_list);
+			destroy_lst(arg_list);
+			if (rd_node == NULL)
+				rd_node = tmp_node;
+			else
+			{
+				bridge_node = new_node(REDIR);
+				bridge_node->left = rd_node;
+				bridge_node->right = tmp_node;
+				rd_node = bridge_node;
+			}
+		}
+	}
+	return (rd_node);
+}
+
+t_node	*make_subtree(t_meta *m)
+{
+	t_node	*p;
+	t_node	*cl;
+	t_node	*rd;
 	int		i;
 
-	if (m->from >= m->to)
-		return (NULL);
-	t = new_tree(count_pipes(m) + 1);
-	if (t == NULL)
-		return ;
 	i = m->from;
-	while (i <= m->to)
+	cl = handle_cl(m, &i);
+	rd = handle_rd(m, &i);
+	if (cl == NULL && rd == NULL)
+		return (NULL);
+	else if (cl == NULL)
+		return (rd);
+	else if (rd == NULL)
+		return (cl);
+	else
 	{
-		if (m->src[i] == ';')
+		p = new_node(PRC);
+		p->left = cl;
+		p->right = rd;
+		return (p);
+	}
+}
+
+t_tree	*parse_to_tree(char *s)
+{
+	t_tree	*t;
+	t_node	*n;
+	t_node	*p;
+	t_meta	m;
+	int		i;
+	const int	len = ft_strlen(s);
+
+	t = new_tree();
+	if (t == NULL)
+		return (NULL);
+	i = -1;
+	n = NULL;
+	m.src = s;
+	while (s[++i])
+	{
+		jump_space(s, &i, len);
+		if (s[i] != '|')
 		{
-			new_m.from = i + 1;
-			new_m.to = m->to;
-			new_m.src = m->src;
-			tmp_t = parse_to_tree(&new_m);
-			t->next = tmp_t;
-			return (t);
+			m.from = i;
+			while (s[i] && s[i] != '|')
+			{
+				if (s[i] == '\'' || s[i] == '"')
+					jump_string(s, &i);
+				i++;
+			}
+			m.to = i - 1;
+			n = make_subtree(&m);
 		}
-		if (m->src[i] == '|')
+		if (s[i] == '|' || s[i] == 0)
 		{
-			new_m.from = m->from;
-			new_m.to = i - 1;
-			new_m.src = m->src;
-			parse_cl(&new_m, t);
+			if (n == NULL)
+				continue ;
+			if (t->root->left == NULL)
+				t->root->left = n;
+			else if (t->root->right == NULL)
+				t->root->right = n;
+			else
+			{
+				p = new_node(PIPE);
+				p->left = t->root;
+				p->right = n;
+				t->root = p;
+			}
 		}
+	}
+	return (t);
+}
+
+void	pre_traversal(t_node *n, void (*f)(t_node *child_n))
+{
+	if (n == NULL)
+		return ;
+	pre_traversal(n->left, f);
+	f(n);
+	pre_traversal(n->right, f);
+}
+
+void	print_info(t_node *n)
+{
+	int	i;
+
+	if (!(n && n->cmd && n->arg))
+		return ;
+	if (n->type == CL)
+		printf("type: COMMAND LINE\n");
+	else if (n->type == REDIR)
+		printf("type: REDIRECTION\n");
+	printf("cmd: %s\n", n->cmd);
+	i = 0;
+	while ((n->arg)[i])
+	{
+		printf("args[%d]: %s\n", i, (n->arg)[i]);
 		i++;
 	}
 }
 
-void	parse_cl(t_meta *m, t_tree *t)
+int	main(int argc, char **argv)
 {
-	int	i;
-	t_node	*cmd;
-	t_node	*rd;
+	t_tree	*t;
 
-	i = m->from;
-	while (i <= m->to)
-	{
-		if (is_blank(m->src[i]))
-			while (m->src[i] && is_blank(m->src[i]))
-				i++;
-		if (m->src[i] == '\'' || m->src[i] == '"')
-		{
-			char	c;
-			int		s_i;
-			while (m->src[i] && m->src[i] != c)
-				i++;
-			if (i >= m->to)
-			{
-				// syntax error: Invalid quotes
-				return ;
-			}
-			
-		}
-	}
+	t = parse_to_tree(translate_line(argv[1]));
+	pre_traversal(t->root, print_info);
 }
