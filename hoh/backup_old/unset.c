@@ -1,8 +1,21 @@
 #include "minishell.h"
 
-extern char *path;
+void	unset(t_list **env_list, char **command)
+{
+    int i;
+	t_list *node;
 
-void    unset(char ***envp, char **command)
+    i = 0;
+    while (command[i])
+    {
+        node = is_exist(*env_list, command[i]);
+        if (node)
+            ft_lstdelnode(env_list, node, &delnode);
+        i ++;
+    }
+}
+
+void    unset_new(char ***envp, char **command)
 {
     int i;
     int j;
@@ -13,7 +26,7 @@ void    unset(char ***envp, char **command)
     i = 1;
     while (command[i])
     {
-        idx = is_exist(*envp, command[i]);
+        idx = is_exist_new(*envp, command[i]);
         if (idx != -1)
         {
             j = 0;
@@ -27,20 +40,12 @@ void    unset(char ***envp, char **command)
                     j ++;
                 }
                 else
-                {
                     free((*envp)[k]);
-                    idx --;
-                }
                 k ++;   
             }
             new[j] = 0;
             free(*envp);
             *envp = new;
-            if (!ft_strncmp("PATH", command[i], 4))
-            {
-                free(path);
-                path = 0;
-            }
         }
         i ++;
     }

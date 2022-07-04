@@ -2,7 +2,7 @@
 
 char	*path;
 
-void	free_arr(char **command)
+void	free_command(char **command)
 {
 	int	i;
 
@@ -12,48 +12,31 @@ void	free_arr(char **command)
 	free(command);
 }
 
-int	excute_fork(char *envp[], char **command)
+int	excute_fork(t_list **env_list, char **command, char *envp[])
 {
 	char	**paths;
-	char	*org;
 	int		i;
-	int		flag;
 	int		pid;
 
 	i = 0;
-	flag = 0;
 	pid = fork();
 	if (!pid)
 	{
-		if (ft_strchr(command[0], '/'))
-		{
-			if (execve(command[0], command, envp) == -1)
-				return (printf("minishell: %s: No such File or directory\n", command[0]));
-		}
 		paths = get_paths(path, ':', command[0]);
-		org = command[0];
-		while (paths && paths[i])
+		while (paths[i])
 		{
 			command[0] = paths[i];
-			if (execve(paths[i], command, envp) != -1)
-			{
-				flag = 1;
-				break ;
-			}
-			else
+			if (execve(paths[i], command, envp) == -1)
 				i ++;
 		}
-		if (!flag)
-			printf("bash: %s: command not found\n", org);
-		free_arr(paths);
-		command[0] = org;
+		free_command(paths);
 	}
 	else
 		waitpid(pid, 0, 0);
 	return (0);
 }
 
-int	execute_command(char **envp[], char **command)
+int	execute_command(t_list **env_list, char **command, char *envp[])
 {
 	int	ret;
 
@@ -61,21 +44,21 @@ int	execute_command(char **envp[], char **command)
 	if (*command == 0)
 		return (ret);
 	else if (!ft_strcmp(command[0], "cd"))
-		cd(*envp, command);
+		cd(env_list, command);
 	else if (!ft_strcmp(command[0], "echo"))
 		echo(command);
 	else if (!ft_strcmp(command[0], "env"))
-		env(*envp, command);
+		env(env_list, command);
 	else if (!ft_strcmp(command[0], "exit"))
-		shell_exit(0, *envp);
+		shell_exit(0, env_list);
 	else if (!ft_strcmp(command[0], "export"))
-		env_export(envp, command);
+		env_export(env_list, command);
 	else if (!ft_strcmp(command[0], "pwd"))
 		pwd(command);
 	else if (!ft_strcmp(command[0], "unset"))
-		unset(envp, command);
+		unset(env_list, command);
 	else
-		excute_fork(*envp, command);
+		excute_fork(env_list, command, envp);
 	return (ret);
 }
 
@@ -98,17 +81,18 @@ int main(int argc, char *argv[], char *envp[])
 
 	env_list = 0;
 	printf("%d\n", getpid());
-	init_env(&envp_new, envp);
+	init_env(&env_list, envp);
 	signal(SIGINT, handler);
 	while (1)
 	{
 		pstr = readline(prompt);
 		command = ft_split(pstr, ' ');
 		add_history(pstr);
-		execute_command(&envp_new, command);
+		execute_command(&env_list, command, envp_new);
 		free(pstr);
-		free_arr(command);
+		free_command(command);
 	}
-	free_arr(envp_new);
-	free(path);
+	ft_lstclear(&env_list, &delnode);
+	//free_command(envp_new);
+	//free(path);
 }

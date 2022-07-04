@@ -2,158 +2,71 @@
 
 extern char	*path;
 
-char	**env_split_clear(char **ret, int index)
-{
-	int		i;
-
-	i = 0;
-	while (i < index)
-	{	
-		free(ret[i]);
-		i ++;
-	}
-	free(ret);
-	return (0);
-}
-
-char	**env_split_malloc(char *str)
-{
-	char	**ret;
-    int     i;
-    int     j;
-
-	i = 0;
-	ret = (char **)malloc(sizeof(char *) * 2);
-	if (!ret)
-		return (0);
-    while (str[i] != '=' && str[i ++] != 0);
-
-    ret[0] = (char *)malloc(sizeof(char) * (i + 1));
-	if (!ret[0])
-		return (env_split_clear(ret, 1));
-    if (str[i] == '=')
-        i ++;
-	j = 0;
-    while (str[i ++] != 0)
-		j ++;
-	ret[1] = (char *)malloc(sizeof(char) * (j + 1));
-	if (!ret[1])
-		return (env_split_clear(ret, 2));
-	return (ret);
-}
-
-char    **env_split(char *str)
-{
-	char	**ret;
-    int     i;
-    int     j;
-
-	i = 0;
-	ret = env_split_malloc(str);
-	if (!ret)
-	return (0);
-	while (str[i] != '=' && str[i] != 0)
-	{
-		ret[0][i] = str[i];
-		i ++;
-	}
-	ret[0][i] = 0;
-	if (str[i] == '=')
-        i ++;
-	j = 0;
-    while (str[i] != 0)
-	{
-		ret[1][j] = str[i];
-		i ++;
-		j ++;
-	}
-	if (ret[1])
-		ret[1][j] = 0;
-	return (ret);
-}
-
-void    delnode(void *content)
-{
-    char    **str;
-
-	if (!content)
-		return ;
-    str = (char **)content;
-    free(str[0]);
-    free(str[1]);
-	str[0] = 0;
-	str[1] = 0;
-    free(str);
-	str = 0;
-}
-
-void	init_env(t_list **env_list, char *env[])
+int	is_valid(char *command)
 {
 	int	i;
-	char	**content;
-	t_list	*node;
 
 	i = 0;
-	while (env[i])
+	if (command[0] == '=')
 	{
-		content = env_split(env[i]);
-		if (!ft_strcmp(content[0], "PATH"))
-			path = content[1];
-		node = ft_lstnew((void *)content);
-		ft_lstadd_back(env_list, node);
+		printf("export: '%s': not a valid identifier\n", command);
+		return (0);
+	}
+	while (command[i])
+	{
+		if (command[i] == '=')
+			break ;
 		i ++;
 	}
+	if (command[i] == 0)
+		return (0);
+	return (1);
 }
 
-t_list	*is_exist(t_list *env_list, char *key)
+int	env_export_string(char ***envp, char *command)
 {
-	t_list	*ret;
+	int		idx;
+	char	**new;
+	char	*new_command;
 
-	ret = 0;
-	while (env_list && ret == 0)
+	if (is_valid(command))
 	{
-		if (!ft_strcmp(((char **)env_list -> content)[0], key))
+		idx = is_exist(*envp, command);
+		new_command = ft_strdup(command);
+		if (idx == -1)
 		{
-			ret = env_list;
-			break ;
+			idx = 0;
+			new = (char **)malloc(sizeof(char *) * (count_env(*envp) + 2));
+			while ((*envp)[idx])
+			{
+				new[idx] = (*envp)[idx];
+				idx ++;
+			}
+			new[idx] = new_command;
+			new[idx + 1] = 0;
+			free(*envp);
+			*envp = new;
 		}
-		env_list = env_list -> next;
+		else
+		{
+			if (!ft_strncmp("PATH", new_command, 4))
+			{
+				free(path);
+				path = cut_value(new_command);
+			}
+			free((*envp)[idx]);
+			(*envp)[idx] = new_command;
+		}
 	}
-	return (ret);
+	return (0);
 }
 
-int env_export(t_list **env_list, char **command)
+int env_export(char ***envp, char **command)
 {
-    t_list *node;
-    char    **content;
 	int		i;
-
 
 	i = 1;
 	while (command[i])
-	{
-		if (command[i][0] == '=')
-			printf("export: '%s': not a valid identifier\n", command[i]);
-		else
-		{
-			content = env_split(command[i]);
-			node = is_exist(*env_list, content[0]);
-			if (!node)
-			{
-				node = ft_lstnew((void *)content);
-				ft_lstadd_back(env_list, node);
-			}
-			else
-			{
-				free(((char **)node->content)[1]);
-				((char **)node->content)[1] = content[1];
-				if (!ft_strcmp(content[0], "PATH"))
-					path = content[1];
-				free(content[0]);
-				free(content);
-			}
-		}
-		i ++;
-	}
+		env_export_string(envp, command[i ++]);
 	return (0);
 }
