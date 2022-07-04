@@ -8,7 +8,7 @@ void    redir_in_heredoc(char **command, char *end_str, char *envp[])
 	int		fd;
 
 	pstr = 0;
-    fd = open(temp, O_RDWR | O_CREAT | O_APPEND, S_IRUSR);
+    fd = open(temp, O_RDWR | O_TRUNC);
 	while (1)
 	{
 		pstr = readline("> ");
@@ -20,8 +20,8 @@ void    redir_in_heredoc(char **command, char *end_str, char *envp[])
 		write(fd, pstr, ft_strlen(pstr));
         write(fd, "\n", 1);
 		free(pstr);
+        pstr = 0;
 	}
-    remove("./temp_file");
 }
 
 int main(void)

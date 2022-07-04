@@ -10,14 +10,14 @@ int	redir_in(char **command, char *file, char *envp[])
 	execute_fork(envp, command);
 }
 
-int	redir_in_heredoc(char **command, char *end_str, char *envp[])
+void    redir_in_heredoc(char **command, char *end_str, char *envp[])
 {
 	char	*pstr;
 	char	temp[10] = "temp_file";
 	int		fd;
 
 	pstr = 0;
-    fd = open(temp, O_RDWR | O_CREAT | O_APPEND, S_IRUSR);
+    fd = open(temp, O_RDWR | O_TRUNC);
 	while (1)
 	{
 		pstr = readline("> ");
@@ -29,9 +29,8 @@ int	redir_in_heredoc(char **command, char *end_str, char *envp[])
 		write(fd, pstr, ft_strlen(pstr));
         write(fd, "\n", 1);
 		free(pstr);
+        pstr = 0;
 	}
-	redir_in(command, "./temp_file", envp);
-	remove("./temp_file");
 }
 
 int	redir_out(char **command, char *file, char *envp[])
