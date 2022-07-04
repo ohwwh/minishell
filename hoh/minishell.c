@@ -12,7 +12,7 @@ void	free_arr(char **command)
 	free(command);
 }
 
-int	excute_fork(char *envp[], char **command)
+int	execute_fork(char *envp[], char **command)
 {
 	char	**paths;
 	char	*org;
@@ -28,7 +28,7 @@ int	excute_fork(char *envp[], char **command)
 		if (ft_strchr(command[0], '/'))
 		{
 			if (execve(command[0], command, envp) == -1)
-				return (printf("minishell: %s: No such File or directory\n", command[0]));
+				return (printf("minishell: %s: %s\n", command[0], strerror(errno)));
 		}
 		paths = get_paths(path, ':', command[0]);
 		org = command[0];
@@ -41,10 +41,14 @@ int	excute_fork(char *envp[], char **command)
 				break ;
 			}
 			else
+			{
+				if (errno != 2)
+					break ;
 				i ++;
+			}
 		}
 		if (!flag)
-			printf("bash: %s: command not found\n", org);
+			printf("bash: %s: %s\n", org, strerror(errno));
 		free_arr(paths);
 		command[0] = org;
 	}

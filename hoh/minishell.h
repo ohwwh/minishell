@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <string.h>
 #include <signal.h>
+#include <fcntl.h>
+#include <errno.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "./libohw/includes/libft.h"
@@ -15,8 +18,8 @@ char	*cat_env(char *key, char *value);
 char	*get_value(char *envp[], char *key);
 char	*cut_value(char *str);
 char	**get_paths(char const *s, char c, char *command);
-int	shell_pipe(char **command1, char **command2, t_list *env_list, char *envp[]);
-int	excute_fork(char *envp[], char **command);
+int	shell_pipe(char **command1, char **command2, char *envp[]);
+int	execute_fork(char *envp[], char **command);
 void	free_arr(char **command);
 int env_export(char ***envp, char **command);
 int	env_export_string(char ***envp, char *command);
