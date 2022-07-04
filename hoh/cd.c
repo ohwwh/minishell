@@ -35,7 +35,10 @@ int cd(char *envp[], char **command)
 	else if (command[1][0] == '-')
 	{
 		if (is_exist(envp, "OLDPWD") == -1)
+		{
 			printf("minishell: cd: OLDPWD not set\n");
+			errno = EPERM;
+		}
 		else
 		{
 			temp = get_value(envp, "OLDPWD");
@@ -44,7 +47,7 @@ int cd(char *envp[], char **command)
 		}
 	}
 	else if (chdir(command[1]) == -1)
-		return (printf("cd: %s: No such file or directory\n", command[1]));
+		return (printf("cd: %s: %s\n", command[1], strerror(errno)));
 	set_pwd(envp);
 	return (0);
 }

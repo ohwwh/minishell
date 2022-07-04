@@ -2,14 +2,14 @@
 
 char	*path;
 
-void	free_arr(char **command)
+void	free_arr(char **arr)
 {
 	int	i;
 
 	i = 0;
-	while (command[i])
-		free(command[i ++]);
-	free(command);
+	while (arr[i])
+		free(arr[i ++]);
+	free(arr);
 }
 
 int	execute_fork(char *envp[], char **command)
@@ -79,7 +79,7 @@ int	execute_command(char **envp[], char **command)
 	else if (!ft_strcmp(command[0], "unset"))
 		unset(envp, command);
 	else
-		excute_fork(*envp, command);
+		execute_fork(*envp, command);
 	return (ret);
 }
 

@@ -9,6 +9,7 @@ int	is_valid(char *command)
 	i = 0;
 	if (command[0] == '=')
 	{
+		errno = EPERM;
 		printf("export: '%s': not a valid identifier\n", command);
 		return (0);
 	}
