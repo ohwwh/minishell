@@ -2,6 +2,20 @@
 
 extern char	*path;
 
+static void	ft_clear(char **ret, int index)
+{
+	int		i;
+
+	i = 0;
+	while (i < index)
+	{	
+		free(ret[i]);
+		i ++;
+	}
+	free(ret);
+	exit(ENOMEM);
+}
+
 int	is_valid(char *command)
 {
 	int	i;
@@ -34,10 +48,14 @@ int	env_export_string(char ***envp, char *command)
 	{
 		idx = is_exist(*envp, command);
 		new_command = ft_strdup(command);
+		if (!new_command)
+			shell_exit(ENOMEM, *envp);
 		if (idx == -1)
 		{
 			idx = 0;
 			new = (char **)malloc(sizeof(char *) * (count_env(*envp) + 2));
+			if (!new)
+				shell_exit(ENOMEM, *envp);
 			while ((*envp)[idx])
 			{
 				new[idx] = (*envp)[idx];
@@ -53,7 +71,7 @@ int	env_export_string(char ***envp, char *command)
 			if (!ft_strncmp("PATH", new_command, 4))
 			{
 				free(path);
-				path = cut_value(new_command);
+				path = cut_value(new_command, *envp);
 			}
 			free((*envp)[idx]);
 			(*envp)[idx] = new_command;

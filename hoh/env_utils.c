@@ -39,13 +39,15 @@ int	is_exist(char *envp[], char *key)
 	return (ret);
 }
 
-char	*cat_env(char *key, char *value)
+char	*cat_env(char *key, char *value, char *envp[])
 {
 	char	*ret;
 	int		i;
 	int		j;
 
 	ret = (char *)malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(value) + 2));
+	if (!ret)
+		shell_exit(ENOMEM, envp);
 	i = 0;
 	j = 0;
 	while (key[j])
@@ -66,7 +68,7 @@ char	*cat_env(char *key, char *value)
 	return (ret);
 }
 
-char	*cut_value(char *str)
+char	*cut_value(char *str, char *envp[])
 {
 	char	*ret;
 	int		j;
@@ -81,6 +83,8 @@ char	*cut_value(char *str)
 		j ++;
 	}
 	ret = (char *)malloc(sizeof(char) * (j - k));
+	if (!ret)
+		shell_exit(ENOMEM, envp);
 	k ++;
 	j = 0;
 	while (str[k])
@@ -116,7 +120,7 @@ char	*get_value(char *envp[], char *key)
 			j ++;
 		}
 		if (flag != -1)
-			return (cut_value(envp[i]));
+			return (cut_value(envp[i], envp));
 		i ++;
 	}
 	return (ret);

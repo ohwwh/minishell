@@ -9,13 +9,13 @@ static void	set_pwd(char *envp[])
 	pwd_idx = is_exist(envp, "PWD");
 	if (pwd_idx != -1)
 	{
-		temp = cut_value(envp[pwd_idx]);
-		temp2 = cat_env("OLDPWD", temp);
+		temp = cut_value(envp[pwd_idx], envp);
+		temp2 = cat_env("OLDPWD", temp, envp);
 		free(temp);
 		env_export_string(&envp, temp2);
 		free(temp2);
 		temp = getcwd(0, 1);
-		temp2 = cat_env("PWD", temp);
+		temp2 = cat_env("PWD", temp, envp);
 		free(temp);
 		env_export_string(&envp, temp2);
 		free(temp2);

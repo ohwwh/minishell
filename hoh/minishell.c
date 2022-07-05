@@ -30,7 +30,7 @@ int	execute_fork(char *envp[], char **command)
 			if (execve(command[0], command, envp) == -1)
 				return (printf("minishell: %s: %s\n", command[0], strerror(errno)));
 		}
-		paths = get_paths(path, ':', command[0]);
+		paths = get_paths(path, ':', command[0], envp);
 		org = command[0];
 		while (paths && paths[i])
 		{
@@ -98,9 +98,7 @@ int main(int argc, char *argv[], char *envp[])
 	char	*pstr;
 	char	**command;
 	char	**envp_new;
-	t_list	*env_list;
-
-	env_list = 0;
+	
 	printf("%d\n", getpid());
 	init_env(&envp_new, envp);
 	signal(SIGINT, handler);

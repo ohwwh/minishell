@@ -2,13 +2,30 @@
 
 extern char *path;
 
+static void	ft_clear(char **ret, int index)
+{
+	int		i;
+
+	i = 0;
+	while (i < index)
+	{	
+		free(ret[i]);
+		i ++;
+	}
+	free(ret);
+	exit(ENOMEM);
+}
+
 void	init_env(char **envp_new[], char *envp[])
 {
 	char	**new;
 	char	*new_element;
 	int		i;
+	char	dummy;
 
 	i = 0;
+	dummy = 'c';
+	path = &dummy;
 	new = (char **)malloc(sizeof(char *) * (count_env(envp) + 1));
 	while (envp[i])
 	{
@@ -20,6 +37,8 @@ void	init_env(char **envp_new[], char *envp[])
 			(envp[i]) ++;
 			path = ft_strdup(envp[i]);
 		}
+		if (!path || !new_element)
+			ft_clear(new, i);
 		new[i] = new_element;
 		i ++;
 	}
