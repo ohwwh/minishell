@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:15 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/01 17:15:55 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/04 19:08:27 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ typedef struct s_meta
 typedef struct s_node
 {
 	t_node_type		type;
-	char			*cmd;
-	char			**arg;
+	char			**data;
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;

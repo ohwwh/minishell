@@ -6,11 +6,17 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:12 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/02 18:14:27 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/05 12:55:51 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tree.h"
+
+//	TODO:
+//		- Handle memory leak ✅
+//		- Null guard
+//		- Error handling
+//		- Signal handling
 
 void	print_meta(t_meta *m)
 {
@@ -115,17 +121,6 @@ char	*translate_line(char *s)
 	return (res);
 }
 
-char	*getenv_from_meta(t_meta *m)
-{
-	char	*k;
-	char	*v;
-
-	k = range_strdup(m);
-	v = getenv(k);
-	free(k);
-	return (v);
-}
-
 t_meta	*new_meta(char *s, int f, int t)
 {
 	t_meta	*m;
@@ -161,6 +156,7 @@ void    destroy_strings(char **strs)
 {
 	int     i;
 
+	i = 0;
 	while (strs && strs[i] != NULL)
 		free(strs[i++]);
 }
@@ -171,9 +167,8 @@ void	destroy_nodes(t_node *n)
 		return ;
 	destroy_nodes(n->left);
 	destroy_nodes(n->right);
-	free(n->cmd);
-	destroy_strings(n->arg);
-	free(n->arg);
+	destroy_strings(n->data);
+	free(n->data);
 	free(n);
 }
 
@@ -182,9 +177,8 @@ t_node	*new_node(t_node_type nt)
 	t_node  *n;
 
 	n = (t_node *)malloc(sizeof(t_node));
-	n->arg = NULL;
+	n->data = NULL;
 	n->type = nt;
-	n->cmd = NULL;
 	n->left = NULL;
 	n->right = NULL;
 	return (n);
@@ -266,34 +260,42 @@ void	destroy_lst(t_list *lst)
 	lst = NULL;
 }
 
+char	*handle_rd_cmd(t_meta *m, int *i)
+{
+	t_node	*s;
+	t_meta	tmp_m;
+
+	if (m->src[*i] != '<' && m->src[*i] != '>')
+		return (NULL);
+	tmp_m.src = m->src;
+	tmp_m.from = *i;
+	(*i)++;
+	if (m->src[*i - 1] == m->src[*i])
+		(*i)++;
+	tmp_m.to = *i - 1;
+	return (range_strdup(&tmp_m));
+}
+
 t_node	*handle_cl(t_meta *m, int *i)
 {
-	bool 	cmd_flag;
 	t_node	*cl_node = NULL;
-	char	*tmp_s;
 	t_list	*arg_list = ft_lstnew();
 
-	cmd_flag = true;
 	while (*i <= m->to)
 	{
 		jump_space(m->src, i, m->to);
 		if (m->src[*i] == '\'' || m->src[*i] == '"')
-			tmp_s = handle_quotes(m, i);
+			ft_lstadd_back(arg_list, (void *)handle_quotes(m, i));
 		else
-			tmp_s = handle_word(m, i);
-		if (cmd_flag && tmp_s)
-		{
-			cl_node = new_node(CL);
-			cl_node->cmd = tmp_s;
-			cmd_flag = false;
-		}
-		else if (tmp_s)
-			ft_lstadd_back(arg_list, (void *)tmp_s);
+			ft_lstadd_back(arg_list, (void *)handle_word(m, i));
 		if (m->src[*i] == '>' || m->src[*i] == '<')
 			break ;
 	}
 	if (arg_list->len != 0)
-		cl_node->arg = lst_to_arr(arg_list);
+	{
+		cl_node = new_node(CL);
+		cl_node->data = lst_to_arr(arg_list);
+	}
 	destroy_lst(arg_list);
 	return (cl_node);
 }
@@ -303,7 +305,6 @@ t_node	*handle_rd(t_meta *m, int *i)
 	t_node	*rd_node = NULL;
 	t_node	*bridge_node;
 	t_node	*tmp_node;
-	char	*tmp_s;
 	t_meta	tmp_m;
 	t_list	*arg_list;
 
@@ -315,31 +316,22 @@ t_node	*handle_rd(t_meta *m, int *i)
 		jump_space(m->src, i, m->to);
 		if (m->src[*i] == '>' || m->src[*i] == '<')
 		{
-			tmp_node = new_node(REDIR);
-			tmp_node->cmd = (char *)malloc(sizeof(char) * 3);
-			if (tmp_node->cmd == NULL)
-			{
-				destroy_nodes(rd_node);
-				return (NULL);
-			}
-			tmp_node->cmd[0] = m->src[(*i)++];
-			tmp_node->cmd[1] = 0;
-			tmp_node->cmd[2] = 0;
-			if (m->src[*i - 1] == m->src[*i])
-				tmp_node->cmd[1] = m->src[(*i)++];
+			ft_lstadd_back(arg_list, (void *)handle_rd_cmd(m, i));
 			while (*i <= m->to && m->src[*i] != '>' && m->src[*i] != '<')
 			{
 				jump_space(m->src, i, m->to);
 				tmp_m.from = *i;
 				if (m->src[*i] == '\'' || m->src[*i] == '"')
-					tmp_s = handle_quotes(&tmp_m, i);
+					ft_lstadd_back(arg_list, (void *)handle_quotes(&tmp_m, i));
 				else
-					tmp_s = handle_word(&tmp_m, i);
-				ft_lstadd_back(arg_list, (void *)tmp_s);
+					ft_lstadd_back(arg_list, (void *)handle_word(&tmp_m, i));
 				(*i)++;
 			}
-			tmp_node->arg = lst_to_arr(arg_list);
-			destroy_lst(arg_list);
+			if (arg_list->len != 0)
+			{
+				tmp_node = new_node(REDIR);
+				tmp_node->data = lst_to_arr(arg_list);
+			}
 			if (rd_node == NULL)
 				rd_node = tmp_node;
 			else
@@ -350,6 +342,7 @@ t_node	*handle_rd(t_meta *m, int *i)
 				rd_node = bridge_node;
 			}
 		}
+		destroy_lst(arg_list);
 	}
 	return (rd_node);
 }
@@ -373,8 +366,8 @@ t_node	*make_subtree(t_meta *m)
 	else
 	{
 		p = new_node(PRC);
-		p->left = cl;
-		p->right = rd;
+		p->left = rd;
+		p->right = cl;
 		return (p);
 	}
 }
@@ -391,10 +384,10 @@ t_tree	*parse_to_tree(char *s)
 	t = new_tree();
 	if (t == NULL)
 		return (NULL);
-	i = -1;
+	i = 0;
 	n = NULL;
 	m.src = s;
-	while (s[++i])
+	while (s[i])
 	{
 		jump_space(s, &i, len);
 		if (s[i] != '|')
@@ -409,23 +402,24 @@ t_tree	*parse_to_tree(char *s)
 			m.to = i - 1;
 			n = make_subtree(&m);
 		}
-		if (s[i] == '|' || s[i] == 0)
+		else
+			i++;
+		if (n == NULL) // syntax error: found pipeline with no command line
+			continue ;
+		if (t->root->left == NULL)
+			t->root->left = n;
+		else if (t->root->right == NULL)
+			t->root->right = n;
+		else
 		{
-			if (n == NULL)
-				continue ;
-			if (t->root->left == NULL)
-				t->root->left = n;
-			else if (t->root->right == NULL)
-				t->root->right = n;
-			else
-			{
-				p = new_node(PIPE);
-				p->left = t->root;
-				p->right = n;
-				t->root = p;
-			}
+			p = new_node(PIPE);
+			p->left = t->root;
+			p->right = n;
+			t->root = p;
 		}
+		n = NULL;
 	}
+	free(s);
 	return (t);
 }
 
@@ -442,17 +436,17 @@ void	print_info(t_node *n)
 {
 	int	i;
 
-	if (!(n && n->cmd && n->arg))
+	if (!(n && n->data && n->data[0]))
 		return ;
 	if (n->type == CL)
 		printf("type: COMMAND LINE\n");
 	else if (n->type == REDIR)
 		printf("type: REDIRECTION\n");
-	printf("cmd: %s\n", n->cmd);
-	i = 0;
-	while ((n->arg)[i])
+	printf("cmd: %s\n", n->data[0]);
+	i = 1;
+	while ((n->data)[i])
 	{
-		printf("args[%d]: %s\n", i, (n->arg)[i]);
+		printf("args[%d]: %s\n", i, (n->data)[i]);
 		i++;
 	}
 }
@@ -463,4 +457,5 @@ int	main(int argc, char **argv)
 
 	t = parse_to_tree(translate_line(argv[1]));
 	pre_traversal(t->root, print_info);
+	destroy_tree(t);
 }

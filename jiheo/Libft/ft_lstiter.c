@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 14:32:28 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/01 11:23:16 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/04 19:02:23 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
 	t_list_node	*n;
 
-	if (lst == NULL)
+	if (lst == NULL || f == NULL)
 		return ;
 	n = lst->front;
 	while (n)

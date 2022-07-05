@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 12:29:12 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/01 11:18:57 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/04 19:02:05 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_lstadd_front(t_list *lst, void *item)
 {
 	t_list_node	*n;
 
-	if (lst == NULL)
+	if (lst == NULL || item == NULL)
 		return ;
 	n = ft_new_node(item);
 	if (n == NULL)
