@@ -14,9 +14,11 @@
 				"-lohw",
 				"-lreadline",
 				"-L./libohw",
-				"-L/opt/homebrew/opt/readline/lib",
+				//"-L/opt/homebrew/opt/readline/lib",
+				"-L/Users/hoh/.brew/opt/readline/lib",
 				"-I./libohw/incs",
-				"-I/opt/homebrew/opt/readline/include"
+				//"-I/opt/homebrew/opt/readline/include",
+				"-I/Users/hoh/.brew/opt/readline/include"
 			],
 			"options": {
 				"cwd": "${fileDirname}"

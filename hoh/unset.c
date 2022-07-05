@@ -15,6 +15,8 @@ void    unset_string(char ***envp, char *command)
         j = 0;
         k = 0;
         new = (char **)malloc(sizeof(char *) * count_env(*envp));
+       if (!new)
+			shell_exit(ENOMEM, *envp);
         while ((*envp)[k])
         {
             if (idx != j)

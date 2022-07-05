@@ -22,6 +22,7 @@ int	execute_fork(char *envp[], char **command)
 
 	i = 0;
 	flag = 0;
+	errno = 0;
 	pid = fork();
 	if (!pid)
 	{
@@ -31,6 +32,8 @@ int	execute_fork(char *envp[], char **command)
 				return (printf("minishell: %s: %s\n", command[0], strerror(errno)));
 		}
 		paths = get_paths(path, ':', command[0], envp);
+		if (!paths)
+			errno = 2;
 		org = command[0];
 		while (paths && paths[i])
 		{

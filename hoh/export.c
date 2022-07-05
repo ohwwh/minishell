@@ -2,20 +2,6 @@
 
 extern char	*path;
 
-static void	ft_clear(char **ret, int index)
-{
-	int		i;
-
-	i = 0;
-	while (i < index)
-	{	
-		free(ret[i]);
-		i ++;
-	}
-	free(ret);
-	exit(ENOMEM);
-}
-
 int	is_valid(char *command)
 {
 	int	i;
