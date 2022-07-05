@@ -2,38 +2,38 @@
 
 extern char	*path;
 
-int	is_valid(char *command)
+int	is_valid(char *command, char *arg)
 {
 	int	i;
 
 	i = 0;
-	if (command[0] == '=')
+	if (arg[0] == '=' | isstring_string(arg) == 0)
 	{
 		errno = EPERM;
-		printf("export: '%s': not a valid identifier\n", command);
+		printf("%s: '%s': not a valid identifier\n", command, arg);
 		return (0);
 	}
-	while (command[i])
+	while (arg[i])
 	{
-		if (command[i] == '=')
+		if (arg[i] == '=')
 			break ;
 		i ++;
 	}
-	if (command[i] == 0)
+	if (arg[i] == 0)
 		return (0);
 	return (1);
 }
 
-int	env_export_string(char ***envp, char *command)
+int	env_export_string(char ***envp, char *arg)
 {
 	int		idx;
 	char	**new;
 	char	*new_command;
 
-	if (is_valid(command))
+	if (is_valid("export", arg))
 	{
-		idx = is_exist(*envp, command);
-		new_command = ft_strdup(command);
+		idx = is_exist(*envp, arg);
+		new_command = ft_strdup(arg);
 		if (!new_command)
 			shell_exit(ENOMEM, *envp);
 		if (idx == -1)

@@ -74,7 +74,7 @@ int	execute_command(char **envp[], char **command)
 	else if (!ft_strcmp(command[0], "env"))
 		env(*envp, command);
 	else if (!ft_strcmp(command[0], "exit"))
-		shell_exit(0, *envp);
+		exit_shell(*envp, command);
 	else if (!ft_strcmp(command[0], "export"))
 		env_export(envp, command);
 	else if (!ft_strcmp(command[0], "pwd"))

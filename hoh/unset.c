@@ -2,15 +2,15 @@
 
 extern char *path;
 
-void    unset_string(char ***envp, char *command)
+void    unset_string(char ***envp, char *arg)
 {
     int j;
     int k;
     int idx;
     char    **new;
 
-    idx = is_exist(*envp, command);
-    if (idx != -1)
+    idx = is_exist(*envp, arg);
+    if (is_valid("unset", arg) && idx != -1)
     {
         j = 0;
         k = 0;
@@ -34,7 +34,7 @@ void    unset_string(char ***envp, char *command)
         new[j] = 0;
         free(*envp);
         *envp = new;
-        if (!ft_strncmp("PATH", command, 4))
+        if (!ft_strncmp("PATH", arg, 4))
         {
             free(path);
             path = 0;
