@@ -52,7 +52,7 @@ void	destroy_nodes(t_node *n);
 void	destroy_tree(t_tree *t);
 t_node	*new_node(t_node_type nt);
 t_meta	*new_meta(char *s, int f, int t);
-
+char	*translate_line(char *s);
 t_node	*make_subtree(t_meta *m);
 t_tree	*parse_to_tree(char *s);
 void	pre_traversal(t_node *n, void (*f)(t_node *child_n));

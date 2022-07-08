@@ -52,7 +52,7 @@
 	다중 파이프는 어떻게 구현함?
 	*/
 
-void	shell_pipe(t_node *left, t_node *right, char *envp[])
+void	shell_pipe(t_node *left, t_node *right, char **envp[])
 {
 	int	fd[2];
 	int	pipe1;
@@ -61,7 +61,7 @@ void	shell_pipe(t_node *left, t_node *right, char *envp[])
 
 	if (!right)
 	{
-		execute_command(&envp, left->data);
+		execute_command(envp, left->data);
 		return ;
 	}
 	// 이럴거면 루트 노드에 무조건 pipe를 둔 이유가 없지 않나요
@@ -73,13 +73,11 @@ void	shell_pipe(t_node *left, t_node *right, char *envp[])
 		if (!pid_1)
 		{
 			dup2(fd[1], 1);
-			execute_fork(left->data, envp);
+			execute_command(envp, left->data); //앞쪽 명령어
+			exit(0);
 		}
 		else
-		{
 			waitpid(pid_1, 0, 0);
-			waitpid(pid_2, 0, 0);
-		}
 	}
 	else
 	{
@@ -89,6 +87,9 @@ void	shell_pipe(t_node *left, t_node *right, char *envp[])
 			shell_pipe(right->left, right->right, envp);
 			
 		else
-			execute_fork(right->data, envp);
+		{
+			execute_command(envp, right->data); //뒷쪽 명령어
+			exit(0);
+		}
 	}
 }

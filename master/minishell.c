@@ -23,7 +23,7 @@ int	execute_fork(char *envp[], char **command)
 	i = 0;
 	flag = 0;
 	errno = 0;
-	pid = fork();
+	/*pid = fork();
 	if (!pid)
 	{
 		if (ft_strchr(command[0], '/'))
@@ -56,7 +56,35 @@ int	execute_fork(char *envp[], char **command)
 		command[0] = org;
 	}
 	else
-		waitpid(pid, 0, 0);
+		waitpid(pid, 0, 0);*/
+	if (ft_strchr(command[0], '/'))
+	{
+		if (execve(command[0], command, envp) == -1)
+			return (printf("minishell: %s: %s\n", command[0], strerror(errno)));
+	}
+	paths = get_paths(path, ':', command[0], envp);
+	if (!paths)
+		errno = 2;
+	org = command[0];
+	while (paths && paths[i])
+	{
+		command[0] = paths[i];
+		if (execve(paths[i], command, envp) != -1)
+		{
+			flag = 1;
+			break ;
+		}
+		else
+		{
+			if (errno != 2)
+				break ;
+			i ++;
+		}
+	}
+	if (!flag)
+		printf("bash: %s: %s\n", org, strerror(errno));
+	free_arr(paths);
+	command[0] = org;
 	return (0);
 }
 
@@ -110,11 +138,11 @@ int main(int argc, char *argv[], char *envp[])
 	{
 		pstr = readline(prompt);
 		//command = ft_split(pstr, ' ');
-		tree = *parse_to_tree(pstr);
+		tree = *parse_to_tree(translate_line(pstr));
 		//pre_traversal(tree.root, print_info);
 		add_history(pstr);
 		//execute_command(&envp_new, command);
-		shell_pipe(tree.root->left, tree.root->right, envp);
+		shell_pipe(tree.root->left, tree.root->right, &envp_new);
 		free(pstr);
 		//free_arr(command);
 		destroy_tree(&tree);
