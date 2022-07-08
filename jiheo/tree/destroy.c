@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 22:12:43 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 09:04:06 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/08 20:53:53 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	destroy_tree(t_tree *t)
 	if (t == NULL)
 		return ;
 	destroy_nodes(t->root);
+	free(t);
 }
 
 void	destroy_lst(t_list *lst)
