@@ -16,14 +16,15 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
+#include "./libohw/includes/libft.h"
 
 typedef enum e_node_type
 {
 	ROOT,
 	PIPE,
-	PRC,
-	REDIR,
-	CL,
+	PRC, //프로세스  = 리다이렉션 + 커맨드라인
+	REDIR,  //리다이렉션
+	CL, //커맨드라인
 }	t_node_type;
 
 typedef struct s_meta
