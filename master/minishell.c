@@ -126,7 +126,7 @@ int main(int argc, char *argv[], char *envp[])
 	{
 		pstr = readline(prompt);
 		//command = ft_split(pstr, ' ');
-		tree = *parse_to_tree(translate_line(pstr));
+		tree = *parse(translate(pstr));
 		//pre_traversal(tree.root, print_info);
 		add_history(pstr);
 		//execute_command(&envp_new, command);
