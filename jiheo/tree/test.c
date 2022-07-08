@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tree_test.c                                        :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/07 22:07:05 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 17:56:29 by jiheo            ###   ########.fr       */
+/*   Created: 2022/07/08 16:22:05 by jiheo             #+#    #+#             */
+/*   Updated: 2022/07/08 16:24:43 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include <stdio.h>
 
-void	pre_traversal(t_node *n, void (*f)(t_node *child_n))
+typedef struct s_test
 {
-	if (n == NULL)
-		return ;
-	pre_traversal(n->left, f);
-	f(n);
-	pre_traversal(n->right, f);
+	int c;
+}	t_test;
+
+void	tt(t_test t)
+{
+	t.c = 50;
+	printf("%d\n", t.c);
 }
 
-
-int	main(int argc, char **argv)
+int main()
 {
-	t_tree	*t;
+	t_test h;
 
-	t = parse(translate(argv[1]));
-	pre_traversal(t->root, print_info);
-	destroy_tree(t);
+	h.c = 10;
+	tt(h);
+	printf("%d\n", h.c);
 }
