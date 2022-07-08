@@ -2,9 +2,26 @@
 
 char	*path;
 
-int	is_built_in(char *command)
+int	is_built_in(char **command)
 {
+	int	ret;
 
+	ret = 0;
+	if (!ft_strcmp(command[0], "cd"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "echo"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "env"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "exit"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "export"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "pwd"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "unset"))
+		ret = 1;
+	return (ret);
 }
 
 void	free_arr(char **arr)
@@ -53,7 +70,7 @@ int	execute_fork(char *envp[], char **command)
 		}
 	}
 	if (!flag)
-		printf("bash: %s: %s\n", org, strerror(errno));
+		printf("minishell: %s: %s\n", org, strerror(errno));
 	free_arr(paths);
 	command[0] = org;
 	return (0);

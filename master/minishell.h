@@ -32,3 +32,4 @@ int		count_env(char *envp[]);
 void	init_env(char **envp_new[], char *envp[]);
 int		is_exist(char *envp[], char *key);
 void    unset(char ***envp, char **command);
+int		is_built_in(char **command);
