@@ -8,7 +8,7 @@
 #include <errno.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "../jiheo/tree.h"
+#include "tree.h"
 
 int		cd(char *envp[], char **command);
 int		pwd(char **command);

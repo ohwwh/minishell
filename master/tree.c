@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "minishell.h"
 
 //	TODO:
 //		- Handle memory leak ✅
@@ -451,11 +451,11 @@ void	print_info(t_node *n)
 	}
 }
 
-int	main(int argc, char **argv)
+/*int	main(int argc, char **argv)
 {
 	t_tree	*t;
 
 	t = parse_to_tree(translate_line(argv[1]));
 	pre_traversal(t->root, print_info);
 	destroy_tree(t);
-}
+}*/

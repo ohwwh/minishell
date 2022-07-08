@@ -99,8 +99,7 @@ int main(int argc, char *argv[], char *envp[])
 {
 	char	prompt[100] = "minishell-0.0$ ";
 	char	*pstr;
-	//char	**command;
-	t_tree	tree;
+	char	**command;
 	char	**envp_new;
 	
 	printf("%d\n", getpid());
@@ -109,14 +108,11 @@ int main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		pstr = readline(prompt);
-		//command = ft_split(pstr, ' ');
-		tree = *parse_to_tree(pstr);
+		command = ft_split(pstr, ' ');
 		add_history(pstr);
-		//execute_command(&envp_new, command);
-		shell_pipe(tree.root->left, tree.root->right, envp);
+		execute_command(&envp_new, command);
 		free(pstr);
-		// free_arr(command);
-		destroy_tree(&tree);
+		free_arr(command);
 	}
 	free_arr(envp_new);
 	free(path);
