@@ -2,6 +2,11 @@
 
 char	*path;
 
+int	is_built_in(char *command)
+{
+
+}
+
 void	free_arr(char **arr)
 {
 	int	i;
@@ -23,40 +28,6 @@ int	execute_fork(char *envp[], char **command)
 	i = 0;
 	flag = 0;
 	errno = 0;
-	/*pid = fork();
-	if (!pid)
-	{
-		if (ft_strchr(command[0], '/'))
-		{
-			if (execve(command[0], command, envp) == -1)
-				return (printf("minishell: %s: %s\n", command[0], strerror(errno)));
-		}
-		paths = get_paths(path, ':', command[0], envp);
-		if (!paths)
-			errno = 2;
-		org = command[0];
-		while (paths && paths[i])
-		{
-			command[0] = paths[i];
-			if (execve(paths[i], command, envp) != -1)
-			{
-				flag = 1;
-				break ;
-			}
-			else
-			{
-				if (errno != 2)
-					break ;
-				i ++;
-			}
-		}
-		if (!flag)
-			printf("bash: %s: %s\n", org, strerror(errno));
-		free_arr(paths);
-		command[0] = org;
-	}
-	else
-		waitpid(pid, 0, 0);*/
 	if (ft_strchr(command[0], '/'))
 	{
 		if (execve(command[0], command, envp) == -1)

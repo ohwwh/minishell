@@ -61,9 +61,18 @@ void	shell_pipe(t_node *left, t_node *right, char **envp[])
 
 	if (!right)
 	{
-		execute_command(envp, left->data);
-		return ;
-	}
+		pid_2 = fork();
+		if (pid_2)
+		{
+			waitpid(pid_2, 0, 0);
+			return ;
+		}
+		else
+		{
+			execute_command(envp, left->data);
+			exit(0);
+		}
+	}	
 	// 이럴거면 루트 노드에 무조건 pipe를 둔 이유가 없지 않나요
 	pipe1 = pipe(fd);
 	pid_2 = fork();
