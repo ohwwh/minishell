@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envs.c                                             :+:      :+:    :+:   */
+/*   sig.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/27 17:09:07 by jiheo             #+#    #+#             */
-/*   Updated: 2022/06/27 19:51:19 by jiheo            ###   ########.fr       */
+/*   Created: 2022/07/07 21:00:21 by jiheo             #+#    #+#             */
+/*   Updated: 2022/07/07 21:50:24 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parse.h"
+#ifndef SIGNAL_H
+# define SIGNAL_H
 
-char	*get_env(const char *key)
+// #include "Libft/libft.h"
+#include <unistd.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+typedef struct  s_signal
 {
-	int	i;
+    int     s_int;
+    int     quit;
+    int     stat;
+    pid_t   pid;
+}   t_signal;
 
-	i = 0;
-	while (g_envs[i].key)
-	{
-		if (ft_strncmp(g_envs[i].key, key, ft_strlen(key)) == 0)
-			return (g_envs[i].value);
-		i++;
-	}
-	return (NULL);
-}
+void    c_handler(int sig);
+void    d_handler(int sig);
+void    bs_handler(int sig);
+
+#endif

@@ -6,46 +6,45 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:12 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/05 12:55:51 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/08 14:22:15 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tree.h"
 
 //	TODO:
-//		- Handle memory leak ✅
 //		- Null guard
 //		- Error handling
 //		- Signal handling
 
-void	print_meta(t_meta *m)
-{
-	for (int i = m->from; i <= m->to; i++)
-		printf("%c", m->src[i]);
-	printf("\n");
-}
-
 char	*range_strdup(t_meta *m)
 {
-	char	*s;
-	int		i;
-
-	s = (char *)malloc((m->to - m->from + 2) * sizeof(char));
-	if (s == NULL)
-		return (NULL);
-	i = m->from;
-	while (i <= m->to)
-	{
-		s[i - m->from] = m->src[i];
-		i++;
-	}
-	s[i] = 0;
-	return (s);
+	return (ft_substr(m->src, m->from, m->to - m->from + 1));
 }
 
 bool	is_blank(char c)
 {
 	return (c == ' ' || c == '\r' || c == '\n' || c == '\a' || c == '\t');
+}
+
+bool	is_not_sep(char c)
+{
+	return (!(is_blank(c) || c == '>' || c == '<'));
+}
+
+bool	is_single_quotes(char c)
+{
+	return (c == '\'');
+}
+
+bool	is_double_quotes(char c)
+{
+	return (c == '"');
+}
+
+bool	is_quotes(char c)
+{
+	return (is_single_quotes(c) || is_double_quotes(c));
 }
 
 char	*_join(t_meta *m, bool is_env, char *res)
@@ -66,122 +65,86 @@ char	*_join(t_meta *m, bool is_env, char *res)
 	return (res);
 }
 
-static
-void	jump_string(const char *s, int *i)
+int	jump(char *s, int i, bool (*f)(char))
 {
-	const char	c = s[*i];
+	while (s[i] && f(s[i]))
+		i++;
+	return (i);
+}
 
-	while (s[*i] && s[*i] != c)
-		(*i)++;
+char	*join_and_rm(char *dst, char *src)
+{
+	char	*tmp;
+
+	tmp = dst;
+	if (dst == NULL)
+		return (ft_strdup(src));
+	dst = ft_strjoin(dst, src);
+	free(tmp);
+	return (dst);
+}
+
+static
+void	jump_line(const char *s, int *i)
+{
+	if (s[*i] == '\'')
+		*i = jump(s, *i, is_single_quotes);
+	else if (s[*i] == '"')
+		*i = jump(s, *i, is_double_quotes);
+}
+
+static
+void	jump_word(const char *s, int *i)
+{
+	*i = jump(s, *i, is_not_sep);
 }
 
 static
 void	jump_space(const char *s, int *i, int end)
 {
-	while (*i <= end && is_blank(s[*i]))
+	while (s[*i] && is_blank(s[*i]))
 		(*i)++;
+}
+
+char	*extract_line(char *s, int *i)
+{
+	int	j;
+
+	if (is_quotes(s[*i]))
+	{
+		j = *i + 1;
+		jump_line(s, i);
+		return (ft_substr(s, j, (*i)++ - j));
+	}
+	else
+	{
+		j = *i;
+		jump_word(s, i);
+		return (ft_substr(s, j, *i - j));
+	}
 }
 
 char	*translate_line(char *s)
 {
-	t_meta	m;
-	int		i = 0;
-	char	*res = NULL;
 	char	*tmp;
-	char	*dump;
+	int		i;
+	char	*res = NULL;
 
-	m.src = s;
+	i = 0;
 	while (s[i])
 	{
-		if (s[i] == '\'')
+		if (s[i] == '\'' || s[i] != '$')
 		{
-			m.from = i;
-			while (s[i] && s[i] != '\'')
-				i++;
-			m.to = i;
-			res = _join(&m, false, res);
-		}
-		if (s[i] != '$')
-		{
-			m.from = i;
-			while (s[i] && s[i] != '$')
-				i++;
-			m.to = i;
-			res = _join(&m, false, res);
+			tmp = extract_line(s, &i);
+			res = join_and_rm(res, tmp);
+			free(tmp);
 		}
 		if (s[i] == '$')
 		{
-			m.from = ++i;
-			while (s[i] && ft_isalnum(s[i]))
-				i++;
-			m.to = i;
-			res = _join(&m, true, res);
+			i++;
 		}
 	}
 	return (res);
-}
-
-t_meta	*new_meta(char *s, int f, int t)
-{
-	t_meta	*m;
-
-	m = (t_meta *)malloc(sizeof(t_meta));
-	if (m == NULL)
-		return (NULL);
-	m->from = f;
-	m->src = s;
-	m->to = t;
-	return (m);
-}
-
-t_tree	*new_tree(void)
-{
-	t_tree	*t;
-
-	t = (t_tree *)malloc(sizeof(t_tree));
-	if (t == NULL)
-		return (t);
-	t->root = new_node(PIPE);
-	return (t);
-}
-
-void	destroy_tree(t_tree *t)
-{
-	if (t == NULL)
-		return ;
-	destroy_nodes(t->root);
-}
-
-void    destroy_strings(char **strs)
-{
-	int     i;
-
-	i = 0;
-	while (strs && strs[i] != NULL)
-		free(strs[i++]);
-}
-
-void	destroy_nodes(t_node *n)
-{
-	if (n == NULL)
-		return ;
-	destroy_nodes(n->left);
-	destroy_nodes(n->right);
-	destroy_strings(n->data);
-	free(n->data);
-	free(n);
-}
-
-t_node	*new_node(t_node_type nt)
-{
-	t_node  *n;
-
-	n = (t_node *)malloc(sizeof(t_node));
-	n->data = NULL;
-	n->type = nt;
-	n->left = NULL;
-	n->right = NULL;
-	return (n);
 }
 
 char	**lst_to_arr(t_list *l)
@@ -204,60 +167,34 @@ char	**lst_to_arr(t_list *l)
 	return (res);
 }
 
-char	*handle_quotes(t_meta *m, int *i)
+char	*extract(t_meta *m, int *i, bool (*f)(char))
 {
-	char	c;
 	t_meta	tmp_m;
-	char	*src;
 
-	src = m->src;
-	c = src[*i];
-	tmp_m.src = src;
-	tmp_m.from = ++(*i);
-	while (*i <= m->to && src[*i] != c)
+	tmp_m.src = m->src;
+	tmp_m.from = *i;
+	while (m->src[*i] && f(m->src[*i]))
 		(*i)++;
-	if (!(src[*i]))
-		return (NULL);
 	tmp_m.to = *i - 1;
 	if (tmp_m.from > tmp_m.to)
 		return (NULL);
-	(*i)++;
 	return (range_strdup(&tmp_m));
+}
+
+char	*handle_quotes(t_meta *m, int *i)
+{
+	char	c;
+	char	*s;
+
+	c = m->src[(*i)++];
+	s = extract(m, i, is_quotes);
+	(*i)++;
+	return (s);
 }
 
 char	*handle_word(t_meta *m, int *i)
 {
-	t_meta	tmp_m;
-	char	*src;
-
-	src = m->src;
-	tmp_m.src = src;
-	tmp_m.from = *i;
-	while (*i <= m->to && !is_blank(src[*i]) && src[*i] != '>' && src[*i] != '<')
-		(*i)++;
-	tmp_m.to = *i - 1;
-	if (tmp_m.from > tmp_m.to)
-		return (NULL);
-	return (range_strdup(&tmp_m));
-}
-
-void	destroy_lst(t_list *lst)
-{
-	t_list_node	*n;
-	t_list_node	*target;
-
-	if (lst == NULL)
-		return ;
-	n = lst->front;
-	while (n)
-	{
-		target = n;
-		n = n->next;
-		free(target);
-		target = NULL;
-	}
-	free(lst);
-	lst = NULL;
+	return (extract(m, i, is_not_sep));
 }
 
 char	*handle_rd_cmd(t_meta *m, int *i)
@@ -284,9 +221,9 @@ t_node	*handle_cl(t_meta *m, int *i)
 	while (*i <= m->to)
 	{
 		jump_space(m->src, i, m->to);
-		if (m->src[*i] == '\'' || m->src[*i] == '"')
+		if (*i <= m->to && (m->src[*i] == '\'' || m->src[*i] == '"'))
 			ft_lstadd_back(arg_list, (void *)handle_quotes(m, i));
-		else
+		else if (*i <= m->to)
 			ft_lstadd_back(arg_list, (void *)handle_word(m, i));
 		if (m->src[*i] == '>' || m->src[*i] == '<')
 			break ;
@@ -321,11 +258,13 @@ t_node	*handle_rd(t_meta *m, int *i)
 			{
 				jump_space(m->src, i, m->to);
 				tmp_m.from = *i;
-				if (m->src[*i] == '\'' || m->src[*i] == '"')
+				if (*i <= m->to && (m->src[*i] == '\'' || m->src[*i] == '"'))
+				{
 					ft_lstadd_back(arg_list, (void *)handle_quotes(&tmp_m, i));
-				else
+					printf("%d\n", *i);
+				}
+				else if (*i <= m->to)
 					ft_lstadd_back(arg_list, (void *)handle_word(&tmp_m, i));
-				(*i)++;
 			}
 			if (arg_list->len != 0)
 			{
@@ -396,7 +335,7 @@ t_tree	*parse_to_tree(char *s)
 			while (s[i] && s[i] != '|')
 			{
 				if (s[i] == '\'' || s[i] == '"')
-					jump_string(s, &i);
+					jump_line(s, &i);
 				i++;
 			}
 			m.to = i - 1;
@@ -430,32 +369,4 @@ void	pre_traversal(t_node *n, void (*f)(t_node *child_n))
 	pre_traversal(n->left, f);
 	f(n);
 	pre_traversal(n->right, f);
-}
-
-void	print_info(t_node *n)
-{
-	int	i;
-
-	if (!(n && n->data && n->data[0]))
-		return ;
-	if (n->type == CL)
-		printf("type: COMMAND LINE\n");
-	else if (n->type == REDIR)
-		printf("type: REDIRECTION\n");
-	printf("cmd: %s\n", n->data[0]);
-	i = 1;
-	while ((n->data)[i])
-	{
-		printf("args[%d]: %s\n", i, (n->data)[i]);
-		i++;
-	}
-}
-
-int	main(int argc, char **argv)
-{
-	t_tree	*t;
-
-	t = parse_to_tree(translate_line(argv[1]));
-	pre_traversal(t->root, print_info);
-	destroy_tree(t);
 }

@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:15 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/04 19:08:27 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/08 09:03:59 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
-# include "Libft/libft.h"
+# include "../Libft/libft.h"
 
 typedef enum e_node_type
 {
@@ -48,14 +48,21 @@ typedef struct s_tree
 }	t_tree;
 
 t_tree	*new_tree(void);
-void	destroy_nodes(t_node *n);
-void	destroy_tree(t_tree *t);
 t_node	*new_node(t_node_type nt);
 t_meta	*new_meta(char *s, int f, int t);
+
+void    destroy_strings(char **strs);
+void	destroy_nodes(t_node *n);
+void	destroy_tree(t_tree *t);
+void	destroy_lst(t_list *lst);
+
+char	*translate_line(char *s);
 
 t_node	*make_subtree(t_meta *m);
 t_tree	*parse_to_tree(char *s);
 void	pre_traversal(t_node *n, void (*f)(t_node *child_n));
+
+void	print_meta(t_meta *m);
 void	print_info(t_node *n);
 
 #endif // TREE_H
