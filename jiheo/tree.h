@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:15 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 15:00:33 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/08 15:04:12 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
-#include "../minishell/jiheo/Libft/libft.h"
+# include "Libft/libft.h"
 
 typedef enum e_node_type
 {
 	ROOT,
 	PIPE,
-	PRC, //프로세스  = 리다이렉션 + 커맨드라인
-	REDIR,  //리다이렉션
-	CL, //커맨드라인
+	PRC,
+	REDIR,
+	CL,
 }	t_node_type;
 
 typedef struct s_meta
