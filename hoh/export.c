@@ -2,7 +2,7 @@
 
 extern char	*path;
 
-int	is_valid(char *command, char *arg)
+static int	is_valid_export(char *arg)
 {
 	int	i;
 
@@ -10,7 +10,7 @@ int	is_valid(char *command, char *arg)
 	if (arg[0] == '=' | isstring_string(arg) == 0)
 	{
 		errno = EPERM;
-		printf("%s: '%s': not a valid identifier\n", command, arg);
+		printf("export: '%s': not a valid identifier\n", arg);
 		return (0);
 	}
 	while (arg[i])
@@ -30,7 +30,7 @@ int	env_export_string(char ***envp, char *arg)
 	char	**new;
 	char	*new_command;
 
-	if (is_valid("export", arg))
+	if (is_valid_export(arg))
 	{
 		idx = is_exist(*envp, arg);
 		new_command = ft_strdup(arg);

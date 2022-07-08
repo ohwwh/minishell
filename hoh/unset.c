@@ -2,6 +2,26 @@
 
 extern char *path;
 
+static int	is_valid_unset(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (arg[0] == '=' | isstring_string(arg) == 0)
+	{
+		errno = EPERM;
+		printf("unset: '%s': not a valid identifier\n", arg);
+		return (0);
+	}
+	while (arg[i])
+	{
+		if (arg[i] == '=')
+			break ;
+		i ++;
+	}
+	return (1);
+}
+
 void    unset_string(char ***envp, char *arg)
 {
     int j;
@@ -10,7 +30,7 @@ void    unset_string(char ***envp, char *arg)
     char    **new;
 
     idx = is_exist(*envp, arg);
-    if (is_valid("unset", arg) && idx != -1)
+    if (is_valid_unset(arg) && idx != -1)
     {
         j = 0;
         k = 0;

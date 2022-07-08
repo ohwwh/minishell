@@ -1,27 +1,61 @@
 #include "minishell.h"
 
-void    print_env(void *content)
-{
-	char **str;
+extern char *path;
 
-	str = (char **)content;
-	printf("%s=", str[0]);
-	printf("%s\n", str[1]);
+static void	ft_clear(char **ret, int index)
+{
+	int		i;
+
+	i = 0;
+	while (i < index)
+	{	
+		free(ret[i]);
+		i ++;
+	}
+	free(ret);
+	exit(ENOMEM);
 }
 
-int env(t_list **env_list, char **command)
+void	init_env(char **envp_new[], char *envp[])
 {
-	if (command[1])
-		return (write(1, "env: too many arguments\n", 24));
-	ft_lstiter(*env_list, &print_env);
-	return (0);
+	char	**new;
+	char	*new_element;
+	int		i;
+	char	dummy;
+
+	i = 0;
+	dummy = 'c';
+	path = &dummy;
+	new = (char **)malloc(sizeof(char *) * (count_env(envp) + 1));
+	while (envp[i])
+	{
+		new_element = ft_strdup(envp[i]);
+		if (!ft_strncmp("PATH", envp[i], 4))
+		{
+			while (*(envp[i]) != '=')
+				(envp[i]) ++;
+			(envp[i]) ++;
+			path = ft_strdup(envp[i]);
+		}
+		if (!path || !new_element)
+			ft_clear(new, i);
+		new[i] = new_element;
+		i ++;
+	}
+	new[i] = 0;
+	*envp_new = new;
 }
 
-int	env_new(char *envp[], char **command)
+int	env(char *envp[], char **command)
 {
 	int	i;
+
+	i = 0;
 	if (command[1])
+	{
+		errno = EPERM;
 		return (write(1, "env: too many arguments\n", 24));
+	}
 	while (envp[i])
 		printf("%s\n", envp[i ++]);
 	return (0);
