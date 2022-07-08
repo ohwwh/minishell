@@ -8,7 +8,7 @@
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
-				"minishell.c","cd.c","echo.c","env.c","exit.c","export.c","pwd.c","unset.c", "env_utils.c","getpaths.c",
+				"minishell.c","cd.c","echo.c","env.c","exit.c","export.c","pwd.c","unset.c", "env_utils.c","getpaths.c", "tree.c", "pipe.c",
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}",
 				"-lohw",
