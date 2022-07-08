@@ -52,10 +52,10 @@
 	다중 파이프는 어떻게 구현함?
 	*/
 
-void	single_command(t_node *node, char **envp[])
+int	single_command(t_node *node, char **envp[])
 {
 	int	pid;
-	const int	built = is_built_in(node->data);	
+	const int	built = is_built_in(node->right->data);	
 
 	pid = 0;
 	if (!built)
@@ -63,14 +63,16 @@ void	single_command(t_node *node, char **envp[])
 	if (pid)
 	{
 		waitpid(pid, 0, 0);
-		return ;
+		return (0);
 	}
 	else
 	{
-		execute_command(envp, node->data);
+		execute_command(envp, node->right->data);
+		return (1);
 		if (!built)
 			exit(0);
 	}
+	return (0);
 }
 
 void	shell_pipe(t_node *left, t_node *right, char **envp[])
@@ -81,7 +83,8 @@ void	shell_pipe(t_node *left, t_node *right, char **envp[])
 	int	pid_2;
 
 	if (!right)
-		single_command(left, envp);
+		if (1 == single_command(left, envp))
+			return ;
 	// 이럴거면 루트 노드에 무조건 pipe를 둔 이유가 없지 않나요
 	pipe1 = pipe(fd);
 	pid_2 = fork();
@@ -90,12 +93,17 @@ void	shell_pipe(t_node *left, t_node *right, char **envp[])
 		pid_1 = fork();
 		if (!pid_1)
 		{
+			//sleep(1);
 			dup2(fd[1], 1);
-			execute_command(envp, left->data); //앞쪽 명령어
+			close(fd[0]);
+			execute_command(envp, left->right->data); //앞쪽 명령어
 			exit(0);
 		}
 		else
+		{
 			waitpid(pid_1, 0, 0);
+			waitpid(pid_2, 0, 0);
+		}
 	}
 	else
 	{
@@ -103,10 +111,9 @@ void	shell_pipe(t_node *left, t_node *right, char **envp[])
 		close(fd[1]);
 		if (right->type == PIPE)
 			shell_pipe(right->left, right->right, envp);
-			
 		else
 		{
-			execute_command(envp, right->data); //뒷쪽 명령어
+			execute_command(envp, right->right->data); //뒷쪽 명령어
 			exit(0);
 		}
 	}

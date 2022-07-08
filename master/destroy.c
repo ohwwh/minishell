@@ -37,6 +37,7 @@ void	destroy_tree(t_tree *t)
 	if (t == NULL)
 		return ;
 	destroy_nodes(t->root);
+	free(t);
 }
 
 void	destroy_lst(t_list *lst)
