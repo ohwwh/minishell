@@ -71,7 +71,7 @@ void	shell_pipe(t_node *left, t_node *right, char **envp[])
 		{
 			close(fd[1]);
 			waitpid(pid_2, 0, 0);
-			waitpid(pid_1, 0, 0);
+			//waitpid(pid_1, 0, 0);
 		}
 		else
 		{
