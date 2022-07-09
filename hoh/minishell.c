@@ -34,7 +34,7 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
-int	execute_fork(char *envp[], char **command)
+int	execute_fork(char *envp[], char **command, int temp)
 {
 	char	**paths;
 	char	*org;
@@ -48,7 +48,12 @@ int	execute_fork(char *envp[], char **command)
 	if (ft_strchr(command[0], '/'))
 	{
 		if (execve(command[0], command, envp) == -1)
-			return (printf("minishell: %s: %s\n", command[0], strerror(errno)));
+		{
+			if (temp)
+				dup2(temp, 1);
+			printf("minishell: %s: %s\n", command[0], strerror(errno));
+			shell_exit(errno, envp);
+		}
 	}
 	paths = get_paths(path, ':', command[0], envp);
 	if (!paths)
@@ -57,26 +62,26 @@ int	execute_fork(char *envp[], char **command)
 	while (paths && paths[i])
 	{
 		command[0] = paths[i];
-		if (execve(paths[i], command, envp) != -1)
+		execve(paths[i ++], command, envp);
+		if (errno != 2)
 		{
 			flag = 1;
 			break ;
 		}
-		else
-		{
-			if (errno != 2)
-				break ;
-			i ++;
-		}
 	}
-	if (!flag)
+	if (temp)
+		dup2(temp, 1);
+	if (flag)
 		printf("minishell: %s: %s\n", org, strerror(errno));
+	else
+		printf("minishell: %s: command not found\n", org);
 	free_arr(paths);
-	command[0] = org;
+	shell_exit(errno, envp);
+	//command[0] = org;
 	return (0);
 }
 
-int	execute_command(char **envp[], char **command)
+int	execute_command(char **envp[], char **command, int temp)
 {
 	int	ret;
 
@@ -84,7 +89,7 @@ int	execute_command(char **envp[], char **command)
 	if (*command == 0)
 		return (ret);
 	else if (!ft_strcmp(command[0], "cd"))
-		cd(*envp, command);
+		cd(*envp, command);	
 	else if (!ft_strcmp(command[0], "echo"))
 		echo(command);
 	else if (!ft_strcmp(command[0], "env"))
@@ -98,7 +103,7 @@ int	execute_command(char **envp[], char **command)
 	else if (!ft_strcmp(command[0], "unset"))
 		unset(envp, command);
 	else
-		execute_fork(*envp, command);
+		execute_fork(*envp, command, temp);
 	return (ret);
 }
 
@@ -130,7 +135,8 @@ int main(int argc, char *argv[], char *envp[])
 		//pre_traversal(tree.root, print_info);
 		add_history(pstr);
 		//execute_command(&envp_new, command);
-		shell_pipe(tree->root->left, tree->root->right, &envp_new);
+		if (tree)
+			shell_pipe(tree->root->left, tree->root->right, &envp_new);
 		free(pstr);
 		//free_arr(command);
 		destroy_tree(tree);

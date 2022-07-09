@@ -110,6 +110,8 @@ t_tree	*parse(char *s)
 	t_tree		*t;
 	int			i;
 
+	if (!s)
+		return (0);
 	t = new_tree();
 	if (t == NULL)
 		return (NULL);

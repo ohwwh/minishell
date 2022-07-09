@@ -1,16 +1,15 @@
 #include "minishell.h"
 
-int	redir_in(char **command, char *file, char *envp[])
+void	redir_in(char *file)
 {
 	int fd;
 
 	fd = open(file, O_RDONLY);
 	dup2(fd, 0);
 	close(fd);
-	execute_fork(envp, command);
 }
 
-void    redir_in_heredoc(char **command, char *end_str, char *envp[])
+void    redir_in_heredoc(char *end_str)
 {
 	char	*pstr;
 	char	temp[10] = "temp_file";
@@ -33,22 +32,40 @@ void    redir_in_heredoc(char **command, char *end_str, char *envp[])
 	}
 }
 
-int	redir_out(char **command, char *file, char *envp[])
+void	redir_out(char *file)
 {
 	int fd;
 
 	fd = open(file, O_WRONLY);
 	dup2(fd, 1);
 	close(fd);
-	execute_fork(envp, command);
 }
 
-int	redir_out_double(char **command, char *file, char *envp[])
+void	redir_out_double(char *file)
 {
 	int fd;
 
 	fd = open(file, O_WRONLY | O_APPEND);
 	dup2(fd, 1);
 	close(fd);
-	execute_fork(envp, command);
+}
+
+void	redir(t_node *node)
+{
+	if (node->left->type == REDIR)
+		redir(node->left);
+	if (node->right->data[0][0] == '>')
+	{
+		if (node->right->data[0][1] == '>')
+			redir_out_double(node->right->data[1]);
+		else if (!node->right->data[0][1])
+			redir_out(node->right->data[1]);
+	}
+	else if (node->right->data[0][0] == '<')
+	{
+		if (node->right->data[0][1] == '<')
+			redir_in_heredoc(node->right->data[1]);
+		else if (!node->right->data[0][1])
+			redir_in(node->right->data[1]);
+	}
 }
