@@ -109,6 +109,8 @@ int	execute_command(char **envp[], char **command, int temp)
 
 void	handler(int signum)
 {
+	if (signum == SIGTERM)
+		exit(0);
 	if (signum != SIGINT)
 		return ;
 	rl_on_new_line();
@@ -130,6 +132,8 @@ int main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		pstr = readline(prompt);
+		if (!pstr)
+			pstr = "exit";
 		tree = parse(ft_strdup(pstr));
 		add_history(pstr);
 		if (tree)

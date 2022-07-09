@@ -80,10 +80,10 @@ void	shell_pipe(t_node *left, t_node *right, char **envp[])
 		front_command(left, envp, fd);
 }
 
-void	execute_pipe(t_node *node, char **envp[])
+/*void	execute_pipe(t_node *node, char **envp[])
 {
 	if (!node->right)
 		
 	else
 		execute_pipe(node->right, envp);
-}
+}*/
