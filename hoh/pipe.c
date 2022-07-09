@@ -101,6 +101,7 @@ void	shell_pipe(t_node *left, t_node *right, char **envp[])
 		}
 		else
 		{
+			close(fd[1]); //cat, grep등 표준 입력을 받는 명령어들이 파이프 뒤에 올 경우 무한 대기에 빠지는 원인 -> 여기서 파이프를 안 닫아 줬음
 			waitpid(pid_1, 0, 0);
 			waitpid(pid_2, 0, 0);
 		}
