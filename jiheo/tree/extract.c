@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   extract.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 17:06:40 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 16:48:38 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 19:55:45 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ char	*extract_word(char *s, int *p_from)
 			res = join_and_rm_all(res, ft_substr(s, i, *p_from - i));
 		}
 	}
-	return (res);
-	
+	return (translate(res));
 }
 
 char	*extract_rd(char *s, int *p_from)
@@ -63,7 +62,7 @@ char	*extract_rd(char *s, int *p_from)
 	if (s[*p_from] == '<' && s[*p_from] == s[*p_from + 1])
 	{
 		*p_from += 2;
-		if (s[*p_from] == '<')
+		if (s[*p_from - 2] == '<')
 			return (ft_strdup("<<"));
 		else
 			return (ft_strdup(">>"));
@@ -71,7 +70,7 @@ char	*extract_rd(char *s, int *p_from)
 	else
 	{
 		(*p_from)++;
-		if (s[*p_from] == '<')
+		if (s[*p_from - 1] == '<')
 			return (ft_strdup("<"));
 		else
 			return (ft_strdup(">"));

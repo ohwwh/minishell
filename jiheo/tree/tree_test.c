@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_test.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 22:07:05 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 16:50:20 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:00:46 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int argc, char **argv)
 	t = parse(ft_strdup(argv[1]));
 	pre_traversal(t->root, print_info);
 	destroy_tree(t);
+	while (1) {}
 	// int	i = 0;
 	// printf("org: %s\n", argv[1]);
 	// s = translate(ft_strdup(argv[1]));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   strings.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:17:25 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 16:22:09 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 19:56:20 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*join_and_rm_all(char *s1, char *s2)
 {
 	char	*s;
 
+	s = NULL;
 	s = ft_strjoin(s1, s2);
 	free(s1);
 	free(s2);

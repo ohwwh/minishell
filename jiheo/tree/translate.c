@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   translate.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:01:45 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 16:33:17 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 19:59:29 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ char	*ts_env(char *s, int *i)
 		return (NULL);
 	val = getenv(key);
 	free(key);
+	if (val == NULL)
+		return (NULL);
 	return (ft_strdup(val));
 }
 
