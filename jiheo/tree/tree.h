@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:15 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 15:04:12 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 16:17:50 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
-# include "Libft/libft.h"
+# include "../Libft/libft.h"
 
 typedef enum e_node_type
 {
-	ROOT,
 	PIPE,
 	PRC,
 	REDIR,
@@ -48,14 +47,32 @@ typedef struct s_tree
 }	t_tree;
 
 t_tree	*new_tree(void);
-void	destroy_nodes(t_node *n);
-void	destroy_tree(t_tree *t);
-t_node	*new_node(t_node_type nt);
+t_node	*new_node(t_node_type nt, char **data);
 t_meta	*new_meta(char *s, int f, int t);
 
-t_node	*make_subtree(t_meta *m);
-t_tree	*parse_to_tree(char *s);
-void	pre_traversal(t_node *n, void (*f)(t_node *child_n));
+char	**lst_to_arr(t_list *l);
+void	destroy_strings(char **strs);
+void	destroy_nodes(t_node *n);
+void	destroy_tree(t_tree *t);
+void	destroy_lst(t_list *lst);
+
+int		find_c(char *src, int from, char c);
+
+char	*extract(char *s, int *p_from);
+char	*extract_rd(char *s, int *p_from);
+
+char	*translate(char *s);
+
+t_tree	*parse(char *s);
+
+void	print_meta(t_meta *m);
 void	print_info(t_node *n);
+
+bool	is_blank(char c);
+bool	is_sep(char c);
+void	ignore_space(char *s, int *i);
+void	ignore_until_c(char *s, int *i, char c);
+
+char	*join_and_rm_all(char *s1, char *s2);
 
 #endif // TREE_H

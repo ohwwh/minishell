@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:15 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 20:03:46 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:12:55 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,13 @@ t_tree	*parse(char *s);
 
 void	print_meta(t_meta *m);
 void	print_info(t_node *n);
+void	pre_traversal(t_node *n, void (*f)(t_node *child_n));
 
 bool	is_blank(char c);
 bool	is_sep(char c);
 void	ignore_space(char *s, int *i);
 void	ignore_until_c(char *s, int *i, char c);
+
+char	*join_and_rm_all(char *s1, char *s2);
 
 #endif // TREE_H

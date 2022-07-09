@@ -118,7 +118,7 @@ int main(int argc, char *argv[], char *envp[])
 	char	**command;
 	t_tree	*tree;
 	char	**envp_new;
-	
+
 	printf("%d\n", getpid());
 	init_env(&envp_new, envp);
 	signal(SIGINT, handler);
@@ -126,7 +126,7 @@ int main(int argc, char *argv[], char *envp[])
 	{
 		pstr = readline(prompt);
 		//command = ft_split(pstr, ' ');
-		tree = parse(translate(pstr));
+		tree = parse(ft_strdup(pstr));
 		//pre_traversal(tree.root, print_info);
 		add_history(pstr);
 		//execute_command(&envp_new, command);
