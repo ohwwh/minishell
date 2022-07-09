@@ -130,15 +130,11 @@ int main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		pstr = readline(prompt);
-		//command = ft_split(pstr, ' ');
 		tree = parse(ft_strdup(pstr));
-		//pre_traversal(tree.root, print_info);
 		add_history(pstr);
-		//execute_command(&envp_new, command);
 		if (tree)
 			shell_pipe(tree->root->left, tree->root->right, &envp_new);
 		free(pstr);
-		//free_arr(command);
 		destroy_tree(tree);
 		tree = 0;
 	}

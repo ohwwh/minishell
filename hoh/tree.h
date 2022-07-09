@@ -73,4 +73,6 @@ bool	is_sep(char c);
 void	ignore_space(char *s, int *i);
 void	ignore_until_c(char *s, int *i, char c);
 
+char	*join_and_rm_all(char *s1, char *s2);
+
 #endif // TREE_H

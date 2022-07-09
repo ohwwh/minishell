@@ -68,17 +68,22 @@ void	shell_pipe(t_node *left, t_node *right, char **envp[])
 	{
 		pid_1 = fork();
 		if (pid_1)
-		{
+		{	
 			close(fd[1]);
 			waitpid(pid_2, 0, 0);
-			//waitpid(pid_1, 0, 0);
+			waitpid(pid_1, 0, 0);
 		}
 		else
-		{
-			waitpid(pid_2, 0, 0);
 			back_command(right, envp, fd);
-		}
 	}
 	else
 		front_command(left, envp, fd);
+}
+
+void	execute_pipe(t_node *node, char **envp[])
+{
+	if (!node->right)
+		
+	else
+		execute_pipe(node->right, envp);
 }

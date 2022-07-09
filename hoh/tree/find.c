@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   find.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:12:47 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 16:36:39 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:10:59 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "../tree.h"
 
 int	find_c(char *src, int from, char c)
 {
