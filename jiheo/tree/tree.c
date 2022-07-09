@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:06:23 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 21:00:19 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 17:23:30 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ t_node	*create_rd(t_meta *m, int *i)
 			{
 				printf("check 222\n");
 				ignore_space(m->src, i);
+				printf("check 333\n");
 				if (*i <= m->to)
 					ft_lstadd_back(l, (void *)extract(m->src, i));
 			}
@@ -93,6 +94,19 @@ t_node	*create_rd(t_meta *m, int *i)
 		destroy_lst(l);
 	}
 	return (NULL);
+}
+
+void	create_subnode(t_node *n, t_meta *m, int *p_from)
+{
+	int	i;
+
+	if (n == NULL)
+		return (NULL);
+	i = *p_from;
+	while (i <= m->to)
+	{
+		
+	}
 }
 
 t_node	*create_prc(char *s, int *i)
@@ -119,6 +133,7 @@ t_tree	*parse(char *s)
 	t = new_tree();
 	if (t == NULL)
 		return (NULL);
+	printf("input: %s\n", s);
 	i = 0;
 	while (s[i])
 	{

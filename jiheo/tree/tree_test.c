@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 22:07:05 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 17:56:29 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 16:50:20 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,20 @@ void	pre_traversal(t_node *n, void (*f)(t_node *child_n))
 	pre_traversal(n->right, f);
 }
 
-
 int	main(int argc, char **argv)
 {
+	// char *s;
 	t_tree	*t;
 
-	t = parse(translate(argv[1]));
+	t = parse(ft_strdup(argv[1]));
 	pre_traversal(t->root, print_info);
 	destroy_tree(t);
+	// int	i = 0;
+	// printf("org: %s\n", argv[1]);
+	// s = translate(ft_strdup(argv[1]));
+	// printf("translated: %s\n", s);
+	// free(s);
+	// s = extract(ft_strdup(argv[1]), &i);
+	// printf("extracted: %s\n", s);
+	// free(s);
 }

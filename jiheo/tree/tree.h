@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:15 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 19:50:28 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 16:17:50 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,7 @@ bool	is_blank(char c);
 bool	is_sep(char c);
 void	ignore_space(char *s, int *i);
 void	ignore_until_c(char *s, int *i, char c);
+
+char	*join_and_rm_all(char *s1, char *s2);
 
 #endif // TREE_H
