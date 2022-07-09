@@ -30,16 +30,18 @@ void	init_env(char **envp_new[], char *envp[])
 	while (envp[i])
 	{
 		new_element = ft_strdup(envp[i]);
+		new[i] = new_element;
 		if (!ft_strncmp("PATH", envp[i], 4))
 		{
+			new_element = envp[i];
 			while (*(envp[i]) != '=')
 				(envp[i]) ++;
 			(envp[i]) ++;
 			path = ft_strdup(envp[i]);
+			envp[i] = new_element;
 		}
 		if (!path || !new_element)
 			ft_clear(new, i);
-		new[i] = new_element;
 		i ++;
 	}
 	new[i] = 0;
