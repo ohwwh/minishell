@@ -102,13 +102,18 @@ int	execute_command(char **envp[], char **command)
 	return (ret);
 }
 
-void	handler(int signum)
+static void	sig_handler(int signum)
 {
-	if (signum != SIGINT)
-		return ;
-	rl_on_new_line();
-	rl_replace_line("", 1);
-	rl_redisplay();
+	if (signum == SIGINT)
+    {
+        rl_replace_line("", 1);
+        printf("\n");
+    }
+    if (signum == SIGINT || signum == SIGQUIT)
+    {
+        rl_on_new_line();
+        rl_redisplay();
+    }
 }
 
 int main(int argc, char *argv[], char *envp[])
@@ -119,20 +124,25 @@ int main(int argc, char *argv[], char *envp[])
 	t_tree	*tree;
 	char	**envp_new;
 
+	struct termios term;
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag &= ~(ECHOCTL);
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+
 	printf("%d\n", getpid());
 	init_env(&envp_new, envp);
-	signal(SIGINT, handler);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
 		pstr = readline(prompt);
-		//command = ft_split(pstr, ' ');
+		if (pstr == NULL)
+			exit(EXIT_SUCCESS);
 		tree = parse(ft_strdup(pstr));
-		//pre_traversal(tree.root, print_info);
 		add_history(pstr);
-		//execute_command(&envp_new, command);
-		shell_pipe(tree->root->left, tree->root->right, &envp_new);
+		if (tree && tree->root)
+			shell_pipe(tree->root->left, tree->root->right, &envp_new);
 		free(pstr);
-		//free_arr(command);
 		destroy_tree(tree);
 		tree = 0;
 	}

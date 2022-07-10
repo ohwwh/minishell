@@ -82,7 +82,7 @@ void	shell_pipe(t_node *left, t_node *right, char **envp[])
 	int	pid_1;
 	int	pid_2;
 
-	if (!right)
+	if (left)
 		if (1 == single_command(left, envp))
 			return ;
 	// 이럴거면 루트 노드에 무조건 pipe를 둔 이유가 없지 않나요

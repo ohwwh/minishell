@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <termios.h>
 #include "tree.h"
 
 int		cd(char *envp[], char **command);
