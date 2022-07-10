@@ -1,3 +1,7 @@
 .vscode
 .idea
 .DS_STORE
+
+**/*.dSYM
+
+jiheo/minishell.dSYM/*
