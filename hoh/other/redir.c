@@ -17,11 +17,11 @@ void	redir_in(char *file, char *envp[])
 void    redir_in_heredoc(char *end_str)
 {
 	char	*pstr;
-	char	temp[10] = "temp_file";
+	char	temp[9] = "heredoc";
 	int		fd;
 
 	pstr = 0;
-    fd = open(temp, O_RDWR | O_TRUNC);
+    fd = open(temp, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	while (1)
 	{
 		pstr = readline("> ");
@@ -35,6 +35,8 @@ void    redir_in_heredoc(char *end_str)
 		free(pstr);
         pstr = 0;
 	}
+	close(fd);
+	fd = open(temp, O_RDONLY);
 	dup2(fd, 0);
 	close(fd);
 }

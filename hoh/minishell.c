@@ -42,19 +42,22 @@ int	execute_fork(char *envp[], char **command, int *temp)
 	int		flag;
 	int		pid;
 
-	i = 0;
 	flag = 0;
 	errno = 0;
 	if (ft_strchr(command[0], '/'))
 	{
 		if (execve(command[0], command, envp) == -1)
 		{
-			if (temp)
-				dup2(temp[1], 1);
-			printf("minishell: %s: %s\n", command[0], strerror(errno));
+			dup2(temp[1], 1);
+			i = errno;
+			if (!chdir(command[0]))
+				printf("minishell: %s: is a directory\n", command[0]);
+			else
+				printf("minishell: %s: %s\n", command[0], strerror(i));
 			return (0);
 		}
 	}
+	i = 0;
 	paths = get_paths(path, ':', command[0], envp);
 	if (!paths)
 		errno = 2;
@@ -69,8 +72,7 @@ int	execute_fork(char *envp[], char **command, int *temp)
 			break ;
 		}
 	}
-	if (temp)
-		dup2(temp[1], 1);
+	dup2(temp[1], 1);
 	if (flag)
 		printf("minishell: %s: %s\n", org, strerror(errno));
 	else

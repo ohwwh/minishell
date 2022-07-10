@@ -20,7 +20,7 @@ void	back_command(t_node *node, char **envp[], int *former_fd, int *fd, int *tem
 	close(fd[1]);
 	if (node->left)
 		redir(node->left, *envp);
-	execute_command(envp, node->right->data, 0);
+	execute_command(envp, node->right->data, temp);
 	shell_exit(0, *envp);
 
 }
@@ -45,14 +45,6 @@ void	single_command(t_node *node, char **envp[], int *temp)
 		if (!built)
 			shell_exit(0, *envp);
 	}
-}
-
-void	execute_tree(t_node *node, char **envp[], int *temp)
-{
-	if (!node->right)
-		single_command(node->left, envp, temp);
-	else
-		execute_pipe(node, envp, 0, temp);
 }
 
 void	execute_pipe(t_node *node, char **envp[], int *former_fd, int *temp)
@@ -87,4 +79,12 @@ void	execute_pipe(t_node *node, char **envp[], int *former_fd, int *temp)
 	}
 	else
 		back_command(node->right, envp, former_fd, fd, temp);
+}
+
+void	execute_tree(t_node *node, char **envp[], int *temp)
+{
+	if (!node->right)
+		single_command(node->left, envp, temp);
+	else
+		execute_pipe(node, envp, 0, temp);
 }
