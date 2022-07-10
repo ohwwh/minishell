@@ -34,7 +34,7 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
-int	execute_fork(char *envp[], char **command, int temp)
+int	execute_fork(char *envp[], char **command, int *temp)
 {
 	char	**paths;
 	char	*org;
@@ -50,9 +50,9 @@ int	execute_fork(char *envp[], char **command, int temp)
 		if (execve(command[0], command, envp) == -1)
 		{
 			if (temp)
-				dup2(temp, 1);
+				dup2(temp[1], 1);
 			printf("minishell: %s: %s\n", command[0], strerror(errno));
-			shell_exit(errno, envp);
+			return (0);
 		}
 	}
 	paths = get_paths(path, ':', command[0], envp);
@@ -70,18 +70,17 @@ int	execute_fork(char *envp[], char **command, int temp)
 		}
 	}
 	if (temp)
-		dup2(temp, 1);
+		dup2(temp[1], 1);
 	if (flag)
 		printf("minishell: %s: %s\n", org, strerror(errno));
 	else
 		printf("minishell: %s: command not found\n", org);
 	free_arr(paths);
-	shell_exit(errno, envp);
 	//command[0] = org;
 	return (0);
 }
 
-int	execute_command(char **envp[], char **command, int temp)
+int	execute_command(char **envp[], char **command, int *temp)
 {
 	int	ret;
 
@@ -125,19 +124,24 @@ int main(int argc, char *argv[], char *envp[])
 	char	**command;
 	t_tree	*tree;
 	char	**envp_new;
+	int		temp[2];
 	
+	temp[0] = dup(0);
+	temp[1] = dup(1);
 	printf("%d\n", getpid());
 	init_env(&envp_new, envp);
 	signal(SIGINT, handler);
 	while (1)
 	{
+		dup2(temp[0], 0);
+		dup2(temp[1], 1);
 		pstr = readline(prompt);
 		if (!pstr)
 			pstr = "exit";
 		tree = parse(ft_strdup(pstr));
 		add_history(pstr);
 		if (tree)
-			shell_pipe(tree->root->left, tree->root->right, &envp_new);
+			execute_tree(tree->root, &envp_new, temp);
 		free(pstr);
 		destroy_tree(tree);
 		tree = 0;
