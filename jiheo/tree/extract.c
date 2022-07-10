@@ -6,11 +6,11 @@
 /*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 17:06:40 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 19:55:45 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:12:15 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "../tree.h"
 
 char	*extract_line(char *s, int *p_from)
 {
@@ -47,7 +47,8 @@ char	*extract_word(char *s, int *p_from)
 		{
 			i = *p_from;
 			while (s[*p_from] && !is_blank(s[*p_from]) \
-					&& !is_sep(s[*p_from]) && s[*p_from] != '"' && s[*p_from] != '\'')
+					&& !is_sep(s[*p_from]) && \
+						s[*p_from] != '"' && s[*p_from] != '\'')
 				(*p_from)++;
 			res = join_and_rm_all(res, ft_substr(s, i, *p_from - i));
 		}

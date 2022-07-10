@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:28:30 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 16:03:18 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:12:35 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "../tree.h"
 
 bool	is_blank(char c)
 {
@@ -28,7 +28,6 @@ void	ignore_space(char *s, int *i)
 		(*i)++;
 }
 
-// s[*i] == c
 void	ignore_until_c(char *s, int *i, char c)
 {
 	(*i)++;

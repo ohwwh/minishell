@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 17:56:10 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 18:04:09 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:12:05 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "../tree.h"
 
 void	print_meta(t_meta *m)
 {
@@ -37,4 +37,13 @@ void	print_info(t_node *n)
 		printf("args[%d]: %s\n", i, (n->data)[i]);
 		i++;
 	}
+}
+
+void	pre_traversal(t_node *n, void (*f)(t_node *child_n))
+{
+	if (n == NULL)
+		return ;
+	pre_traversal(n->left, f);
+	f(n);
+	pre_traversal(n->right, f);
 }

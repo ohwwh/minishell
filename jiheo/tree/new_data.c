@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   new_data.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 22:08:06 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 19:50:56 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:11:57 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "../tree.h"
 
 t_meta	*new_meta(char *s, int f, int t)
 {
@@ -27,7 +27,7 @@ t_meta	*new_meta(char *s, int f, int t)
 
 t_node	*new_node(t_node_type nt, char **data)
 {
-	t_node  *n;
+	t_node	*n;
 
 	n = (t_node *)malloc(sizeof(t_node));
 	n->data = data;

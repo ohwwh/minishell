@@ -6,11 +6,11 @@
 /*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:01:45 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 19:59:29 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:11:13 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "../tree.h"
 
 static
 char	*ts_env(char *s, int *i)

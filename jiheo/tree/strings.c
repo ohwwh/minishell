@@ -6,11 +6,11 @@
 /*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:17:25 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 19:56:20 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:11:05 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "../tree.h"
 
 char	*join_and_rm_all(char *s1, char *s2)
 {

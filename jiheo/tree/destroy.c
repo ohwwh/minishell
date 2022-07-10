@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   destroy.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 22:12:43 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 20:53:53 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:10:53 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "../tree.h"
 
 void    destroy_strings(char **strs)
 {
