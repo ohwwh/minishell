@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 17:06:40 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/10 15:57:39 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/11 08:30:08 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*extract_rd(char *s, int *p_from)
 {
 	if (s[*p_from] != '<' && s[*p_from] != '>')
 		return (NULL);
-	if (s[*p_from] == '<' && s[*p_from] == s[*p_from + 1])
+	if (s[*p_from] == s[*p_from + 1])
 	{
 		*p_from += 2;
 		if (s[*p_from - 2] == '<')
