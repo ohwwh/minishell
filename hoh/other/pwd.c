@@ -2,7 +2,7 @@
 
 int	pwd(char **command)
 {
-	char *pwd;
+	char	*pwd;
 
 	command = 0;
 	pwd = getcwd(0, 1);

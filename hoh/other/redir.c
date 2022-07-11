@@ -2,7 +2,7 @@
 
 void	redir_in(char *file, char *envp[])
 {
-	int fd;
+	int	fd;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
@@ -14,26 +14,26 @@ void	redir_in(char *file, char *envp[])
 	close(fd);
 }
 
-void    redir_in_heredoc(char *end_str)
+void	redir_in_heredoc(char *end_str)
 {
-	char	*pstr;
-	char	temp[9] = "heredoc";
-	int		fd;
+	char		*pstr;
+	const char	temp[9] = "heredoc";
+	int			fd;
 
 	pstr = 0;
-    fd = open(temp, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	fd = open(temp, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	while (1)
 	{
 		pstr = readline("> ");
-        if (!ft_strcmp(pstr, end_str))
-        {
-            free(pstr);
-            break ;
-        }
+		if (!ft_strcmp(pstr, end_str))
+		{
+			free(pstr);
+			break ;
+		}
 		write(fd, pstr, ft_strlen(pstr));
-        write(fd, "\n", 1);
+		write(fd, "\n", 1);
 		free(pstr);
-        pstr = 0;
+		pstr = 0;
 	}
 	close(fd);
 	fd = open(temp, O_RDONLY);
@@ -43,7 +43,7 @@ void    redir_in_heredoc(char *end_str)
 
 void	redir_out(char *file)
 {
-	int fd;
+	int	fd;
 
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	dup2(fd, 1);
@@ -52,7 +52,7 @@ void	redir_out(char *file)
 
 void	redir_out_double(char *file)
 {
-	int fd;
+	int	fd;
 
 	fd = open(file, O_WRONLY | O_APPEND);
 	dup2(fd, 1);

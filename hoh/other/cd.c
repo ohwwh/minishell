@@ -2,8 +2,8 @@
 
 static void	set_pwd(char *envp[])
 {
-	char    *temp;
-	char    *temp2;
+	char	*temp;
+	char	*temp2;
 	int		pwd_idx;
 
 	pwd_idx = is_exist(envp, "PWD");
@@ -22,7 +22,24 @@ static void	set_pwd(char *envp[])
 	}
 }
 
-int cd(char *envp[], char **command)
+static void	cd_oldpwd(char *envp[])
+{
+	char	*temp;
+
+	if (is_exist(envp, "OLDPWD") == -1)
+	{
+		printf("minishell: cd: OLDPWD not set\n");
+		errno = EPERM;
+	}
+	else
+	{
+		temp = get_value(envp, "OLDPWD");
+		chdir(temp);
+		free(temp);
+	}
+}
+
+int	cd(char *envp[], char **command)
 {
 	char	*temp;
 
@@ -33,19 +50,7 @@ int cd(char *envp[], char **command)
 		free(temp);
 	}
 	else if (command[1][0] == '-')
-	{
-		if (is_exist(envp, "OLDPWD") == -1)
-		{
-			printf("minishell: cd: OLDPWD not set\n");
-			errno = EPERM;
-		}
-		else
-		{
-			temp = get_value(envp, "OLDPWD");
-			chdir(temp);
-			free(temp);
-		}
-	}
+		cd_oldpwd(envp);
 	else if (chdir(command[1]) == -1)
 		return (printf("cd: %s: %s\n", command[1], strerror(errno)));
 	set_pwd(envp);

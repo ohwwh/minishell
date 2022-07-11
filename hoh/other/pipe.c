@@ -9,29 +9,25 @@ void	front_command(t_node *node, char **envp[], int *fd, int *temp)
 	shell_exit(0, *envp);
 }
 
-void	back_command(t_node *node, char **envp[], int *former_fd, int *fd, int *temp)
+void	back_command(t_node *node, char **envp[], int *fd, int *temp)
 {
-	if (former_fd)
-	{
-		dup2(former_fd[1], 1);
-		close(former_fd[1]);
-	}
 	dup2(fd[0], 0);
 	close(fd[1]);
 	if (node->left)
 		redir(node->left, *envp);
+	//usleep(100);
 	execute_command(envp, node->right->data, temp);
 	shell_exit(0, *envp);
-
 }
 
 void	single_command(t_node *node, char **envp[], int *temp)
 {
 	int	pid;
-	const int	built = is_built_in(node->right->data);	
+	int	built;	
 
-	if (!node)
+	if (!node || !(node->right))
 		return ;
+	built = is_built_in(node->right->data);
 	pid = 0;
 	if (!built)
 		pid = fork();
@@ -78,7 +74,14 @@ void	execute_pipe(t_node *node, char **envp[], int *former_fd, int *temp)
 		}
 	}
 	else
-		back_command(node->right, envp, former_fd, fd, temp);
+	{
+		if (former_fd)
+		{
+			dup2(former_fd[1], 1);
+			close(former_fd[1]);
+		}
+		back_command(node->right, envp, fd, temp);
+	}
 }
 
 void	execute_tree(t_node *node, char **envp[], int *temp)

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*path;
+char	*g_path;
 
 int	is_built_in(char **command)
 {
@@ -40,6 +40,7 @@ int	command_with_path(char *envp[], char **command, int *temp)
 {
 	int	errno_org;
 
+	errno = 0;
 	if (execve(command[0], command, envp) == -1)
 	{
 		dup2(temp[1], 1);
@@ -58,14 +59,11 @@ int	execute_fork(char *envp[], char **command, int *temp)
 	char	**paths;
 	char	*org;
 	int		i;
-	int		flag;
 
 	i = 0;
-	flag = 0;
-	errno = 0;
 	if (ft_strchr(command[0], '/'))
 		return (command_with_path(envp, command, temp));
-	paths = get_paths(path, ':', command[0], envp);
+	paths = get_paths(g_path, ':', command[0], envp);
 	if (!paths)
 		errno = 2;
 	org = command[0];
@@ -74,13 +72,10 @@ int	execute_fork(char *envp[], char **command, int *temp)
 		command[0] = paths[i];
 		execve(paths[i ++], command, envp);
 		if (errno != 2)
-		{
-			flag = 1;
 			break ;
-		}
 	}
 	dup2(temp[1], 1);
-	if (flag)
+	if (paths[i])
 		printf("minishell: %s: %s\n", org, strerror(errno));
 	else
 		printf("minishell: %s: command not found\n", org);
@@ -131,7 +126,6 @@ int main(int argc, char *argv[], char *envp[])
 {
 	char	prompt[100] = "minishell-1.0$ ";
 	char	*pstr;
-	char	**command;
 	t_tree	*tree;
 	char	**envp_new;
 	int		temp[2];
@@ -157,5 +151,5 @@ int main(int argc, char *argv[], char *envp[])
 		tree = 0;
 	}
 	free_arr(envp_new);
-	free(path);
+	free(g_path);
 }
