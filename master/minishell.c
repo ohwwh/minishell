@@ -78,7 +78,6 @@ int	execute_fork(char *envp[], char **command, int *temp)
 	else
 		printf("minishell: %s: command not found\n", org);
 	free_arr(paths);
-	//command[0] = org;
 	return (0);
 }
 
