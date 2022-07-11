@@ -111,15 +111,18 @@ int	execute_command(char **envp[], char **command, int *temp)
 	return (ret);
 }
 
-void	handler(int signum)
+static void	sig_handler(int signum)
 {
-	if (signum == SIGTERM)
-		exit(0);
-	if (signum != SIGINT)
-		return ;
-	rl_on_new_line();
-	rl_replace_line("", 1);
-	rl_redisplay();
+	if (signum == SIGINT)
+    {
+        printf("\n");
+        rl_replace_line("", 1);
+    }
+    if (signum == SIGINT || signum == SIGQUIT)
+    {
+        rl_on_new_line();
+        rl_redisplay();
+    }
 }
 
 int main(int argc, char *argv[], char *envp[])
@@ -130,11 +133,17 @@ int main(int argc, char *argv[], char *envp[])
 	char	**envp_new;
 	int		temp[2];
 	
+	struct termios term;
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag &= ~(ECHOCTL);
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+
 	temp[0] = dup(0);
 	temp[1] = dup(1);
 	//printf("%d\n", getpid());
 	init_env(&envp_new, envp);
-	signal(SIGINT, handler);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
 		dup2(temp[0], 0);

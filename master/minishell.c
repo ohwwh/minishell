@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*path;
+char	*g_path;
 
 int	is_built_in(char **command)
 {
@@ -57,7 +57,7 @@ int	execute_fork(char *envp[], char **command, int *temp)
 		}
 	}
 	i = 0;
-	paths = get_paths(path, ':', command[0], envp);
+	paths = get_paths(g_path, ':', command[0], envp);
 	if (!paths)
 		errno = 2;
 	org = command[0];
@@ -155,5 +155,5 @@ int main(int argc, char *argv[], char *envp[])
 		tree = 0;
 	}
 	free_arr(envp_new);
-	free(path);
+	free(g_path);
 }

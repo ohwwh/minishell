@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:06:23 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 20:17:55 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/11 14:16:39 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_node	*create_prc(char *s, int *i)
 	m.src = s;
 	m.from = *i;
 	m.to = find_c(s, *i, '|') - 1;
-	if (m.to <= m.from)
+	if (m.to < m.from)
 		return (NULL);
 	n = new_node(PRC, NULL);
 	create_subnode(n, &m, i);

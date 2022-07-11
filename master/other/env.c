@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-extern char *path;
+extern char	*g_path;
 
 static void	ft_clear(char **ret, int index)
 {
@@ -25,7 +25,7 @@ void	init_env(char **envp_new[], char *envp[])
 
 	i = 0;
 	dummy = 'c';
-	path = &dummy;
+	g_path = &dummy;
 	new = (char **)malloc(sizeof(char *) * (count_env(envp) + 1));
 	while (envp[i])
 	{
@@ -35,12 +35,12 @@ void	init_env(char **envp_new[], char *envp[])
 		{
 			new_element = envp[i];
 			while (*(envp[i]) != '=')
-				(envp[i]) ++;
-			(envp[i]) ++;
-			path = ft_strdup(envp[i]);
+				(envp[i])++;
+			(envp[i])++;
+			g_path = ft_strdup(envp[i]);
 			envp[i] = new_element;
 		}
-		if (!path || !new_element)
+		if (!g_path || !new_element)
 			ft_clear(new, i);
 		i ++;
 	}

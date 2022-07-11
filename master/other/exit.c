@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-extern char *path;
+extern char	*g_path;
 
 int	isdigit_string(char *str)
 {
@@ -24,11 +24,11 @@ int	isstring_string(char *str)
 	return (1);
 }
 
-void    shell_exit(int status, char *envp[])
+void	shell_exit(int status, char *envp[])
 {
 	errno = status;
 	free_arr(envp);
-	free(path);
+	free(g_path);
 	exit(status);
 }
 

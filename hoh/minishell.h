@@ -6,6 +6,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <termios.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <readline/readline.h>
