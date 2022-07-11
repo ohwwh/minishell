@@ -28,10 +28,11 @@ void	back_command(t_node *node, char **envp[], int *former_fd, int *fd, int *tem
 void	single_command(t_node *node, char **envp[], int *temp)
 {
 	int	pid;
-	const int	built = is_built_in(node->right->data);	
+	int	built;
 
-	if (!node)
+	if (!node || !(node->right))
 		return ;
+	built = is_built_in(node->right->data);	
 	pid = 0;
 	if (!built)
 		pid = fork();

@@ -1,0 +1,9 @@
+.vscode
+.idea
+.DS_STORE
+
+**/*.dSYM
+
+/Users/jiheo/Desktop/master/master/minishell.dSYM/*
+
+minishell.dSYM/Contents/*
