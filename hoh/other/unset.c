@@ -35,7 +35,7 @@ void    unset_string(char ***envp, char *arg)
         j = 0;
         k = 0;
         new = (char **)malloc(sizeof(char *) * count_env(*envp));
-       if (!new)
+        if (!new)
 			shell_exit(ENOMEM, *envp);
         while ((*envp)[k])
         {

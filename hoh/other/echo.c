@@ -39,17 +39,13 @@ int	echo(char **command)
 		n += isflag;
 		if (!isflag)
 		{
-			/*ft_putstr_fd(command[i], 1);
+			ft_putstr_fd(command[i], 1);
 			if (command[i + 1])
-				write(1, " ", 1);*/
-			printf("%s", command[i]);
-			if (command[i + 1])
-				printf(" ");
+				write(1, " ", 1);
 		}
 		i ++;
 	}
 	if (n == 0)
-		//write(1, "\n", 1);
-		printf("\n");
+		write(1, "\n", 1);
 	return (0);
 }
