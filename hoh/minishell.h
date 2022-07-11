@@ -6,9 +6,15 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+<<<<<<< HEAD
 #include "../jiheo/tree.h"
+=======
+#include "tree.h"
+>>>>>>> hoh
 
 int		cd(char *envp[], char **command);
 int		pwd(char **command);
@@ -21,14 +27,18 @@ char	*cat_env(char *key, char *value, char *envp[]);
 char	*get_value(char *envp[], char *key);
 char	*cut_value(char *str, char *envp[]);
 char	**get_paths(char const *s, char c, char *command, char *envp[]);
-int	shell_pipe(t_node *left, t_node *right, char *envp[]);
-int		execute_fork(char *envp[], char **command);
+//void	shell_pipe(t_node *left, t_node *right, char **envp[], int *former_fd);
+void	execute_tree(t_node *node, char **envp[], int *temp);
+void	execute_pipe(t_node *node, char **envp[], int *former_fd, int *temp);
+void	redir(t_node *node, char *envp[]);
+int		execute_command(char **envp[], char **command, int *temp);
+int		execute_fork(char *envp[], char **command, int *temp);
 void	free_arr(char **arr);
 int 	env_export(char ***envp, char **command);
 int		env_export_string(char ***envp, char *command);
-int		is_valid(char *command, char *arg);
 int		env(char *envp[], char **command);
 int		count_env(char *envp[]);
 void	init_env(char **envp_new[], char *envp[]);
 int		is_exist(char *envp[], char *key);
 void    unset(char ***envp, char **command);
+int		is_built_in(char **command);

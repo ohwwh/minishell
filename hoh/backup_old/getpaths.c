@@ -56,7 +56,7 @@ static char	*ft_dup(const char *src, char c, char *command, size_t command_len)
 	return (ret);
 }
 
-static char	**ft_clear(char **ret, int index)
+static void	ft_clear(char **ret, int index, char *envp[])
 {
 	int		i;
 
@@ -67,10 +67,10 @@ static char	**ft_clear(char **ret, int index)
 		i ++;
 	}
 	free(ret);
-	return (0);
+	shell_exit(ENOMEM, envp);
 }
 
-char	**get_paths(char const *s, char c, char *command)
+char	**get_paths(char const *s, char c, char *command, char *envp[])
 {
 	char	**ret;
 	int		i;
@@ -80,22 +80,21 @@ char	**get_paths(char const *s, char c, char *command)
 		return (0);
 	i = 0;
 	ret = (char **)malloc(sizeof(char *) * (wordcount(s, c) + 1));
-	if (ret)
-	{	
-		while (*s)
+	if (!ret)
+		shell_exit(ENOMEM, envp);
+	while (*s)
+	{
+		if (*s != c && *s)
 		{
-			if (*s != c && *s)
-			{
-				ret[i] = ft_dup(s, c, command, command_len);
-				if (!ret[i])
-					return (ft_clear(ret, i));
-				i ++;
-				s += wordlen(s, c);
-			}
-			else
-				s ++;
+			ret[i] = ft_dup(s, c, command, command_len);
+			if (!ret[i])
+				ft_clear(ret, i, envp);
+			i ++;
+			s += wordlen(s, c);
 		}
-		ret[i] = 0;
+		else
+			s ++;
 	}
+	ret[i] = 0;
 	return (ret);
 }

@@ -2,41 +2,65 @@
 
 char	*path;
 
-void	free_command(char **command)
+void	free_arr(char **arr)
 {
 	int	i;
 
 	i = 0;
-	while (command[i])
-		free(command[i ++]);
-	free(command);
+	while (arr[i])
+		free(arr[i ++]);
+	free(arr);
 }
 
-int	excute_fork(t_list **env_list, char **command, char *envp[])
+int	execute_fork(char *envp[], char **command)
 {
 	char	**paths;
+	char	*org;
 	int		i;
+	int		flag;
 	int		pid;
 
 	i = 0;
+	flag = 0;
+	errno = 0;
 	pid = fork();
 	if (!pid)
 	{
-		paths = get_paths(path, ':', command[0]);
-		while (paths[i])
+		if (ft_strchr(command[0], '/'))
+		{
+			if (execve(command[0], command, envp) == -1)
+				return (printf("minishell: %s: %s\n", command[0], strerror(errno)));
+		}
+		paths = get_paths(path, ':', command[0], envp);
+		if (!paths)
+			errno = 2;
+		org = command[0];
+		while (paths && paths[i])
 		{
 			command[0] = paths[i];
-			if (execve(paths[i], command, envp) == -1)
+			if (execve(paths[i], command, envp) != -1)
+			{
+				flag = 1;
+				break ;
+			}
+			else
+			{
+				if (errno != 2)
+					break ;
 				i ++;
+			}
 		}
-		free_command(paths);
+		if (!flag)
+			printf("bash: %s: %s\n", org, strerror(errno));
+		free_arr(paths);
+		command[0] = org;
 	}
 	else
 		waitpid(pid, 0, 0);
 	return (0);
 }
 
-int	execute_command(t_list **env_list, char **command, char *envp[])
+int	execute_command(char **envp[], char **command)
 {
 	int	ret;
 
@@ -44,21 +68,21 @@ int	execute_command(t_list **env_list, char **command, char *envp[])
 	if (*command == 0)
 		return (ret);
 	else if (!ft_strcmp(command[0], "cd"))
-		cd(env_list, command);
+		cd(*envp, command);
 	else if (!ft_strcmp(command[0], "echo"))
 		echo(command);
 	else if (!ft_strcmp(command[0], "env"))
-		env(env_list, command);
+		env(*envp, command);
 	else if (!ft_strcmp(command[0], "exit"))
-		shell_exit(0, env_list);
+		exit_shell(*envp, command);
 	else if (!ft_strcmp(command[0], "export"))
-		env_export(env_list, command);
+		env_export(envp, command);
 	else if (!ft_strcmp(command[0], "pwd"))
 		pwd(command);
 	else if (!ft_strcmp(command[0], "unset"))
-		unset(env_list, command);
+		unset(envp, command);
 	else
-		excute_fork(env_list, command, envp);
+		execute_fork(*envp, command);
 	return (ret);
 }
 
@@ -77,22 +101,19 @@ int main(int argc, char *argv[], char *envp[])
 	char	*pstr;
 	char	**command;
 	char	**envp_new;
-	t_list	*env_list;
-
-	env_list = 0;
+	
 	printf("%d\n", getpid());
-	init_env(&env_list, envp);
+	init_env(&envp_new, envp);
 	signal(SIGINT, handler);
 	while (1)
 	{
 		pstr = readline(prompt);
 		command = ft_split(pstr, ' ');
 		add_history(pstr);
-		execute_command(&env_list, command, envp_new);
+		execute_command(&envp_new, command);
 		free(pstr);
-		free_command(command);
+		free_arr(command);
 	}
-	ft_lstclear(&env_list, &delnode);
-	//free_command(envp_new);
-	//free(path);
+	free_arr(envp_new);
+	free(path);
 }

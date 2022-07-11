@@ -8,18 +8,26 @@
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
+<<<<<<< HEAD
 				"minishell.c","cd.c","echo.c","env.c","exit.c","export.c","pwd.c","unset.c", "env_utils.c","getpaths.c", "tree.c", "pipe.c",
 				"print.c", "utils.c", "find.c", "advlst.c", "destroy.c", "extract.c", "new_data.c",
+=======
+				"./minishell.c","./other/cd.c","./other/echo.c","./other/env.c","./other/exit.c","./other/export.c","./other/pwd.c",
+				"./other/unset.c", "./other/env_utils.c","./other/getpaths.c", "./other/pipe.c", "./other/redir.c",
+				"./tree/print.c", "./tree/utils.c", "./tree/find.c", "./tree/advlst.c", "./tree/destroy.c", "./tree/extract.c", 
+				"./tree/new_data.c", "./tree/tree.c", "tree/strings.c", "tree/translate.c",
+>>>>>>> hoh
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}",
 				"-lohw",
 				"-lreadline",
 				"-L./libohw",
-				//"-L/opt/homebrew/opt/readline/lib",
-				"-L/Users/hoh/.brew/opt/readline/lib",
+				"-L/opt/homebrew/opt/readline/lib",
+				//"-L/Users/hoh/.brew/opt/readline/lib",
 				"-I./libohw/incs",
-				//"-I/opt/homebrew/opt/readline/include",
-				"-I/Users/hoh/.brew/opt/readline/include"
+				"-I./",
+				"-I/opt/homebrew/opt/readline/include",
+				//"-I/Users/hoh/.brew/opt/readline/include"
 			],
 			"options": {
 				"cwd": "${fileDirname}"
