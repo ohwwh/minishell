@@ -106,8 +106,8 @@ static void	sig_handler(int signum)
 {
 	if (signum == SIGINT)
     {
-        rl_replace_line("", 1);
         printf("\n");
+        rl_replace_line("", 1);
     }
     if (signum == SIGINT || signum == SIGQUIT)
     {
