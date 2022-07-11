@@ -14,14 +14,16 @@ void	redir_in(char *file, char *envp[])
 	close(fd);
 }
 
-void	redir_in_heredoc(char *end_str)
+void	redir_in_heredoc(char *end_str, char *envp[])
 {
 	char		*pstr;
-	const char	temp[9] = "heredoc";
+	char		*temp;
 	int			fd;
 
-	pstr = 0;
+	pstr = get_value(envp, "SHELL");
+	temp = ft_strjoin(pstr, "/heredoc");
 	fd = open(temp, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	free(pstr);
 	while (1)
 	{
 		pstr = readline("> ");
@@ -33,10 +35,10 @@ void	redir_in_heredoc(char *end_str)
 		write(fd, pstr, ft_strlen(pstr));
 		write(fd, "\n", 1);
 		free(pstr);
-		pstr = 0;
 	}
 	close(fd);
 	fd = open(temp, O_RDONLY);
+	free(temp);
 	dup2(fd, 0);
 	close(fd);
 }
@@ -73,7 +75,7 @@ void	redir(t_node *node, char *envp[])
 	else if (node->data[0][0] == '<')
 	{
 		if (node->data[0][1] == '<')
-			redir_in_heredoc(node->data[1]);
+			redir_in_heredoc(node->data[1], envp);
 		else if (!node->data[0][1])
 			redir_in(node->data[1], envp);
 	}
