@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:06:23 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 20:02:14 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 19:59:52 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,62 +31,60 @@ void	add_subtree(t_tree *org, t_node *sub)
 	}
 }
 
-t_node	*create_cl(t_meta *m, int *i)
+t_node	*conn_node(t_node *org, t_node *new)
 {
 	t_node	*n;
-	t_list	*l;
 
-	n = NULL;
-	l = ft_lstnew();
-	if (l == NULL)
-		return (NULL);
-	while (*i <= m->to)
-	{
-		ignore_space(m->src, i);
-		if (m->src[*i] == '<' || m->src[*i] == '>')
-			break ;
-		if (*i <= m->to)
-			ft_lstadd_back(l, (void *)extract(m->src, i));
-	}
-	if (l->len != 0)
-		n = new_node(CL, lst_to_arr(l));
-	destroy_lst(l);
+	if (org == NULL)
+		return (new);
+	n = new_node(REDIR, NULL);
+	n->left = org;
+	n->right = new;
 	return (n);
 }
-
-// t_node	*conn_node(t_node *org, t_node *new)
-// {
-// 	t_node	
-// 	if (org == NULL)
-// 		return (new);
-	
-// }
 
 t_node	*create_rd(t_meta *m, int *i)
 {
 	t_node	*n;
-	// t_list	*l;
+	char	*cmd;
+	char	**data;
 
-	n = NULL;
-	// while (*i <= m->to)
-	// {
-	// 	l = ft_lstnew();
-	// 	ignore_space(m->src, i);
-	// 	if (m->src[*i] == '<' || m->src[*i] == '>')
-	// 	{
-	// 		ft_lstadd_back(l, (void *)extract_rd(m->src, i));
-	// 		while (*i <= m->to && !is_sep(m->src[*i]))
-	// 		{
-	// 			ignore_space(m->src, i);
-	// 			if (*i <= m->to)
-	// 				ft_lstadd_back(l, (void *)extract(m->src, i));
-	// 		}
-	// 		if (l->len != 0)
-	// 			n = new_node(REDIR, lst_to_arr(l));
-	// 	}
-	// 	destroy_lst(l);
-	// }
-	return (NULL);
+	cmd = extract_rd(m->src, i);
+	if (cmd == NULL)
+		return (NULL);
+	data = (char **)malloc(sizeof(char *) * 3);
+	if (data == NULL)
+		return (NULL);
+	ignore_space(m->src, i);
+	data[0] = cmd;
+	data[1] = extract(m->src, i);
+	data[2] = NULL;
+	return (new_node(REDIR, data));
+}
+
+void	create_subnode(t_node *prc, t_meta *m, int *p_from)
+{
+	int		i;
+	t_list	*cl_list;
+	char	*s;
+
+	if (prc == NULL)
+		return ;
+	cl_list = ft_lstnew();
+	i = *p_from;
+	while (i <= m->to)
+	{
+		ignore_space(m->src, &i);
+		if (m->src[i] == '>' || m->src[i] == '<')
+			prc->left = conn_node(prc->left, create_rd(m, &i));
+		else
+			if (i <= m->to)
+				ft_lstadd_back(cl_list, (void *)extract(m->src, &i));
+	}
+	if (cl_list->len != 0)
+		prc->right = new_node(CL, lst_to_arr(cl_list));
+	*p_from = i;
+	destroy_lst(cl_list);
 }
 
 t_node	*create_prc(char *s, int *i)
@@ -97,11 +95,12 @@ t_node	*create_prc(char *s, int *i)
 	m.src = s;
 	m.from = *i;
 	m.to = find_c(s, *i, '|') - 1;
-	n = new_node(PRC, NULL);
-	if (n == NULL)
+	if (m.to <= m.from)
 		return (NULL);
-	n->right = create_cl(&m, i);
-	n->left = create_rd(&m, i);
+	n = new_node(PRC, NULL);
+	create_subnode(n, &m, i);
+	if (n->left == NULL && n->right == NULL)
+		destroy_nodes(n);
 	return (n);
 }
 
@@ -113,6 +112,7 @@ t_tree	*parse(char *s)
 	t = new_tree();
 	if (t == NULL)
 		return (NULL);
+	printf("input: %s\n", s);
 	i = 0;
 	while (s[i])
 	{

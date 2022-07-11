@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:28:30 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/08 20:04:06 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/09 20:12:35 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tree.h"
+#include "../tree.h"
 
 bool	is_blank(char c)
 {
@@ -33,33 +33,4 @@ void	ignore_until_c(char *s, int *i, char c)
 	(*i)++;
 	while (s[*i] && s[*i] != c)
 		(*i)++;
-}
-
-char	*translate(char *s)
-{
-	char	*tmp;
-	int		i;
-	int		s_i;
-	char	*res;
-	char	*dump;
-
-	i = 0;
-	res = NULL;
-	while (s[i])
-	{
-		if (s[i] == '\'' || s[i] == '$')
-			tmp = extract(s, &i);
-		else
-		{
-			s_i = i;
-			while (s[i] && !(s[i] == '\'' || s[i] == '$'))
-				i++;
-			tmp = ft_substr(s, s_i, i - s_i);
-		}
-		dump = res;
-		res = ft_strjoin(res, tmp);
-		free(dump);
-		free(tmp);
-	}
-	return (res);
 }

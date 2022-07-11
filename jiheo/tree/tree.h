@@ -7,10 +7,14 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:15 by jiheo             #+#    #+#             */
 <<<<<<< HEAD:jiheo/tree.h
+<<<<<<< HEAD:jiheo/tree.h
 /*   Updated: 2022/07/08 15:04:12 by jiheo            ###   ########.fr       */
 =======
 /*   Updated: 2022/07/08 20:03:46 by jiheo            ###   ########.fr       */
 >>>>>>> hoh:hoh/tree.h
+=======
+/*   Updated: 2022/07/09 16:17:50 by jiheo            ###   ########.fr       */
+>>>>>>> be5ccee2bb1a217b7ce62e7cfa3adff8dc07aaf7:jiheo/tree/tree.h
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +25,14 @@
 # include <stdlib.h>
 # include <stdbool.h>
 <<<<<<< HEAD:jiheo/tree.h
+<<<<<<< HEAD:jiheo/tree.h
 # include "Libft/libft.h"
 =======
 # include "libohw/includes/libft.h"
 >>>>>>> hoh:hoh/tree.h
+=======
+# include "../Libft/libft.h"
+>>>>>>> be5ccee2bb1a217b7ce62e7cfa3adff8dc07aaf7:jiheo/tree/tree.h
 
 typedef enum e_node_type
 {

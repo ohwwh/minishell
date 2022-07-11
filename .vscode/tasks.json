@@ -9,6 +9,7 @@
 				"-fdiagnostics-color=always",
 				"-g",
 <<<<<<< HEAD
+<<<<<<< HEAD
 				"minishell.c","cd.c","echo.c","env.c","exit.c","export.c","pwd.c","unset.c", "env_utils.c","getpaths.c", "tree.c", "pipe.c",
 				"print.c", "utils.c", "find.c", "advlst.c", "destroy.c", "extract.c", "new_data.c",
 =======
@@ -17,6 +18,10 @@
 				"./tree/print.c", "./tree/utils.c", "./tree/find.c", "./tree/advlst.c", "./tree/destroy.c", "./tree/extract.c", 
 				"./tree/new_data.c", "./tree/tree.c", "tree/strings.c", "tree/translate.c",
 >>>>>>> hoh
+=======
+				"minishell.c","cd.c","echo.c","env.c","exit.c","export.c","pwd.c","unset.c", "env_utils.c","getpaths.c", "pipe.c",
+				"tree/print.c", "tree/utils.c", "tree/find.c", "tree/advlst.c", "tree/destroy.c", "tree/extract.c", "tree/new_data.c", "tree/tree.c", "tree/translate.c", "tree/strings.c",
+>>>>>>> be5ccee2bb1a217b7ce62e7cfa3adff8dc07aaf7
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}",
 				"-lohw",
