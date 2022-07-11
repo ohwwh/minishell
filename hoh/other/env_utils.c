@@ -1,14 +1,13 @@
 #include "minishell.h"
 
-extern char *path;
-
 int	count_env(char *envp[])
 {
 	int	i;
 
 	i = 0;
-	while (envp[i ++]);
-
+	while (envp[i ++])
+	{
+	}
 	return (i);
 }
 
@@ -39,13 +38,13 @@ int	is_exist(char *envp[], char *key)
 	return (ret);
 }
 
-char	*cat_env(char *key, char *value, char *envp[])
+char	*cat_env(char *key, char *val, char *envp[])
 {
 	char	*ret;
 	int		i;
 	int		j;
 
-	ret = (char *)malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(value) + 2));
+	ret = (char *)malloc(sizeof(char) * (ft_strlen(key) + ft_strlen(val) + 2));
 	if (!ret)
 		shell_exit(ENOMEM, envp);
 	i = 0;
@@ -58,9 +57,9 @@ char	*cat_env(char *key, char *value, char *envp[])
 	}
 	ret[i ++] = '=';
 	j = 0;
-	while (value[j])
+	while (val[j])
 	{
-		ret[i] = value[j];
+		ret[i] = val[j];
 		i ++;
 		j ++;
 	}
@@ -100,9 +99,9 @@ char	*cut_value(char *str, char *envp[])
 char	*get_value(char *envp[], char *key)
 {
 	char	*ret;
-	int	flag;
-	int	i;
-	int	j;
+	int		flag;
+	int		i;
+	int		j;
 
 	i = 0;
 	ret = 0;

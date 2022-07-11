@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-extern char	*path;
+extern char	*g_path;
 
 static int	is_valid_export(char *arg)
 {
@@ -24,6 +24,37 @@ static int	is_valid_export(char *arg)
 	return (1);
 }
 
+void	env_export_exist(char ***envp, char *new_command, int idx)
+{
+	if (!ft_strncmp("PATH", new_command, 4))
+	{
+		free(g_path);
+		g_path = cut_value(new_command, *envp);
+	}
+	free((*envp)[idx]);
+	(*envp)[idx] = new_command;
+}
+
+void	env_export_new(char ***envp, char *new_command)
+{
+	int		i;
+	char	**new;
+
+	i = 0;
+	new = (char **)malloc(sizeof(char *) * (count_env(*envp) + 2));
+	if (!new)
+		shell_exit(ENOMEM, *envp);
+	while ((*envp)[i])
+	{
+		new[i] = (*envp)[i];
+		i ++;
+	}
+	new[i] = new_command;
+	new[i + 1] = 0;
+	free(*envp);
+	*envp = new;
+}
+
 int	env_export_string(char ***envp, char *arg)
 {
 	int		idx;
@@ -37,36 +68,14 @@ int	env_export_string(char ***envp, char *arg)
 		if (!new_command)
 			shell_exit(ENOMEM, *envp);
 		if (idx == -1)
-		{
-			idx = 0;
-			new = (char **)malloc(sizeof(char *) * (count_env(*envp) + 2));
-			if (!new)
-				shell_exit(ENOMEM, *envp);
-			while ((*envp)[idx])
-			{
-				new[idx] = (*envp)[idx];
-				idx ++;
-			}
-			new[idx] = new_command;
-			new[idx + 1] = 0;
-			free(*envp);
-			*envp = new;
-		}
+			env_export_new(envp, new_command);
 		else
-		{
-			if (!ft_strncmp("PATH", new_command, 4))
-			{
-				free(path);
-				path = cut_value(new_command, *envp);
-			}
-			free((*envp)[idx]);
-			(*envp)[idx] = new_command;
-		}
+			env_export_exist(envp, new_command, idx);
 	}
 	return (0);
 }
 
-int env_export(char ***envp, char **command)
+int	env_export(char ***envp, char **command)
 {
 	int		i;
 

@@ -72,8 +72,8 @@ static void	ft_clear(char **ret, int index, char *envp[])
 
 char	**get_paths(char const *s, char c, char *command, char *envp[])
 {
-	char	**ret;
-	int		i;
+	char		**ret;
+	int			i;
 	const int	command_len = ft_strlen(command);
 
 	if (!s)

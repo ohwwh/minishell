@@ -19,7 +19,7 @@ void    shell_exit(int status, char *envp[]);
 void	exit_shell(char *envp[], char **command);
 int		isdigit_string(char *str);
 int		isstring_string(char *str);
-char	*cat_env(char *key, char *value, char *envp[]);
+char	*cat_env(char *key, char *val, char *envp[]);
 char	*get_value(char *envp[], char *key);
 char	*cut_value(char *str, char *envp[]);
 char	**get_paths(char const *s, char c, char *command, char *envp[]);
