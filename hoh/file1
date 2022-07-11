@@ -1,2 +1,16 @@
-one
-one
+total 328
+-rwxr-xr-x   1 ohw  staff  50002  7 11 17:14 a.out
+drwxr-xr-x  34 ohw  staff   1088  7 11 18:10 backup_old
+-rwxr-xr-x   1 ohw  staff    812  7 11 18:06 com.sh
+-rw-r--r--   1 ohw  staff      0  7 11 18:31 file1
+-rwxr-xr-x   1 ohw  staff      3  7 11 18:00 heredoc
+-rwxr-xr-x   1 ohw  staff     49  7 11 17:14 leaks.sh
+drwxr-xr-x   7 ohw  staff    224  7 11 10:32 libohw
+-rwxr-xr-x   1 ohw  staff  82342  7 11 18:06 minishell
+-rw-r--r--   1 ohw  staff   1355  7 11 18:06 minishell.c
+drwxr-xr-x   3 ohw  staff     96  7  8 22:20 minishell.dSYM
+-rw-r--r--   1 ohw  staff   1664  7 11 17:15 minishell.h
+drwxr-xr-x  16 ohw  staff    512  7 11 18:06 other
+-rw-r--r--   1 ohw  staff    145  7 11 17:14 test.c
+drwxr-xr-x  13 ohw  staff    416  7 11 15:49 tree
+-rw-r--r--   1 ohw  staff   2016  7 11 18:10 tree.h

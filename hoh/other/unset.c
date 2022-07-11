@@ -18,7 +18,7 @@ static int	is_valid_unset(char *arg)
 	int	i;
 
 	i = 0;
-	if (arg[0] == '=' | isstring_string(arg) == 0)
+	if (ft_strchr(arg, '=') != 0 | isstring_string(arg) == 0)
 	{
 		errno = EPERM;
 		printf("unset: '%s': not a valid identifier\n", arg);
