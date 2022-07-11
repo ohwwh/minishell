@@ -34,7 +34,7 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
-int	execute_fork(char *envp[], char **command)
+int	execute_fork(char *envp[], char **command, int *temp)
 {
 	char	**paths;
 	char	*org;
@@ -42,14 +42,22 @@ int	execute_fork(char *envp[], char **command)
 	int		flag;
 	int		pid;
 
-	i = 0;
 	flag = 0;
 	errno = 0;
 	if (ft_strchr(command[0], '/'))
 	{
 		if (execve(command[0], command, envp) == -1)
-			return (printf("minishell: %s: %s\n", command[0], strerror(errno)));
+		{
+			dup2(temp[1], 1);
+			i = errno;
+			if (!chdir(command[0]))
+				printf("minishell: %s: is a directory\n", command[0]);
+			else
+				printf("minishell: %s: %s\n", command[0], strerror(i));
+			return (0);
+		}
 	}
+	i = 0;
 	paths = get_paths(path, ':', command[0], envp);
 	if (!paths)
 		errno = 2;
@@ -57,26 +65,24 @@ int	execute_fork(char *envp[], char **command)
 	while (paths && paths[i])
 	{
 		command[0] = paths[i];
-		if (execve(paths[i], command, envp) != -1)
+		execve(paths[i ++], command, envp);
+		if (errno != 2)
 		{
 			flag = 1;
 			break ;
 		}
-		else
-		{
-			if (errno != 2)
-				break ;
-			i ++;
-		}
 	}
-	if (!flag)
+	dup2(temp[1], 1);
+	if (flag)
 		printf("minishell: %s: %s\n", org, strerror(errno));
+	else
+		printf("minishell: %s: command not found\n", org);
 	free_arr(paths);
-	command[0] = org;
+	//command[0] = org;
 	return (0);
 }
 
-int	execute_command(char **envp[], char **command)
+int	execute_command(char **envp[], char **command, int *temp)
 {
 	int	ret;
 
@@ -84,7 +90,7 @@ int	execute_command(char **envp[], char **command)
 	if (*command == 0)
 		return (ret);
 	else if (!ft_strcmp(command[0], "cd"))
-		cd(*envp, command);
+		cd(*envp, command);	
 	else if (!ft_strcmp(command[0], "echo"))
 		echo(command);
 	else if (!ft_strcmp(command[0], "env"))
@@ -98,12 +104,14 @@ int	execute_command(char **envp[], char **command)
 	else if (!ft_strcmp(command[0], "unset"))
 		unset(envp, command);
 	else
-		execute_fork(*envp, command);
+		execute_fork(*envp, command, temp);
 	return (ret);
 }
 
 void	handler(int signum)
 {
+	if (signum == SIGTERM)
+		exit(0);
 	if (signum != SIGINT)
 		return ;
 	rl_on_new_line();
@@ -118,21 +126,25 @@ int main(int argc, char *argv[], char *envp[])
 	char	**command;
 	t_tree	*tree;
 	char	**envp_new;
-
+	int		temp[2];
+	
+	temp[0] = dup(0);
+	temp[1] = dup(1);
 	printf("%d\n", getpid());
 	init_env(&envp_new, envp);
 	signal(SIGINT, handler);
 	while (1)
 	{
+		dup2(temp[0], 0);
+		dup2(temp[1], 1);
 		pstr = readline(prompt);
-		//command = ft_split(pstr, ' ');
+		if (!pstr)
+			pstr = "exit";
 		tree = parse(ft_strdup(pstr));
-		//pre_traversal(tree.root, print_info);
 		add_history(pstr);
-		//execute_command(&envp_new, command);
-		shell_pipe(tree->root->left, tree->root->right, &envp_new);
+		if (tree)
+			execute_tree(tree->root, &envp_new, temp);
 		free(pstr);
-		//free_arr(command);
 		destroy_tree(tree);
 		tree = 0;
 	}

@@ -6,6 +6,8 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "tree.h"
@@ -21,9 +23,11 @@ char	*cat_env(char *key, char *value, char *envp[]);
 char	*get_value(char *envp[], char *key);
 char	*cut_value(char *str, char *envp[]);
 char	**get_paths(char const *s, char c, char *command, char *envp[]);
-void		shell_pipe(t_node *left, t_node *right, char **envp[]);
-int		execute_command(char **envp[], char **command);
-int		execute_fork(char *envp[], char **command);
+void	execute_tree(t_node *node, char **envp[], int *temp);
+void	execute_pipe(t_node *node, char **envp[], int *former_fd, int *temp);
+void	redir(t_node *node, char *envp[]);
+int		execute_command(char **envp[], char **command, int *temp);
+int		execute_fork(char *envp[], char **command, int *temp);
 void	free_arr(char **arr);
 int 	env_export(char ***envp, char **command);
 int		env_export_string(char ***envp, char *command);

@@ -123,13 +123,8 @@ int main(int argc, char *argv[], char *envp[])
 {
 	char	prompt[100] = "minishell-0.0$ ";
 	char	*pstr;
-<<<<<<< HEAD
-	//char	**command;
-	t_tree	tree;
-=======
 	char	**command;
 	t_tree	*tree;
->>>>>>> hoh
 	char	**envp_new;
 	int		temp[2];
 	
@@ -143,16 +138,6 @@ int main(int argc, char *argv[], char *envp[])
 		dup2(temp[0], 0);
 		dup2(temp[1], 1);
 		pstr = readline(prompt);
-<<<<<<< HEAD
-		//command = ft_split(pstr, ' ');
-		tree = *parse_to_tree(pstr);
-		add_history(pstr);
-		//execute_command(&envp_new, command);
-		shell_pipe(tree.root->left, tree.root->right, envp);
-		free(pstr);
-		// free_arr(command);
-		destroy_tree(&tree);
-=======
 		if (!pstr)
 			pstr = "exit";
 		tree = parse(ft_strdup(pstr));
@@ -162,7 +147,6 @@ int main(int argc, char *argv[], char *envp[])
 		free(pstr);
 		destroy_tree(tree);
 		tree = 0;
->>>>>>> hoh
 	}
 	free_arr(envp_new);
 	free(path);

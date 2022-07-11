@@ -10,11 +10,7 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-<<<<<<< HEAD
-#include "../jiheo/tree.h"
-=======
 #include "tree.h"
->>>>>>> hoh
 
 int		cd(char *envp[], char **command);
 int		pwd(char **command);
@@ -27,7 +23,6 @@ char	*cat_env(char *key, char *value, char *envp[]);
 char	*get_value(char *envp[], char *key);
 char	*cut_value(char *str, char *envp[]);
 char	**get_paths(char const *s, char c, char *command, char *envp[]);
-//void	shell_pipe(t_node *left, t_node *right, char **envp[], int *former_fd);
 void	execute_tree(t_node *node, char **envp[], int *temp);
 void	execute_pipe(t_node *node, char **envp[], int *former_fd, int *temp);
 void	redir(t_node *node, char *envp[]);

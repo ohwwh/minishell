@@ -24,15 +24,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdbool.h>
-<<<<<<< HEAD:jiheo/tree.h
-<<<<<<< HEAD:jiheo/tree.h
 # include "Libft/libft.h"
-=======
 # include "libohw/includes/libft.h"
->>>>>>> hoh:hoh/tree.h
-=======
 # include "../Libft/libft.h"
->>>>>>> be5ccee2bb1a217b7ce62e7cfa3adff8dc07aaf7:jiheo/tree/tree.h
 
 typedef enum e_node_type
 {
