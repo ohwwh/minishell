@@ -13,6 +13,12 @@
 #include <readline/history.h>
 #include "tree.h"
 
+typedef struct s_global_set{
+	char	*g_path;
+	int		temp[2];
+}t_global_set;
+
+void	init_term(char **envp_new[], char *envp[]);
 int		cd(char *envp[], char **command);
 int		pwd(char **command);
 int 	echo(char **command);
@@ -24,11 +30,14 @@ char	*cat_env(char *key, char *val, char *envp[]);
 char	*get_value(char *envp[], char *key);
 char	*cut_value(char *str, char *envp[]);
 char	**get_paths(char const *s, char c, char *command, char *envp[]);
-void	execute_tree(t_node *node, char **envp[], int *temp);
-void	execute_pipe(t_node *node, char **envp[], int *former_fd, int *temp);
+void	execute_tree(t_node *node, char **envp[]);
+void	execute_pipe(t_node *node, char **envp[], int *former_fd);
 void	redir(t_node *node, char *envp[]);
-int		execute_command(char **envp[], char **command, int *temp);
-int		execute_fork(char *envp[], char **command, int *temp);
+void	single_command(t_node *node, char **envp[]);
+void	back_command(t_node *node, char **envp[], int *fd);
+void	front_command(t_node *node, char **envp[], int *fd);
+int		execute_command(char **envp[], char **command);
+int		execute_fork(char *envp[], char **command);
 void	free_arr(char **arr);
 int 	env_export(char ***envp, char **command);
 int		env_export_string(char ***envp, char *command);

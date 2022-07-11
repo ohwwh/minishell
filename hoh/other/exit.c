@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-extern char	*g_path;
+extern t_global_set	g_set;
 
 int	isdigit_string(char *str)
 {
@@ -28,7 +28,7 @@ void	shell_exit(int status, char *envp[])
 {
 	errno = status;
 	free_arr(envp);
-	free(g_path);
+	free(g_set.g_path);
 	exit(status);
 }
 
