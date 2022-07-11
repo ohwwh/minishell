@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-extern char	*g_path;
+extern t_global_set	g_set;
 
 static void	ft_free(char ***envp, char *arg, char **new)
 {
@@ -8,8 +8,8 @@ static void	ft_free(char ***envp, char *arg, char **new)
 	*envp = new;
 	if (!ft_strncmp("PATH", arg, 4))
 	{
-		free(g_path);
-		g_path = 0;
+		free(g_set.g_path);
+		g_set.g_path = 0;
 	}
 }
 

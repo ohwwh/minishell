@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-extern char	*g_path;
+extern t_global_set	g_set;
 
 static int	is_valid_export(char *arg)
 {
@@ -28,8 +28,8 @@ void	env_export_exist(char ***envp, char *new_command, int idx)
 {
 	if (!ft_strncmp("PATH", new_command, 4))
 	{
-		free(g_path);
-		g_path = cut_value(new_command, *envp);
+		free(g_set.g_path);
+		g_set.g_path = cut_value(new_command, *envp);
 	}
 	free((*envp)[idx]);
 	(*envp)[idx] = new_command;

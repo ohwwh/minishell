@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   translate.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:01:45 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 20:11:13 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/11 14:46:13 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ char	*ts_env(char *s, int *i)
 	return (ft_strdup(val));
 }
 
+static
+char	*ts_home(char *s, int *i)
+{
+	(*i)++;
+	return (ft_strdup(getenv("HOME")));
+}
+
 char	*translate(char *s)
 {
 	char	*tmp;
@@ -50,6 +57,8 @@ char	*translate(char *s)
 	{
 		if (s[i] == '$')
 			tmp = ts_env(s, &i);
+		else if (s[i] == '~')
+			tmp = ts_home(s, &i);
 		else
 		{
 			s_i = i;
