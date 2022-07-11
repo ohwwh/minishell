@@ -21,6 +21,8 @@ int	is_built_in(char **command)
 		ret = 1;
 	else if (!ft_strcmp(command[0], "unset"))
 		ret = 1;
+	else if (!ft_strcmp(command[0], "getpid"))
+		ret = 1;
 	return (ret);
 }
 
@@ -34,30 +36,35 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
+int	command_with_path(char *envp[], char **command, int *temp)
+{
+	int	errno_org;
+
+	if (execve(command[0], command, envp) == -1)
+	{
+		dup2(temp[1], 1);
+		errno_org = errno;
+		if (!chdir(command[0]))
+			printf("minishell: %s: is a directory\n", command[0]);
+		else
+			printf("minishell: %s: %s\n", command[0], strerror(errno_org));
+		return (0);
+	}
+	return (0);
+}
+
 int	execute_fork(char *envp[], char **command, int *temp)
 {
 	char	**paths;
 	char	*org;
 	int		i;
 	int		flag;
-	int		pid;
 
+	i = 0;
 	flag = 0;
 	errno = 0;
 	if (ft_strchr(command[0], '/'))
-	{
-		if (execve(command[0], command, envp) == -1)
-		{
-			dup2(temp[1], 1);
-			i = errno;
-			if (!chdir(command[0]))
-				printf("minishell: %s: is a directory\n", command[0]);
-			else
-				printf("minishell: %s: %s\n", command[0], strerror(i));
-			return (0);
-		}
-	}
-	i = 0;
+		return (command_with_path(envp, command, temp));
 	paths = get_paths(path, ':', command[0], envp);
 	if (!paths)
 		errno = 2;
@@ -78,7 +85,6 @@ int	execute_fork(char *envp[], char **command, int *temp)
 	else
 		printf("minishell: %s: command not found\n", org);
 	free_arr(paths);
-	//command[0] = org;
 	return (0);
 }
 
@@ -103,6 +109,8 @@ int	execute_command(char **envp[], char **command, int *temp)
 		pwd(command);
 	else if (!ft_strcmp(command[0], "unset"))
 		unset(envp, command);
+	else if (!ft_strcmp(command[0], "getpid"))
+		printf("%d\n", getpid());
 	else
 		execute_fork(*envp, command, temp);
 	return (ret);
@@ -121,7 +129,7 @@ void	handler(int signum)
 
 int main(int argc, char *argv[], char *envp[])
 {
-	char	prompt[100] = "minishell-0.0$ ";
+	char	prompt[100] = "minishell-1.0$ ";
 	char	*pstr;
 	char	**command;
 	t_tree	*tree;
@@ -130,7 +138,7 @@ int main(int argc, char *argv[], char *envp[])
 	
 	temp[0] = dup(0);
 	temp[1] = dup(1);
-	printf("%d\n", getpid());
+	//printf("%d\n", getpid());
 	init_env(&envp_new, envp);
 	signal(SIGINT, handler);
 	while (1)
