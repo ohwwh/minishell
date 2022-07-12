@@ -65,18 +65,23 @@ void	redir(t_node *node, char *envp[])
 {
 	if (node->left && node->left->type == REDIR)
 		redir(node->left, envp);
-	if (node->data[0][0] == '>')
+	if (node->right && node->right->type == REDIR)
+		redir(node->right, envp);
+	if (!node->left && !node->right)
 	{
-		if (node->data[0][1] == '>')
-			redir_out_double(node->data[1]);
-		else if (!node->data[0][1])
-			redir_out(node->data[1]);
-	}
-	else if (node->data[0][0] == '<')
-	{
-		if (node->data[0][1] == '<')
-			redir_in_heredoc(node->data[1], envp);
-		else if (!node->data[0][1])
-			redir_in(node->data[1], envp);
+		if (node->data[0][0] == '>')
+		{
+			if (node->data[0][1] == '>')
+				redir_out_double(node->data[1]);
+			else if (!node->data[0][1])
+				redir_out(node->data[1]);
+		}
+		else if (node->data[0][0] == '<')
+		{
+			if (node->data[0][1] == '<')
+				redir_in_heredoc(node->data[1], envp);
+			else if (!node->data[0][1])
+				redir_in(node->data[1], envp);
+		}
 	}
 }
