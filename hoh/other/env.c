@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-extern char	*g_path;
-
 int	env(char *envp[], char **command)
 {
 	int	i;

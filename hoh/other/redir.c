@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern t_global_set	g_set;
+
 void	redir_in(char *file, char *envp[])
 {
 	int	fd;
@@ -20,6 +22,7 @@ void	redir_in_heredoc(char *end_str, char *envp[])
 	char		*temp;
 	int			fd;
 
+	dup2(g_set.temp[0], 0);
 	pstr = get_value(envp, "SHELL");
 	temp = ft_strjoin(pstr, "/heredoc");
 	fd = open(temp, O_RDWR | O_CREAT | O_TRUNC, 0644);
