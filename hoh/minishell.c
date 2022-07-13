@@ -38,6 +38,11 @@ void	free_arr(char **arr)
 
 static void	sig_handler(int signum)
 {
+	if (signum == SIGINT && g_set.flag == 1)
+	{
+		close(STDIN_FILENO);
+		return ;
+	}
 	if (signum == SIGINT)
 	{
 		printf("\n");
@@ -53,37 +58,28 @@ static void	sig_handler(int signum)
 char	*pstr_refactoring(char *pstr)
 {
 	char	*ret;
-	int		i;
-	int		ref;
 	char	*back;
+	int		i;
 
 	i = 0;
-	ref = 1;
 	if (!pstr)
 		return ("exit");
-	while (pstr[i] != '|' && pstr[i])
-		i ++;
-	if (!pstr[i])
+	if (!(*pstr))
 		return (pstr);
-	i ++;
 	while (pstr[i])
-	{
-		if (pstr[i] != ' ')
-		{
-			ref = 0;
-			break ;
-		}
 		i ++;
-	}
-	if (ref)
+	i --;
+	while (i > 0 && pstr[i] != '|')
 	{
-		back = readline("> ");
-		ret = ft_strjoin(pstr, back);
-		free(pstr);
-		free(back);
-		return (ret);
+		if (pstr[i] != '|' && pstr[i] != ' ' && pstr[i] != '>' && pstr[i] != '<')
+			return (pstr);
+		i --;
 	}
-	return (pstr);
+	back = readline("> ");
+	ret = ft_strjoin(pstr, back);
+	free(pstr);
+	free(back);
+	return (ret);
 }
 
 int	main(int argc, char *argv[], char *envp[])

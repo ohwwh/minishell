@@ -16,6 +16,7 @@
 typedef struct s_global_set{
 	char	*g_path;
 	int		temp[2];
+	int		flag;
 }t_global_set;
 
 void	init_term(char **envp_new[], char *envp[]);

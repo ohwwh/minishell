@@ -34,15 +34,7 @@ void	single_command(t_node *node, char **envp[])
 	if (!built)
 		pid = fork();
 	if (pid)
-	{
-		/*if (node->left)
-			redir(node->left, *envp);
-		if (node->right)
-			execute_command(envp, node->right->data);
-		if (!built)
-			shell_exit(0, *envp);*/
 		waitpid(pid, 0, 0);
-	}
 	else
 	{
 		if (node->left)

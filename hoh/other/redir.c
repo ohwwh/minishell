@@ -29,7 +29,10 @@ void	redir_in_heredoc(char *end_str, char *envp[])
 	free(pstr);
 	while (1)
 	{
+		g_set.flag = 1;
 		pstr = readline("> ");
+		if (!pstr)
+			return ;
 		if (!ft_strcmp(pstr, end_str))
 		{
 			free(pstr);
