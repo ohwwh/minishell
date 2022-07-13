@@ -24,9 +24,12 @@ void	single_command(t_node *node, char **envp[])
 	int	pid;
 	int	built;	
 
-	if (!node || !(node->right))
+	if (!node)
 		return ;
-	built = is_built_in(node->right->data);
+	if (node->right)
+		built = is_built_in(node->right->data);
+	else
+		built = 1;
 	pid = 0;
 	if (!built)
 		pid = fork();
@@ -36,7 +39,8 @@ void	single_command(t_node *node, char **envp[])
 	{
 		if (node->left)
 			redir(node->left, *envp);
-		execute_command(envp, node->right->data);
+		if (node->right)
+			execute_command(envp, node->right->data);
 		if (!built)
 			shell_exit(0, *envp);
 	}
