@@ -50,6 +50,42 @@ static void	sig_handler(int signum)
 	}
 }
 
+char	*pstr_refactoring(char *pstr)
+{
+	char	*ret;
+	int		i;
+	int		ref;
+	char	*back;
+
+	i = 0;
+	ref = 1;
+	if (!pstr)
+		return ("exit");
+	while (pstr[i] != '|' && pstr[i])
+		i ++;
+	if (!pstr[i])
+		return (pstr);
+	i ++;
+	while (pstr[i])
+	{
+		if (pstr[i] != ' ')
+		{
+			ref = 0;
+			break ;
+		}
+		i ++;
+	}
+	if (ref)
+	{
+		back = readline("> ");
+		ret = ft_strjoin(pstr, back);
+		free(pstr);
+		free(back);
+		return (ret);
+	}
+	return (pstr);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*pstr;
@@ -64,8 +100,7 @@ int	main(int argc, char *argv[], char *envp[])
 		dup2(g_set.temp[0], 0);
 		dup2(g_set.temp[1], 1);
 		pstr = readline("minishell-1.0$ ");
-		if (!pstr)
-			pstr = "exit";
+		pstr = pstr_refactoring(pstr);
 		tree = parse(ft_strdup(pstr));
 		add_history(pstr);
 		if (tree)
