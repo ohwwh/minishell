@@ -66,7 +66,7 @@ int	main(int argc, char *argv[], char *envp[])
 		pstr = readline("minishell-1.0$ ");
 		if (!pstr)
 			pstr = "exit";
-		tree = parse(ft_strdup(pstr));
+		tree = parse(ft_strdup(pstr), envp_new);
 		add_history(pstr);
 		if (tree)
 			execute_tree(tree->root, &envp_new);

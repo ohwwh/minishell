@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 15:41:15 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 16:17:50 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/15 11:57:31 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,33 +18,6 @@
 # include <stdbool.h>
 # include "libohw/includes/libft.h"
 
-typedef enum e_node_type
-{
-	PIPE,
-	PRC,
-	REDIR,
-	CL,
-}	t_node_type;
-
-typedef struct s_meta
-{
-	char	*src;
-	int		from;
-	int		to;
-}	t_meta;
-
-typedef struct s_node
-{
-	t_node_type		type;
-	char			**data;
-	struct s_node	*left;
-	struct s_node	*right;
-}	t_node;
-
-typedef struct s_tree
-{
-	t_node	*root;
-}	t_tree;
 
 t_tree	*new_tree(void);
 t_node	*new_node(t_node_type nt, char **data);
@@ -61,9 +34,11 @@ int		find_c(char *src, int from, char c);
 char	*extract(char *s, int *p_from);
 char	*extract_rd(char *s, int *p_from);
 
-char	*translate(char *s);
+char	*cut_value(char *str, char *envp[]);
+char	*get_value(char *envp[], char *key);
+char	*translate(char *s, char *envp[]);
 
-t_tree	*parse(char *s);
+t_tree	*parse(char *s, char *envp[]);
 
 void	print_meta(t_meta *m);
 void	print_info(t_node *n);

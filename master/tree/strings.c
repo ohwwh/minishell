@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   strings.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:17:25 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 20:11:05 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/15 11:57:04 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../tree.h"
+#include "../minishell.h"
 
 char	*join_and_rm_all(char *s1, char *s2)
 {

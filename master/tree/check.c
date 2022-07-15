@@ -1,35 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   advlst.c                                           :+:      :+:    :+:   */
+/*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/08 17:22:40 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/15 11:56:38 by jiheo            ###   ########.fr       */
+/*   Created: 2022/07/15 12:45:07 by jiheo             #+#    #+#             */
+/*   Updated: 2022/07/15 13:16:08 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	**lst_to_arr(t_list *l)
+bool	is_redir(char *s)
 {
-	char		**res;
-	t_list_node	*n;
-	int			i;
+	return (ft_strcmp(s, "<<") == 0 || ft_strcmp(s, ">>") == 0 || \
+			ft_strcmp(s, "<") == 0 || ft_strcmp(s, ">") == 0);
+}
 
-	if (l->len == 0)
-		return (NULL);
-	res = (char **)malloc((l->len + 1) * sizeof(char *));
-	if (res == NULL)
-		return (NULL);
-	res[l->len] = NULL;
+int	check_syntax(t_list *l)
+{
+	t_list_node	*n;
+	bool		flag;
+
 	n = l->front;
-	i = 0;
+	flag = true;
+	if (l == NULL || l->front == NULL)
+		return (0);
 	while (n)
 	{
-		res[i++] = (char *)n->content;
+		if (is_redir((char *)n->content))
+		{
+			if (flag)
+				flag = false;
+			else
+			{
+				// syntax error
+				printf("list syntax error\n");
+				return (1);
+			}
+		}
 		n = n->next;
 	}
-	return (res);
+	return (0);
 }
