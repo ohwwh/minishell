@@ -1,5 +1,5 @@
 while :
 do
-	leaks $1 | grep 'error'
+	leaks $1 | grep 'LEAK: '
 	sleep 1
 done

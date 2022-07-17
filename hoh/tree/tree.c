@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:06:23 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/15 15:08:06 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/17 11:55:10 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,16 @@ t_node	*create_prc(char *s, int *i, char *envp[])
 	return (n);
 }
 
+void	heredoc_jobqueue(t_list *l, t_node *n)
+{
+	if (n == NULL || l == NULL)
+		return ;
+	heredoc_jobqueue(l, n->left);
+	if (n->data && n->data[0] && ft_strcmp(n->data[0], "<<") == 0)
+		enqueue(l, n->data[1]);
+	heredoc_jobqueue(l, n->right);
+}
+
 t_tree	*parse(char *s, char *envp[])
 {
 	t_tree		*t;
@@ -164,5 +174,7 @@ t_tree	*parse(char *s, char *envp[])
 		}
 	}
 	free(s);
+	if (t != NULL)
+		heredoc_jobqueue(t->queue, t->root);
 	return (t);
 }

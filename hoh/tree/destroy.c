@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 22:12:43 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/15 14:58:33 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/17 11:39:05 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	destroy_nodes(t_node *n)
 	destroy_nodes(n->left);
 	destroy_nodes(n->right);
 	destroy_strings(n->data);
-	//free(n->data);
 	free(n);
 }
 
@@ -38,6 +37,7 @@ void	destroy_tree(t_tree *t)
 	if (t == NULL)
 		return ;
 	destroy_nodes(t->root);
+	destroy_lst(t->queue, false);
 	free(t);
 }
 
