@@ -1,6 +1,7 @@
 #include "minishell.h"
 
 t_global_set	g_set;
+extern int rl_catch_signals;
 
 int	is_built_in(char **command)
 {
@@ -38,10 +39,17 @@ void	free_arr(char **arr)
 
 static void	sig_handler(int signum)
 {
+	int	pid;
+
+	//printf("%d\n", isatty(0));
+	pid = waitpid(-1, 0, 0);
+	if (pid != -1) //자식 프로세스인 경우
+	{
+		write(0, "^C\n", 3);
+		return ;
+	}
 	if (signum == SIGINT && g_set.flag == 1)
 	{
-		close(STDIN_FILENO);
-		return ;
 	}
 	if (signum == SIGINT)
 	{
@@ -88,14 +96,17 @@ int	main(int argc, char *argv[], char *envp[])
 	t_tree	*tree;
 	char	**envp_new;
 
+	//rl_catch_signals = 1;
 	init_term(&envp_new, envp);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
+		g_set.flag = 0;
 		dup2(g_set.temp[0], 0);
 		dup2(g_set.temp[1], 1);
 		pstr = readline("minishell-1.0$ ");
+		g_set.flag = 1;
 		pstr = pstr_refactoring(pstr);
 		tree = parse(ft_strdup(pstr));
 		add_history(pstr);

@@ -1,10 +1,21 @@
-#include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include "minishell.h"
 
 int main(void){
 	int fd;
-
-	printf("%d: %s\n", getpid(), "freaking test");
-	while(1);
+	int	pid;
+	char	*str;
+	pid = fork();
+	if (pid)
+	{
+		str = readline("parent: ");
+		printf("parent: %s\n", str);
+		free(str);
+		waitpid(pid, 0, 0);
+	}
+	else
+	{
+		str = readline("child: ");
+		printf("child: %s\n", str);
+		free(str);
+	}
 }
