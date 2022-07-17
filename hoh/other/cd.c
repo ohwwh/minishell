@@ -53,6 +53,8 @@ int	cd(char *envp[], char **command)
 		cd_oldpwd(envp);
 	else if (chdir(command[1]) == -1)
 		return (printf("cd: %s: %s\n", command[1], strerror(errno)));
+		printf("%d\n", errno);
 	set_pwd(envp);
+		printf("%d\n", errno);
 	return (0);
 }
