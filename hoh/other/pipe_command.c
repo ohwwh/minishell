@@ -9,9 +9,8 @@ void	front_command(t_node *node, char **envp[], int *fd)
 	close(fd[1]);
 	if (node->left)
 		redir(node->left, *envp);
-	printf("front\n");
 	execute_command(envp, node->right->data);
-	shell_exit(0, *envp);
+	shell_exit(errno, *envp);
 }
 
 void	back_command(t_node *node, char **envp[], int *fd)
@@ -21,15 +20,15 @@ void	back_command(t_node *node, char **envp[], int *fd)
 	close(fd[0]);
 	if (node->left)
 		redir(node->left, *envp);
-	printf("back\n");
 	execute_command(envp, node->right->data);
-	shell_exit(0, *envp);
+	shell_exit(errno, *envp);
 }
 
 void	single_command(t_node *node, char **envp[])
 {
 	int	pid;
-	int	built;	
+	int	built;
+	int	status;
 
 	if (!node)
 		return ;
@@ -41,18 +40,21 @@ void	single_command(t_node *node, char **envp[])
 	if (!built)
 		pid = fork();
 	if (pid)
-		waitpid(pid, 0, 0);
+	{
+		waitpid(pid, &status, 0);
+		WIFEXITED(status);
+		g_set.errno_temp = WEXITSTATUS(status);
+	}
 	else
 	{
-		//g_set.flag = 1;
 		if (node->left)
 			redir(node->left, *envp);
 		if (node->right)
-		{
 			execute_command(envp, node->right->data);
-		}
+		g_set.errno_temp = errno;
+		//printf("%d\n", g_set.errno_temp);
 		if (!built)
-			shell_exit(0, *envp);
+			shell_exit(errno, *envp);
 	}
 }
 

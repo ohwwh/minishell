@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 17:56:10 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 20:12:05 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/15 11:57:01 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../tree.h"
+#include "../minishell.h"
 
 void	print_meta(t_meta *m)
 {

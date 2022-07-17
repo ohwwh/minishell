@@ -10,18 +10,18 @@
 				"-g",
 				"./other/unset.c", "./other/env_utils.c","./other/getpaths.c", "./other/pipe.c", "./other/redir.c", "other/init.c", "other/pipe_command.c",
 				"./tree/print.c", "./tree/utils.c", "./tree/find.c", "./tree/advlst.c", "./tree/destroy.c", "./tree/extract.c", 
-				"./tree/new_data.c", "./tree/tree.c", "tree/strings.c", "tree/translate.c",
+				"./tree/new_data.c", "./tree/tree.c", "tree/strings.c", "tree/translate.c", "tree/check.c",
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}",
 				"-lohw",
 				"-lreadline",
 				"-L./libohw",
-				"-L/opt/homebrew/opt/readline/lib",
-				//"-L/Users/hoh/.brew/opt/readline/lib",
+				//"-L/opt/homebrew/opt/readline/lib",
+				"-L/Users/hoh/.brew/opt/readline/lib",
 				"-I./libohw/incs",
 				"-I./",
-				"-I/opt/homebrew/opt/readline/include",
-				//"-I/Users/hoh/.brew/opt/readline/include"
+				//"-I/opt/homebrew/opt/readline/include",
+				"-I/Users/hoh/.brew/opt/readline/include"
 			],
 			"options": {
 				"cwd": "${fileDirname}"

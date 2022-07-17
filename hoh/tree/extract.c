@@ -6,13 +6,13 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 17:06:40 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/11 08:30:08 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/15 12:00:08 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../tree.h"
+#include "../minishell.h"
 
-char	*extract_line(char *s, int *p_from)
+char	*extract_line(char *s, int *p_from, char *envp[])
 {
 	int		i;
 	char	*res;
@@ -29,11 +29,11 @@ char	*extract_line(char *s, int *p_from)
 	else
 		res = ft_substr(s, i + 1, (*p_from)++ - i - 1);
 	if (s[i] == '"')
-		res = translate(res);
+		res = translate(res, envp);
 	return (res);
 }
 
-char	*extract_word(char *s, int *p_from)
+char	*extract_word(char *s, int *p_from, char *envp[])
 {
 	int		i;
 	char	*res;
@@ -42,7 +42,7 @@ char	*extract_word(char *s, int *p_from)
 	while (s[*p_from] && !is_blank(s[*p_from]) && !is_sep(s[*p_from]))
 	{
 		if (s[*p_from] == '"' || s[*p_from] == '\'')
-			res = join_and_rm_all(res, extract_line(s, p_from));
+			res = join_and_rm_all(res, extract_line(s, p_from, envp));
 		else
 		{
 			i = *p_from;
@@ -53,7 +53,7 @@ char	*extract_word(char *s, int *p_from)
 			res = join_and_rm_all(res, ft_substr(s, i, *p_from - i));
 		}
 	}
-	return (translate(res));
+	return (translate(res, envp));
 }
 
 char	*extract_rd(char *s, int *p_from)
@@ -78,11 +78,11 @@ char	*extract_rd(char *s, int *p_from)
 	}
 }
 
-char	*extract(char *s, int *p_from)
+char	*extract(char *s, int *p_from, char *envp[])
 {
 	if (s[*p_from] == '\'' || s[*p_from] == '"')
-		return (extract_line(s, p_from));
+		return (extract_line(s, p_from, envp));
 	else if (s[*p_from] && !is_blank(s[*p_from]) && !is_sep(s[*p_from]))
-		return (extract_word(s, p_from));
+		return (extract_word(s, p_from, envp));
 	return (NULL);
 }
