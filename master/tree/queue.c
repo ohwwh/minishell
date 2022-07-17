@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/17 10:58:40 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/17 11:12:09 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/17 11:43:28 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 char	*dequeue(t_list *l)
 {
 	t_list_node	*n;
+	char		*ret;
 
 	if (l == NULL || l->len == 0)
 		return (NULL);
@@ -29,10 +30,11 @@ char	*dequeue(t_list *l)
 	else
 	{
 		l->front = n->next;
-		free(n->content);
+		ret = n->content;
 		free(n);
 	}
 	l->len--;
+	return (ret);
 }
 
 void	enqueue(t_list *l, char *src)
