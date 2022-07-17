@@ -73,6 +73,7 @@ void	init_term(char **envp_new[], char *envp[])
 	dummy = 'c';
 	g_set.g_path = &dummy;
 	g_set.flag = 0;
+	g_set.errno_temp = 0;
 	tcgetattr(STDOUT_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDOUT_FILENO, TCSANOW, &term);

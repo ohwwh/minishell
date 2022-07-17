@@ -12,10 +12,12 @@
 
 #include "../minishell.h"
 
+extern t_global_set	g_set;
+
 static
 char	*get_errno(void)
 {
-	return (ft_itoa(errno));
+	return (ft_itoa(g_set.errno_temp));
 }
 
 static

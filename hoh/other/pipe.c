@@ -5,13 +5,15 @@ extern t_global_set	g_set;
 void	execute_pipe_parent(t_node *node, char **envp[], int *fd, int pid_1)
 {
 	int	pid_2;
+	int	status;
 
 	if (node->left->type == PIPE)
 	{
 		execute_pipe(node->left, envp, fd);
 		close(fd[0]);
 		close(fd[1]);
-		waitpid(pid_1, 0, 0);
+		waitpid(pid_1, &status, 0);
+		g_set.errno_temp = WEXITSTATUS(status);
 	}
 	else
 	{
@@ -21,20 +23,16 @@ void	execute_pipe_parent(t_node *node, char **envp[], int *fd, int pid_1)
 			close(fd[0]);
 			close(fd[1]);
 			waitpid(pid_2, 0, 0);
-			waitpid(pid_1, 0, 0);
+			waitpid(pid_1, &status, 0);
+			g_set.errno_temp = WEXITSTATUS(status);
 		}
 		else
-		{
-			//g_set.flag = 1;
-			front_command(node->left, envp, fd);
-		}
-			
+			front_command(node->left, envp, fd);	
 	}
 }
 
 void	execute_pipe_child(t_node *node, char **envp[], int *fd, int *former_fd)
 {
-	//g_set.flag = 1;
 	if (former_fd)
 	{
 		dup2(former_fd[1], 1);

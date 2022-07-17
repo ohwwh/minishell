@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+extern t_global_set	g_set;
+
 static void	set_pwd(char *envp[])
 {
 	char	*temp;
@@ -28,6 +30,7 @@ static void	cd_oldpwd(char *envp[])
 
 	if (is_exist(envp, "OLDPWD") == -1)
 	{
+		dup2(g_set.temp[1], 1);
 		printf("minishell: cd: OLDPWD not set\n");
 		errno = EPERM;
 	}
@@ -52,9 +55,11 @@ int	cd(char *envp[], char **command)
 	else if (command[1][0] == '-')
 		cd_oldpwd(envp);
 	else if (chdir(command[1]) == -1)
-		return (printf("cd: %s: %s\n", command[1], strerror(errno)));
-		printf("%d\n", errno);
+	{
+		dup2(g_set.temp[1], 1);
+		printf("minishell: cd: %s: %s\n", command[1], strerror(errno));
+		return (errno);
+	}
 	set_pwd(envp);
-		printf("%d\n", errno);
 	return (0);
 }

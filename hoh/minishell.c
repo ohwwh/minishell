@@ -1,7 +1,6 @@
 #include "minishell.h"
 
 t_global_set	g_set;
-extern int rl_catch_signals;
 
 int	is_built_in(char **command)
 {
@@ -101,6 +100,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (1)
 	{
 		g_set.flag = 0;
+		//printf("%d\n", g_set.errno_temp);
 		dup2(g_set.temp[0], 0);
 		dup2(g_set.temp[1], 1);
 		pstr = readline("minishell-1.0$ ");
@@ -110,6 +110,7 @@ int	main(int argc, char *argv[], char *envp[])
 		add_history(pstr);
 		if (tree)
 			execute_tree(tree->root, &envp_new);
+		//printf("%d\n", g_set.errno_temp);
 		free(pstr);
 		destroy_tree(tree);
 		tree = 0;
