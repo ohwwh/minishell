@@ -47,6 +47,17 @@ static void	sig_handler(int signum)
 	}
 }
 
+void	print_lst(t_list *l)
+{
+	t_list_node *iter = l->front;
+
+	while (iter)
+	{
+		printf("s: %s\n", (char *)iter->content);
+		iter = iter->next;
+	}
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*pstr;
@@ -64,6 +75,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!pstr)
 			pstr = "exit";
 		tree = parse(ft_strdup(pstr), envp_new);
+		print_lst(tree->queue);
 		add_history(pstr);
 		if (tree)
 			execute_tree(tree->root, &envp_new);
