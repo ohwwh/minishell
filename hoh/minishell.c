@@ -106,7 +106,7 @@ int	main(int argc, char *argv[], char *envp[])
 		pstr = readline("minishell-1.0$ ");
 		g_set.flag = 1;
 		pstr = pstr_refactoring(pstr);
-		tree = parse(ft_strdup(pstr));
+		tree = parse(ft_strdup(pstr), envp_new);
 		add_history(pstr);
 		if (tree)
 			execute_tree(tree->root, &envp_new);

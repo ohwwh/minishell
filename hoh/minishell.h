@@ -20,7 +20,7 @@
 typedef struct s_global_set{
 	char	*g_path;
 	int		temp[2];
-	int		flag
+	int		flag;
 }	t_global_set;
 
 typedef enum e_node_type
