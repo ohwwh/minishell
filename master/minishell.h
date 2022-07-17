@@ -48,6 +48,7 @@ typedef struct s_node
 typedef struct s_tree
 {
 	t_node	*root;
+	t_list	*queue;
 }	t_tree;
 
 void	init_term(char **envp_new[], char *envp[]);
@@ -89,6 +90,9 @@ void	destroy_strings(char **strs);
 void	destroy_nodes(t_node *n);
 void	destroy_tree(t_tree *t);
 void	destroy_lst(t_list *lst, bool rm_content);
+
+char	*dequeue(t_list *l);
+void	enqueue(t_list *l, char *src);
 
 int		find_c(char *src, int from, char c);
 

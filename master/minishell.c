@@ -40,9 +40,10 @@ static void	sig_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
-		rl_replace_line("", 0);
+		printf("\n");
+		rl_replace_line("", 1);
 		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
