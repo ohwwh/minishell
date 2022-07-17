@@ -58,10 +58,41 @@ void	single_command(t_node *node, char **envp[])
 	}
 }
 
-void	execute_tree(t_node *node, char **envp[])
+void	tree_heredoc(t_list *queue, char *envp[])
 {
-	if (!node->right)
-		single_command(node->left, envp);
+	char		*pstr;
+	char		*temp;
+	char		*end_str;
+	int			fd;
+
+	pstr = get_value(envp, "SHELL");
+	temp = ft_strjoin(pstr, "/heredoc");
+	fd = open(temp, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	free(pstr);
+	while (queue->len)
+	{
+		end_str = dequeue(queue);
+		pstr = readline("> ");
+		if (!pstr)
+			return ;
+		if (!ft_strcmp(pstr, end_str))
+		{
+			free(pstr);
+			break ;
+		}
+		write(fd, pstr, ft_strlen(pstr));
+		write(fd, "\n", 1);
+		free(pstr);
+		free(end_str);
+	}
+	close(fd);
+}
+
+void	execute_tree(t_tree *tree, char **envp[])
+{
+	tree_heredoc(tree->queue, *envp);
+	if (!tree->root->right)
+		single_command(tree->root->left, envp);
 	else
-		execute_pipe(node, envp, 0);
+		execute_pipe(tree->root, envp, 0);
 }
