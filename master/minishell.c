@@ -40,13 +40,9 @@ static void	sig_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		printf("\n");
-		rl_replace_line("", 1);
-	}
-	if (signum == SIGINT || signum == SIGQUIT)
-	{
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_replace_line("", 0);
 		rl_on_new_line();
-		rl_redisplay();
 	}
 }
 
@@ -58,7 +54,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	init_term(&envp_new, envp);
 	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, sig_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		dup2(g_set.temp[0], 0);
