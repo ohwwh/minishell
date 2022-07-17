@@ -1,6 +1,8 @@
 gcc -g -lreadline -lohw \
--L/opt/homebrew/opt/readline/lib -L./libohw \
--I/opt/homebrew/opt/readline/include -I./libohw/includes \
+-L/opt/homebrew/opt/readline/lib \
+-L./libohw \
+-I/opt/homebrew/opt/readline/include \
+-I./libohw/includes \
 -I./ \
 minishell.c other/env_utils.c other/getpaths.c other/cd.c other/echo.c other/env.c other/exit.c \
 other/export.c other/pwd.c other/unset.c other/pipe.c other/redir.c other/init.c other/pipe_command.c other/execute.c \

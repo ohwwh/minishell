@@ -41,7 +41,7 @@ int	execute_fork(char *envp[], char **command)
 			break ;
 	}
 	dup2(g_set.temp[1], 1);
-	if (!paths || paths[i])
+	if (!paths || !paths[i])
 		printf("minishell: %s: command not found\n", org);
 	else
 		printf("minishell: %s: %s\n", org, strerror(errno));

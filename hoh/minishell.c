@@ -1,6 +1,7 @@
 #include "minishell.h"
 
 t_global_set	g_set;
+extern int rl_catch_signals;
 
 int	is_built_in(char **command)
 {
@@ -38,6 +39,17 @@ void	free_arr(char **arr)
 
 static void	sig_handler(int signum)
 {
+	int	pid;
+
+	pid = waitpid(-1, 0, 0);
+	if (pid != -1) //자식 프로세스인 경우
+	{
+		write(0, "^C\n", 3);
+		return ;
+	}
+	if (signum == SIGINT && g_set.flag == 1)
+	{
+	}
 	if (signum == SIGINT)
 	{
 		printf("\n");
@@ -48,6 +60,33 @@ static void	sig_handler(int signum)
 		rl_on_new_line();
 		rl_redisplay();
 	}
+}
+
+char	*pstr_refactoring(char *pstr)
+{
+	char	*ret;
+	char	*back;
+	int		i;
+
+	i = 0;
+	if (!pstr)
+		return ("exit");
+	if (!(*pstr))
+		return (pstr);
+	while (pstr[i])
+		i ++;
+	i --;
+	while (i > 0 && pstr[i] != '|')
+	{
+		if (pstr[i] != '|' && pstr[i] != ' ' && pstr[i] != '>' && pstr[i] != '<')
+			return (pstr);
+		i --;
+	}
+	back = readline("> ");
+	ret = ft_strjoin(pstr, back);
+	free(pstr);
+	free(back);
+	return (ret);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -61,11 +100,12 @@ int	main(int argc, char *argv[], char *envp[])
 	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
+		g_set.flag = 0;
 		dup2(g_set.temp[0], 0);
 		dup2(g_set.temp[1], 1);
 		pstr = readline("minishell-1.0$ ");
-		if (!pstr)
-			pstr = "exit";
+		g_set.flag = 1;
+		pstr = pstr_refactoring(pstr);
 		tree = parse(ft_strdup(pstr));
 		add_history(pstr);
 		if (tree)
