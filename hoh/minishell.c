@@ -41,7 +41,6 @@ static void	sig_handler(int signum)
 {
 	int	pid;
 
-	//printf("%d\n", isatty(0));
 	pid = waitpid(-1, 0, 0);
 	if (pid != -1) //자식 프로세스인 경우
 	{
@@ -96,7 +95,6 @@ int	main(int argc, char *argv[], char *envp[])
 	t_tree	*tree;
 	char	**envp_new;
 
-	//rl_catch_signals = 1;
 	init_term(&envp_new, envp);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);

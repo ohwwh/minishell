@@ -49,9 +49,7 @@ void	single_command(t_node *node, char **envp[])
 			redir(node->left, *envp);
 		if (node->right)
 		{
-			//printf("run\n");
 			execute_command(envp, node->right->data);
-			//printf("no\n");
 		}
 		if (!built)
 			shell_exit(0, *envp);
