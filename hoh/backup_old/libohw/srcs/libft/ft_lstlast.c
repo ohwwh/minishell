@@ -3,21 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohw <ohw@student.42seoul.kr>               +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/22 12:22:00 by ohw               #+#    #+#             */
-/*   Updated: 2021/11/30 20:21:23 by hoh              ###   ########.fr       */
+/*   Created: 2021/11/09 12:37:21 by jiheo             #+#    #+#             */
+/*   Updated: 2022/07/01 17:11:13 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstlast(t_list *lst)
+t_list_node	*ft_lstlast(t_list *lst)
 {
-	if (lst)
-	{
-		while (lst -> next)
-			lst = lst -> next;
-	}
-	return (lst);
+	return (lst->rear);
 }
