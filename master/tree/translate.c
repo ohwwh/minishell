@@ -6,11 +6,17 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:01:45 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/15 12:06:15 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/16 14:57:25 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static
+char	*get_errno(void)
+{
+	return (ft_itoa(errno));
+}
 
 static
 char	*ts_env(char *s, int *i, char *envp[])
@@ -21,6 +27,11 @@ char	*ts_env(char *s, int *i, char *envp[])
 
 	key = NULL;
 	s_i = ++(*i);
+	if (s[s_i] == '?')
+	{
+		(*i)++;
+		return (get_errno());
+	}
 	while (s[*i] && ft_isalnum(s[*i]))
 		(*i)++;
 	if (s_i == *i)

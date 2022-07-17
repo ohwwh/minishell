@@ -12,6 +12,7 @@
 #include <termios.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/ioctl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "libohw/includes/libft.h"
@@ -19,7 +20,7 @@
 typedef struct s_global_set{
 	char	*g_path;
 	int		temp[2];
-}t_global_set;
+}	t_global_set;
 
 typedef enum e_node_type
 {
