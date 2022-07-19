@@ -22,26 +22,9 @@ void	redir_in_heredoc(char *end_str, char *envp[])
 	char		*temp;
 	int			fd;
 
-	dup2(g_set.temp[0], 0);
 	pstr = get_value(envp, "SHELL");
 	temp = ft_strjoin(pstr, "/heredoc");
-	fd = open(temp, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	free(pstr);
-	while (1)
-	{
-		pstr = readline("> ");
-		if (!pstr)
-			return ;
-		if (!ft_strcmp(pstr, end_str))
-		{
-			free(pstr);
-			break ;
-		}
-		write(fd, pstr, ft_strlen(pstr));
-		write(fd, "\n", 1);
-		free(pstr);
-	}
-	close(fd);
 	fd = open(temp, O_RDONLY);
 	free(temp);
 	dup2(fd, 0);

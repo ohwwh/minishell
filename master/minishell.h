@@ -20,6 +20,8 @@
 typedef struct s_global_set{
 	char	*g_path;
 	int		temp[2];
+	int		flag;
+	int		errno_temp;
 }	t_global_set;
 
 typedef enum e_node_type
@@ -63,7 +65,7 @@ char	*cat_env(char *key, char *val, char *envp[]);
 char	*get_value(char *envp[], char *key);
 char	*cut_value(char *str, char *envp[]);
 char	**get_paths(char const *s, char c, char *command, char *envp[]);
-void	execute_tree(t_node *node, char **envp[]);
+void	execute_tree(t_tree *tree, char **envp[]);
 void	execute_pipe(t_node *node, char **envp[], int *former_fd);
 void	redir(t_node *node, char *envp[]);
 void	single_command(t_node *node, char **envp[]);

@@ -58,6 +58,7 @@ int	cd(char *envp[], char **command)
 	{
 		dup2(g_set.temp[1], 1);
 		printf("minishell: cd: %s: %s\n", command[1], strerror(errno));
+		printf("%d\n", errno);
 		return (errno);
 	}
 	set_pwd(envp);

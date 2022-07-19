@@ -74,9 +74,9 @@ void	init_term(char **envp_new[], char *envp[])
 	g_set.g_path = &dummy;
 	g_set.flag = 0;
 	g_set.errno_temp = 0;
-	tcgetattr(STDOUT_FILENO, &term);
+	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDOUT_FILENO, TCSANOW, &term);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	g_set.temp[0] = dup(0);
 	g_set.temp[1] = dup(1);
 	init_env(envp_new, envp);
