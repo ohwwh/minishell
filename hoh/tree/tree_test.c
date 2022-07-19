@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 08:10:25 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/11 12:45:21 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/15 11:58:14 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <errno.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "../tree.h"
+#include "../minishell.h"
 
 int	main(void)
 {

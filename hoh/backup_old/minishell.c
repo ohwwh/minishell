@@ -1,6 +1,31 @@
 #include "minishell.h"
 
-char	*path;
+t_global_set	g_set;
+extern int rl_catch_signals;
+
+int	is_built_in(char **command)
+{
+	int	ret;
+
+	ret = 0;
+	if (!ft_strcmp(command[0], "cd"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "echo"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "env"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "exit"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "export"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "pwd"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "unset"))
+		ret = 1;
+	else if (!ft_strcmp(command[0], "getpid"))
+		ret = 1;
+	return (ret);
+}
 
 void	free_arr(char **arr)
 {
@@ -12,108 +37,83 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
-int	execute_fork(char *envp[], char **command)
+static void	sig_handler(int signum)
 {
-	char	**paths;
-	char	*org;
-	int		i;
-	int		flag;
-	int		pid;
+	int	pid;
 
-	i = 0;
-	flag = 0;
-	errno = 0;
-	pid = fork();
-	if (!pid)
+	pid = waitpid(-1, 0, 0);
+	if (pid != -1) //자식 프로세스인 경우
 	{
-		if (ft_strchr(command[0], '/'))
-		{
-			if (execve(command[0], command, envp) == -1)
-				return (printf("minishell: %s: %s\n", command[0], strerror(errno)));
-		}
-		paths = get_paths(path, ':', command[0], envp);
-		if (!paths)
-			errno = 2;
-		org = command[0];
-		while (paths && paths[i])
-		{
-			command[0] = paths[i];
-			if (execve(paths[i], command, envp) != -1)
-			{
-				flag = 1;
-				break ;
-			}
-			else
-			{
-				if (errno != 2)
-					break ;
-				i ++;
-			}
-		}
-		if (!flag)
-			printf("bash: %s: %s\n", org, strerror(errno));
-		free_arr(paths);
-		command[0] = org;
+		write(0, "^C\n", 3);
+		return ;
 	}
-	else
-		waitpid(pid, 0, 0);
-	return (0);
+	if (signum == SIGINT && g_set.flag == 1)
+	{
+	}
+	if (signum == SIGINT)
+	{
+		printf("\n");
+		rl_replace_line("", 1);
+	}
+	if (signum == SIGINT || signum == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
-int	execute_command(char **envp[], char **command)
+char	*pstr_refactoring(char *pstr)
 {
-	int	ret;
+	char	*ret;
+	char	*back;
+	int		i;
 
-	ret = 0;
-	if (*command == 0)
-		return (ret);
-	else if (!ft_strcmp(command[0], "cd"))
-		cd(*envp, command);
-	else if (!ft_strcmp(command[0], "echo"))
-		echo(command);
-	else if (!ft_strcmp(command[0], "env"))
-		env(*envp, command);
-	else if (!ft_strcmp(command[0], "exit"))
-		exit_shell(*envp, command);
-	else if (!ft_strcmp(command[0], "export"))
-		env_export(envp, command);
-	else if (!ft_strcmp(command[0], "pwd"))
-		pwd(command);
-	else if (!ft_strcmp(command[0], "unset"))
-		unset(envp, command);
-	else
-		execute_fork(*envp, command);
+	i = 0;
+	if (!pstr)
+		return ("exit");
+	if (!(*pstr))
+		return (pstr);
+	while (pstr[i])
+		i ++;
+	i --;
+	while (i > 0 && pstr[i] != '|')
+	{
+		if (pstr[i] != '|' && pstr[i] != ' ' && pstr[i] != '>' && pstr[i] != '<')
+			return (pstr);
+		i --;
+	}
+	back = readline("> ");
+	ret = ft_strjoin(pstr, back);
+	free(pstr);
+	free(back);
 	return (ret);
 }
 
-void	handler(int signum)
+int	main(int argc, char *argv[], char *envp[])
 {
-	if (signum != SIGINT)
-		return ;
-	rl_on_new_line();
-	rl_replace_line("", 1);
-	rl_redisplay();
-}
-
-int main(int argc, char *argv[], char *envp[])
-{
-	char	prompt[100] = "minishell-0.0$ ";
 	char	*pstr;
-	char	**command;
+	t_tree	*tree;
 	char	**envp_new;
-	
-	printf("%d\n", getpid());
-	init_env(&envp_new, envp);
-	signal(SIGINT, handler);
+
+	init_term(&envp_new, envp);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
-		pstr = readline(prompt);
-		command = ft_split(pstr, ' ');
+		g_set.flag = 0;
+		dup2(g_set.temp[0], 0);
+		dup2(g_set.temp[1], 1);
+		pstr = readline("minishell-1.0$ ");
+		g_set.flag = 1;
+		pstr = pstr_refactoring(pstr);
+		tree = parse(ft_strdup(pstr));
 		add_history(pstr);
-		execute_command(&envp_new, command);
+		if (tree)
+			execute_tree(tree->root, &envp_new);
 		free(pstr);
-		free_arr(command);
+		destroy_tree(tree);
+		tree = 0;
 	}
 	free_arr(envp_new);
-	free(path);
+	free(g_set.g_path);
 }

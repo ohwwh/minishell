@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   new_data.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 22:08:06 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/09 20:11:57 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/17 11:39:20 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../tree.h"
+#include "../minishell.h"
 
 t_meta	*new_meta(char *s, int f, int t)
 {
@@ -45,5 +45,6 @@ t_tree	*new_tree(void)
 	if (t == NULL)
 		return (t);
 	t->root = new_node(PIPE, NULL);
+	t->queue = ft_lstnew();
 	return (t);
 }
