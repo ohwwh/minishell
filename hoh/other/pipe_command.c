@@ -78,6 +78,8 @@ void	tree_heredoc(t_list *queue, char *envp[])
 			if (!pstr || g_set.flag == 3)
 			{
 				close(fd);
+				free(pstr);
+				free(temp);
 				return ;
 			}
 			if (!ft_strcmp(pstr, end_str))
@@ -88,10 +90,10 @@ void	tree_heredoc(t_list *queue, char *envp[])
 			write(fd, pstr, ft_strlen(pstr));
 			write(fd, "\n", 1);
 			free(pstr);
+			close(fd);
 		}
 	}
 	free(temp);
-	close(fd);
 }
 
 void	execute_tree(t_tree *tree, char **envp[])
