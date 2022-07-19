@@ -1,41 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   queue.c                                            :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/17 10:58:40 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/17 15:18:29 by jiheo            ###   ########.fr       */
+/*   Created: 2022/07/19 10:01:08 by jiheo             #+#    #+#             */
+/*   Updated: 2022/07/19 11:22:56 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*dequeue(t_list *l)
+void	print_errmsg(char *s)
 {
-	t_list_node	*n;
-	char		*ret;
-
-	if (l == NULL || l->len == 0)
-		return (NULL);
-	n = l->front;
-	ret = n->content;
-	free(n);
-	if (l->len == 1)
-	{
-		l->front = NULL;
-		l->rear = NULL;
-	}
+	if (!s)
+		printf("minishell: syntax error near unexpected token `newline'\n");
 	else
-		l->front = n->next;
-	l->len--;
-	return (ret);
-}
-
-void	enqueue(t_list *l, char *src)
-{
-	if (src == NULL)
-		return ;
-	ft_lstadd_back(l, (void *)src);
+		printf("minishell: syntax error near unexpected token `%c'\n", s[0]);
 }

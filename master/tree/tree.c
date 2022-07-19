@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:06:23 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/17 11:55:10 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/19 13:08:24 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_node	*create_rd(t_meta *m, int *i, char *envp[])
 	data[2] = NULL;
 	if (data[1] == NULL || is_redir(data[1]))
 	{
-		printf("syntax error\n");
+		print_errmsg(data[1]);
 		destroy_strings(data);
 		return (NULL);
 	}
@@ -96,7 +96,7 @@ int	create_subnode(t_node *prc, t_meta *m, int *p_from, char *envp[])
 			if (i <= m->to)
 				ft_lstadd_back(cl_list, (void *)extract(m->src, &i, envp));
 	}
-	if (cl_list->len != 0 && check_syntax(cl_list) == 0)
+	if (cl_list->len != 0)
 		prc->right = new_node(CL, lst_to_arr(cl_list));
 	*p_from = i;
 	destroy_lst(cl_list, false);
@@ -115,66 +115,10 @@ t_node	*create_prc(char *s, int *i, char *envp[])
 		return (NULL);
 	n = new_node(PRC, NULL);
 	if (create_subnode(n, &m, i, envp) || \
-			 (n->left == NULL && n->right == NULL))
+			(n->left == NULL && n->right == NULL))
 	{
 		destroy_nodes(n);
 		return (NULL);
 	}
 	return (n);
-}
-
-void	heredoc_jobqueue(t_list *l, t_node *n)
-{
-	if (n == NULL || l == NULL)
-		return ;
-	heredoc_jobqueue(l, n->left);
-	if (n->data && n->data[0] && ft_strcmp(n->data[0], "<<") == 0)
-		enqueue(l, n->data[1]);
-	heredoc_jobqueue(l, n->right);
-}
-
-t_tree	*parse(char *s, char *envp[])
-{
-	t_tree		*t;
-	t_node		*tmp;
-	int			i;
-	bool		flag;
-
-	flag = true;
-	t = new_tree();
-	if (t == NULL)
-		return (NULL);
-	i = 0;
-	while (s[i])
-	{
-		ignore_space(s, &i);
-		if (s[i] != '|')
-		{
-			tmp = create_prc(s, &i, envp);
-			if (tmp == NULL)
-			{
-				free(s);
-				destroy_tree(t);
-				return (NULL);
-			}
-			add_subtree(t, tmp);
-			flag = false;
-		}
-		else
-		{
-			if (flag)
-			{
-				printf("pipe syntax error\n");
-				free(s);
-				destroy_tree(t);
-				return (NULL);
-			}
-			flag = true;
-			i++;
-		}
-	}
-	free(s);
-	if (t != NULL)
-		heredoc_jobqueue(t->queue, t->root);
-	return (t);
 }

@@ -75,7 +75,6 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!pstr)
 			pstr = "exit";
 		tree = parse(ft_strdup(pstr), envp_new);
-		print_lst(tree->queue);
 		add_history(pstr);
 		if (tree)
 			execute_tree(tree->root, &envp_new);

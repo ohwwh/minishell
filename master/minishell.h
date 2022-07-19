@@ -97,7 +97,7 @@ void	enqueue(t_list *l, char *src);
 int		find_c(char *src, int from, char c);
 
 bool	is_redir(char *s);
-int		check_syntax(t_list *l);
+int		check_syntax(char *s);
 
 char	*extract(char *s, int *p_from, char *envp[]);
 char	*extract_rd(char *s, int *p_from);
@@ -115,5 +115,7 @@ void	ignore_space(char *s, int *i);
 void	ignore_until_c(char *s, int *i, char c);
 
 char	*join_and_rm_all(char *s1, char *s2);
+
+void	print_errmsg(char *s);
 
 #endif // MINISHELL_H
