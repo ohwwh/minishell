@@ -38,24 +38,61 @@ void	free_arr(char **arr)
 
 static void	sig_handler(int signum)
 {
-	if (signum == SIGINT)
+	int	pid;
+
+	pid = waitpid(-1, 0, 0);
+	if (pid != -1 && g_set.flag != 2) //자식 프로세스인 경우
+	{
+		if (signum == SIGINT)
+			write(0, "^C\n", 3);
+		else if (signum == SIGQUIT)
+			write(0, "^\'Quit: 3\n", 10);
+		return ;
+	}
+	if (signum == SIGINT && g_set.flag == 2)
+	{
+		close(STDIN_FILENO);
+		printf(">\n");
+		g_set.flag = 3;
+		return ;
+	}
+	if (signum == SIGINT && g_set.flag != 2)
 	{
 		printf("\n");
 		rl_replace_line("", 1);
+	}
+	if (signum == SIGINT || signum == SIGQUIT)
+	{
 		rl_on_new_line();
 		rl_redisplay();
 	}
 }
 
-void	print_lst(t_list *l)
+char	*pstr_refactoring(char *pstr)
 {
-	t_list_node *iter = l->front;
+	char	*ret;
+	char	*back;
+	int		i;
 
-	while (iter)
+	i = 0;
+	if (!pstr)
+		return ("exit");
+	if (!(*pstr))
+		return (pstr);
+	while (pstr[i])
+		i ++;
+	i --;
+	while (i > 0 && pstr[i] != '|')
 	{
-		printf("s: %s\n", (char *)iter->content);
-		iter = iter->next;
+		if (pstr[i] != '|' && pstr[i] != ' ' && pstr[i] != '>' && pstr[i] != '<')
+			return (pstr);
+		i --;
 	}
+	back = readline("> ");
+	ret = ft_strjoin(pstr, back);
+	free(pstr);
+	free(back);
+	return (ret);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -64,21 +101,23 @@ int	main(int argc, char *argv[], char *envp[])
 	t_tree	*tree;
 	char	**envp_new;
 
+	//printf("%d\n", getpid());
 	init_term(&envp_new, envp);
 	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
+		g_set.flag = 0;
 		dup2(g_set.temp[0], 0);
 		dup2(g_set.temp[1], 1);
 		pstr = readline("minishell-1.0$ ");
+		g_set.flag = 1;
 		if (!pstr)
 			pstr = "exit";
 		tree = parse(ft_strdup(pstr), envp_new);
-		print_lst(tree->queue);
 		add_history(pstr);
 		if (tree)
-			execute_tree(tree->root, &envp_new);
+			execute_tree(tree, &envp_new);
 		free(pstr);
 		destroy_tree(tree);
 		tree = 0;

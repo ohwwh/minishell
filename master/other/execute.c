@@ -12,9 +12,15 @@ int	command_with_path(char *envp[], char **command)
 		dup2(g_set.temp[1], 1);
 		errno_org = errno;
 		if (!chdir(command[0]))
+		{
 			printf("minishell: %s: is a directory\n", command[0]);
+			shell_exit(126, envp);
+		}
 		else
+		{
 			printf("minishell: %s: %s\n", command[0], strerror(errno_org));
+			shell_exit(errno_org, envp);
+		}
 		return (0);
 	}
 	return (0);
@@ -41,8 +47,11 @@ int	execute_fork(char *envp[], char **command)
 			break ;
 	}
 	dup2(g_set.temp[1], 1);
-	if (!paths || paths[i])
+	if (!paths || !paths[i])
+	{
 		printf("minishell: %s: command not found\n", org);
+		errno = 127;
+	}
 	else
 		printf("minishell: %s: %s\n", org, strerror(errno));
 	free_arr(paths);
