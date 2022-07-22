@@ -82,6 +82,8 @@ void	init_env(char **envp_new[], char *envp[]);
 int		is_exist(char *envp[], char *key);
 void    unset(char ***envp, char **command);
 int		is_built_in(char **command);
+void	tree_heredoc(t_list *queue, char *envp[]);
+void	sig_handler(int signum);
 
 t_tree	*new_tree(void);
 t_node	*new_node(t_node_type nt, char **data);
