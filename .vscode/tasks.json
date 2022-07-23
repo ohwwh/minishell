@@ -8,12 +8,8 @@
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
-<<<<<<< HEAD
-				"./other/unset.c", "./other/env_utils.c","./other/getpaths.c", "./other/pipe.c", "./other/redir.c", "other/init.c", "other/pipe_command.c",
-=======
 				"./minishell.c","./other/cd.c","./other/echo.c","./other/env.c","./other/exit.c","./other/export.c","./other/pwd.c", "other/execute.c", "other/heredoc.c",
 				"./other/unset.c", "./other/env_utils.c","./other/getpaths.c", "./other/pipe.c", "./other/redir.c", "other/init.c", "other/pipe_command.c", "other/signal.c",
->>>>>>> hoh
 				"./tree/print.c", "./tree/utils.c", "./tree/find.c", "./tree/advlst.c", "./tree/destroy.c", "./tree/extract.c", 
 				"./tree/new_data.c", "./tree/tree.c", "tree/strings.c", "tree/translate.c", "tree/check.c", "tree/queue.c",
 				"-o",
