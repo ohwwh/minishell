@@ -6,17 +6,18 @@
 #    By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/11 12:58:08 by jiheo             #+#    #+#              #
-#    Updated: 2022/07/19 12:54:22 by jiheo            ###   ########.fr        #
+#    Updated: 2022/07/24 11:57:50 by jiheo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 PROJECT_NAME = minishell
 CC = gcc
-#FLAG = -Wall -Wextra -Werror
+FLAG = -Wall -Wextra -Werror
 
 SRCS = minishell.c other/env_utils.c other/getpaths.c other/cd.c other/echo.c other/env.c other/exit.c \
 other/export.c other/pwd.c other/unset.c other/pipe.c other/redir.c other/init.c other/pipe_command.c other/execute.c \
-tree/print.c tree/tree.c tree/utils.c tree/find.c tree/advlst.c tree/destroy.c tree/extract.c tree/new_data.c \
+other/signal.c other/heredoc.c \
+tree/tree.c tree/utils.c tree/find.c tree/advlst.c tree/destroy.c tree/extract.c tree/new_data.c \
 tree/strings.c tree/translate.c tree/check.c tree/queue.c tree/error.c tree/parse.c
 
 OBJS = $(SRCS:.c=.o)

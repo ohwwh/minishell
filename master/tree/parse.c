@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 12:54:27 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/19 20:08:15 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/24 11:45:56 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,53 +34,74 @@ void	stop(char *s, t_tree *t, char *msg)
 	t = NULL;
 }
 
-bool	process(char *s, int *i, char *envp[], t_tree *t)
+void	add_subtree(t_tree *org, t_node *sub)
+{
+	t_node	*n;
+
+	if (sub == NULL)
+		return ;
+	if (org->root->left == NULL)
+		org->root->left = sub;
+	else if (org->root->right == NULL)
+		org->root->right = sub;
+	else
+	{
+		n = new_node(PIPE, NULL);
+		n->left = org->root;
+		n->right = sub;
+		org->root = n;
+	}
+}
+
+int	_parse_body(t_param *p, t_tree *t, bool *flag)
 {
 	t_node	*tmp;
-	bool	flag;
 
-	if (s[*i] != '|')
+	if (p->s[*(p->i)] != '|')
 	{
-		tmp = create_prc(s, i, envp);
+		tmp = create_prc(p->s, p->i, p->env);
 		if (tmp == NULL)
 		{
-			stop(s, t, NULL);
-			return (NULL);
+			stop(p->s, t, NULL);
+			return (1);
 		}
 		add_subtree(t, tmp);
-		flag = false;
+		*flag = false;
 	}
 	else
 	{
-		if (flag)
+		if (*flag)
 		{
-			stop(s, t, "|");
-			return (NULL);
+			stop(p->s, t, "|");
+			return (1);
 		}
-		flag = true;
-		(*i)++;
+		*flag = true;
+		(*(p->i))++;
 	}
-	return (flag);
+	return (0);
 }
 
 t_tree	*parse(char *s, char *envp[])
 {
 	t_tree		*t;
-	t_node		*tmp;
 	int			i;
 	bool		flag;
+	t_param		p;
 
 	flag = true;
 	t = new_tree();
 	i = 0;
+	p.s = s;
+	p.i = &i;
+	p.env = envp;
 	while (s[i])
 	{
 		ignore_space(s, &i);
-		flag = process(s, &i, envp, t);
+		if (_parse_body(&p, t, &flag))
+			return (NULL);
 	}
 	free(s);
 	if (t != NULL)
 		heredoc_jobqueue(t->queue, t->root);
 	return (t);
 }
-
