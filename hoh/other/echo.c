@@ -1,11 +1,12 @@
 #include "minishell.h"
 
-int	nflag(int i, char *arg, int *end)
+int	nflag(char *arg, int *end)
 {
 	int			n;
 	int			j;
 
-	if (i == 1 && !(*end) && arg[0] == '-')
+	n = 0;
+	if (!(*end) && arg[0] == '-')
 	{
 		j = 1;
 		while (arg[j])
@@ -35,13 +36,17 @@ int	echo(char **command)
 	end = 0;
 	while (command[i])
 	{
-		isflag = nflag(i, command[i], &end);
-		n += isflag;
-		if (!isflag)
+		if (isflag != -1)
+		{
+			isflag = nflag(command[i], &end);
+			n += isflag;
+		}
+		if (isflag <= 0)
 		{
 			ft_putstr_fd(command[i], 1);
 			if (command[i + 1])
 				write(1, " ", 1);
+			isflag = -1;
 		}
 		i ++;
 	}
