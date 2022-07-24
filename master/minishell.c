@@ -36,12 +36,19 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
+void	check_args(int argc, char *argv[])
+{
+	if (argc != 1 || argv == NULL)
+		exit(EPERM);
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*pstr;
 	t_tree	*tree;
 	char	**envp_new;
 
+	check_args(argc, argv);
 	init_term(&envp_new, envp);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);

@@ -62,7 +62,7 @@ typedef struct s_param
 
 void	init_term(char **envp_new[], char *envp[]);
 int		cd(char *envp[], char **command);
-int		pwd(char **command);
+int		pwd(void);
 int		echo(char **command);
 void	shell_exit(int status, char *envp[]);
 void	exit_shell(char *envp[], char **command);

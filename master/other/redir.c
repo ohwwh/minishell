@@ -16,7 +16,7 @@ void	redir_in(char *file, char *envp[])
 	close(fd);
 }
 
-void	redir_in_heredoc(char *end_str, char *envp[])
+void	redir_in_heredoc(char *envp[])
 {
 	char		*pstr;
 	char		*temp;
@@ -67,7 +67,7 @@ void	redir(t_node *node, char *envp[])
 		else if (node->data[0][0] == '<')
 		{
 			if (node->data[0][1] == '<')
-				redir_in_heredoc(node->data[1], envp);
+				redir_in_heredoc(envp);
 			else if (!node->data[0][1])
 				redir_in(node->data[1], envp);
 		}

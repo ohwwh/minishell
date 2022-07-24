@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:01:45 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/24 11:51:29 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/24 20:29:24 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*ts_env(char *s, int *i, char *envp[])
 }
 
 static
-char	*ts_home(char *s, int *i, char *envp[])
+char	*ts_home(int *i, char *envp[])
 {
 	(*i)++;
 	return (ft_strdup(get_value(envp, "HOME")));
@@ -70,7 +70,6 @@ char	*translate(char *s, char *envp[])
 {
 	char	*tmp;
 	int		i;
-	int		s_i;
 	char	*res;
 
 	i = 0;
@@ -82,7 +81,7 @@ char	*translate(char *s, char *envp[])
 		if (s[i] == '$')
 			tmp = ts_env(s, &i, envp);
 		else if (s[i] == '~')
-			tmp = ts_home(s, &i, envp);
+			tmp = ts_home(&i, envp);
 		else
 			tmp = _substr(s, &i);
 		res = join_and_rm_all(res, tmp);

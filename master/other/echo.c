@@ -5,6 +5,7 @@ int	nflag(int i, char *arg, int *end)
 	int			n;
 	int			j;
 
+	n = 0;
 	if (i == 1 && !(*end) && arg[0] == '-')
 	{
 		j = 1;

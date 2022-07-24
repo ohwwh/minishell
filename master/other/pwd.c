@@ -1,10 +1,9 @@
 #include "minishell.h"
 
-int	pwd(char **command)
+int	pwd(void)
 {
 	char	*pwd;
 
-	command = 0;
 	pwd = getcwd(0, 1);
 	ft_putstr_fd(pwd, 1);
 	write(1, "\n", 1);

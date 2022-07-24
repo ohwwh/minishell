@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:06:23 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/24 11:41:09 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/24 20:28:23 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ t_node	*conn_node(t_node *org, t_node *new)
 
 t_node	*create_rd(t_param *p)
 {
-	t_node	*n;
 	char	*cmd;
 	char	**data;
 
@@ -73,7 +72,6 @@ int	create_subnode(t_node *prc, t_meta *m, int *p_from, char *envp[])
 {
 	int		i;
 	t_list	*cl_list;
-	char	*s;
 	t_param	p;
 
 	if (prc == NULL)
