@@ -16,6 +16,23 @@ static void	ft_clear(char **ret, int index)
 	exit(ENOMEM);
 }
 
+void	init_shlvl(char **new, char *envp[], int idx)
+{
+	int		shlvl;
+	char	*temp;
+	char	*shell;
+
+	temp = cut_value(envp[idx], envp);
+	shlvl = ft_atoi(temp) + 1;
+	free(temp);
+	temp = ft_itoa(shlvl);
+	shell = ft_strjoin("SHLVL=", temp);
+	free(temp);
+	if (!shell)
+		ft_clear(new, idx);
+	new[idx] = shell;
+} // 넣을까 말까......
+
 void	init_shell(char **new, char *envp[], int idx)
 {
 	char	*pwd;
@@ -23,19 +40,21 @@ void	init_shell(char **new, char *envp[], int idx)
 
 	pwd = getcwd(0, 1);
 	shell = ft_strjoin("SHELL=", pwd);
+	free(pwd);
+	pwd = 0;
 	if (!shell)
 		ft_clear(new, idx);
 	new[idx] = shell;
-	free(pwd);
-	pwd = 0;
 }
 
-void	init_path(char *envp)
+void	init_path(char **new, char *envp[], int idx)
 {
-	while (*envp != '=')
-		envp ++;
-	envp ++;
-	g_set.g_path = ft_strdup(envp);
+	while (*(envp[idx]) != '=')
+		envp[idx] ++;
+	envp[idx] ++;
+	g_set.g_path = ft_strdup(envp[idx]);
+	if (!g_set.g_path)
+		ft_clear(new, idx);
 }
 
 void	init_env(char **envp_new[], char *envp[])
@@ -50,14 +69,16 @@ void	init_env(char **envp_new[], char *envp[])
 	{
 		if (!ft_strncmp("SHELL", envp[i], 5))
 			init_shell(new, envp, i);
+		else if (!ft_strncmp("SHLVL", envp[i], 5))
+			init_shlvl(new, envp, i);
 		else
 		{
 			new_element = ft_strdup(envp[i]);
+			if (!new_element)
+				ft_clear(new, i);
 			new[i] = new_element;
 			if (!ft_strncmp("PATH", envp[i], 4))
-				init_path(envp[i]);
-			if (!g_set.g_path || !new_element)
-				ft_clear(new, i);
+				init_path(new, envp, i);
 		}
 		i ++;
 	}
@@ -68,10 +89,8 @@ void	init_env(char **envp_new[], char *envp[])
 void	init_term(char **envp_new[], char *envp[])
 {
 	struct termios	term;
-	char			dummy;
 
-	dummy = 'c';
-	g_set.g_path = &dummy;
+	g_set.g_path = 0;
 	g_set.flag = 0;
 	g_set.errno_temp = 0;
 	tcgetattr(STDIN_FILENO, &term);

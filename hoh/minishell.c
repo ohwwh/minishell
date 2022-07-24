@@ -61,6 +61,4 @@ int	main(int argc, char *argv[], char *envp[])
 		free(pstr);
 		destroy_tree(tree);
 	}
-	free_arr(envp_new);
-	free(g_set.g_path);
 }
