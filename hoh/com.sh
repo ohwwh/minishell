@@ -4,7 +4,7 @@ gcc -g -lreadline -lohw \
 -I./ \
 -I/opt/homebrew/opt/readline/include \
 -I./libohw/includes \
-minishell.c other/env_utils.c other/getpaths.c other/cd.c other/echo.c other/env.c other/exit.c \
+minishell.c other/env_utils.c other/getpaths.c other/cd.c other/echo.c other/env.c other/exit.c other/heredoc.c other/signal.c \
 other/export.c other/pwd.c other/unset.c other/pipe.c other/redir.c other/init.c other/pipe_command.c other/execute.c \
 tree/print.c tree/tree.c tree/utils.c tree/find.c tree/advlst.c tree/destroy.c tree/extract.c tree/new_data.c \
 tree/strings.c tree/translate.c tree/check.c tree/queue.c \
