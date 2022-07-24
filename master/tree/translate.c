@@ -6,13 +6,13 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:01:45 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/16 14:57:25 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/24 11:51:29 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-extern t_global_set g_set;
+extern t_global_set	g_set;
 
 static
 char	*get_errno(void)
@@ -45,7 +45,7 @@ char	*ts_env(char *s, int *i, char *envp[])
 	free(key);
 	if (val == NULL)
 		return (NULL);
-	return (ft_strdup(val));
+	return (val);
 }
 
 static
@@ -53,6 +53,17 @@ char	*ts_home(char *s, int *i, char *envp[])
 {
 	(*i)++;
 	return (ft_strdup(get_value(envp, "HOME")));
+}
+
+static
+char	*_substr(char *s, int *i)
+{
+	int	s_i;
+
+	s_i = *i;
+	while (s[*i] && s[*i] != '$')
+		(*i)++;
+	return (ft_substr(s, s_i, *i - s_i));
 }
 
 char	*translate(char *s, char *envp[])
@@ -73,12 +84,7 @@ char	*translate(char *s, char *envp[])
 		else if (s[i] == '~')
 			tmp = ts_home(s, &i, envp);
 		else
-		{
-			s_i = i;
-			while (s[i] && s[i] != '$')
-				i++;
-			tmp = ft_substr(s, s_i, i - s_i);
-		}
+			tmp = _substr(s, &i);
 		res = join_and_rm_all(res, tmp);
 	}
 	free(s);

@@ -27,7 +27,7 @@ void	execute_pipe_parent(t_node *node, char **envp[], int *fd, int pid_1)
 			g_set.errno_temp = WEXITSTATUS(status);
 		}
 		else
-			front_command(node->left, envp, fd);	
+			front_command(node->left, envp, fd);
 	}
 }
 
