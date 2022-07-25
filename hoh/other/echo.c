@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	nflag(char *arg, int *end)
+static int	nflag(char *arg, int *end)
 {
 	int			n;
 	int			j;
@@ -24,7 +24,7 @@ int	nflag(char *arg, int *end)
 	return (0);
 }
 
-int	echo(char **command)
+void	echo(char **command)
 {
 	int	i;
 	int	n;
@@ -52,5 +52,4 @@ int	echo(char **command)
 	}
 	if (n == 0)
 		write(1, "\n", 1);
-	return (0);
 }

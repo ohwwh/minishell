@@ -42,7 +42,7 @@ static void	cd_oldpwd(char *envp[])
 	}
 }
 
-int	cd(char *envp[], char **command)
+void	cd(char *envp[], char **command)
 {
 	char	*temp;
 
@@ -59,9 +59,7 @@ int	cd(char *envp[], char **command)
 		dup2(g_set.temp[1], 1);
 		printf("minishell: cd: %s: %s\n", command[1], strerror(errno));
 		errno = 1;
-		return (errno);
 	}
 	set_pwd(envp);
 	errno = 0;
-	return (0);
 }
