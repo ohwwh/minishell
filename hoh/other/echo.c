@@ -24,6 +24,12 @@ static int	nflag(char *arg, int *end)
 	return (0);
 }
 
+static void	write_n(int n)
+{
+	if (n == 0)
+		write(1, "\n", 1);
+}
+
 void	echo(char **command)
 {
 	int	i;
@@ -50,6 +56,5 @@ void	echo(char **command)
 		}
 		i ++;
 	}
-	if (n == 0)
-		write(1, "\n", 1);
+	write_n(n);
 }
