@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 12:54:27 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/24 11:45:56 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/26 17:50:33 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ void	heredoc_jobqueue(t_list *l, t_node *n)
 	heredoc_jobqueue(l, n->right);
 }
 
-void	stop(char *s, t_tree *t, char *msg)
+void	stop(char *s, t_tree **t, char *msg)
 {
 	if (msg != NULL)
 		print_errmsg(msg);
 	if (s != NULL)
 		free(s);
 	if (t != NULL)
-		destroy_tree(t);
+		destroy_tree(*t);
 	s = NULL;
-	t = NULL;
+	*t = NULL;
 }
 
 void	add_subtree(t_tree *org, t_node *sub)
@@ -62,7 +62,7 @@ int	_parse_body(t_param *p, t_tree *t, bool *flag)
 		tmp = create_prc(p->s, p->i, p->env);
 		if (tmp == NULL)
 		{
-			stop(p->s, t, NULL);
+			stop(p->s, &t, NULL);
 			return (1);
 		}
 		add_subtree(t, tmp);
@@ -72,7 +72,7 @@ int	_parse_body(t_param *p, t_tree *t, bool *flag)
 	{
 		if (*flag)
 		{
-			stop(p->s, t, "|");
+			stop(p->s, &t, "|");
 			return (1);
 		}
 		*flag = true;
@@ -101,6 +101,9 @@ t_tree	*parse(char *s, char *envp[])
 			return (NULL);
 	}
 	free(s);
+	s = NULL;
+	if (flag)
+		stop(s, &t, "|");
 	if (t != NULL)
 		heredoc_jobqueue(t->queue, t->root);
 	return (t);

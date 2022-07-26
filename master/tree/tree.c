@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 16:06:23 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/24 20:28:23 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/26 21:49:52 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ t_node	*create_rd(t_param *p)
 	data[2] = NULL;
 	if (data[1] == NULL || is_redir(data[1]))
 	{
-		print_errmsg(data[1]);
+		if (data[1] == NULL)
+			print_errmsg(&(p->s[*(p->i)]));
+		else
+			print_errmsg(data[1]);
 		destroy_strings(data);
 		return (NULL);
 	}
