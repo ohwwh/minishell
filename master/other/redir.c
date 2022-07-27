@@ -6,7 +6,7 @@
 /*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 12:30:29 by hoh               #+#    #+#             */
-/*   Updated: 2022/07/27 12:30:30 by hoh              ###   ########.fr       */
+/*   Updated: 2022/07/27 15:18:08 by hoh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	redir_out_double(char *file)
 {
 	int	fd;
 
-	fd = open(file, O_WRONLY | O_APPEND);
+	fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	dup2(fd, 1);
 	close(fd);
 }

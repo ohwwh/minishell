@@ -6,7 +6,7 @@
 /*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 12:30:50 by hoh               #+#    #+#             */
-/*   Updated: 2022/07/27 12:30:51 by hoh              ###   ########.fr       */
+/*   Updated: 2022/07/27 15:20:09 by hoh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ int	main(int argc, char *argv[], char *envp[])
 		if (!pstr)
 			pstr = "exit";
 		tree = parse(ft_strdup(pstr), envp_new);
-		add_history(pstr);
+		if (pstr && pstr[0])
+			add_history(pstr);
 		if (tree)
 			execute_tree(tree, &envp_new);
 		free(pstr);

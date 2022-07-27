@@ -6,7 +6,7 @@
 /*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 12:30:08 by hoh               #+#    #+#             */
-/*   Updated: 2022/07/27 12:30:09 by hoh              ###   ########.fr       */
+/*   Updated: 2022/07/27 15:16:51 by hoh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	exit_shell(char *envp[], char **command)
 	else if (command[2])
 	{
 		printf("minishell: exit: too many arguements\n");
-		shell_exit(EPERM, envp);
+		errno = EPERM;
 	}
 	else
 		shell_exit(ft_atoi(command[1]), envp);
