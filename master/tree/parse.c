@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 12:54:27 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/27 11:39:26 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/27 13:55:15 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_tree	*parse(char *s, char *envp[])
 	}
 	free(s);
 	s = NULL;
-	if (flag)
+	if (flag && (t->root && t->root->left))
 		stop(s, &t, "newline");
 	if (t != NULL)
 		heredoc_jobqueue(t->queue, t->root);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+         #
+#    By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/11 12:58:08 by jiheo             #+#    #+#              #
-#    Updated: 2022/07/27 13:51:27 by hoh              ###   ########.fr        #
+#    Updated: 2022/07/27 13:53:13 by jiheo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ LIBFT_DIR = libohw
 LIBFT_INC = $(LIBFT_DIR)/include
 
 RL = readline
-RL_DIR = /Users/hoh/.brew/opt/readline
+RL_DIR = /usr/local/opt/readline
 RL_LIB = $(RL_DIR)/lib
 RL_INC = $(RL_DIR)/include
 
