@@ -81,7 +81,7 @@ int	execute_command(char **envp[], char **command)
 	else if (!ft_strcmp(command[0], "export"))
 		env_export(envp, command);
 	else if (!ft_strcmp(command[0], "pwd"))
-		pwd(command);
+		pwd();
 	else if (!ft_strcmp(command[0], "unset"))
 		unset(envp, command);
 	else if (!ft_strcmp(command[0], "getpid"))

@@ -58,7 +58,6 @@ void	env_export_new(char ***envp, char *new_command)
 int	env_export_string(char ***envp, char *arg)
 {
 	int		idx;
-	char	**new;
 	char	*new_command;
 
 	if (is_valid_export(arg))
@@ -75,12 +74,11 @@ int	env_export_string(char ***envp, char *arg)
 	return (0);
 }
 
-int	env_export(char ***envp, char **command)
+void	env_export(char ***envp, char **command)
 {
 	int		i;
 
 	i = 1;
 	while (command[i])
 		env_export_string(envp, command[i ++]);
-	return (0);
 }

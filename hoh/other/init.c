@@ -16,24 +16,7 @@ static void	ft_clear(char **ret, int index)
 	exit(ENOMEM);
 }
 
-void	init_shlvl(char **new, char *envp[], int idx)
-{
-	int		shlvl;
-	char	*temp;
-	char	*shell;
-
-	temp = cut_value(envp[idx], envp);
-	shlvl = ft_atoi(temp) + 1;
-	free(temp);
-	temp = ft_itoa(shlvl);
-	shell = ft_strjoin("SHLVL=", temp);
-	free(temp);
-	if (!shell)
-		ft_clear(new, idx);
-	new[idx] = shell;
-} // 넣을까 말까......
-
-void	init_shell(char **new, char *envp[], int idx)
+void	init_shell(char **new, int idx)
 {
 	char	*pwd;
 	char	*shell;
@@ -50,8 +33,8 @@ void	init_shell(char **new, char *envp[], int idx)
 void	init_path(char **new, char *envp[], int idx)
 {
 	while (*(envp[idx]) != '=')
-		envp[idx] ++;
-	envp[idx] ++;
+		envp[idx]++;
+	envp[idx]++;
 	g_set.g_path = ft_strdup(envp[idx]);
 	if (!g_set.g_path)
 		ft_clear(new, idx);
@@ -68,9 +51,7 @@ void	init_env(char **envp_new[], char *envp[])
 	while (envp[i])
 	{
 		if (!ft_strncmp("SHELL", envp[i], 5))
-			init_shell(new, envp, i);
-		else if (!ft_strncmp("SHLVL", envp[i], 5))
-			init_shlvl(new, envp, i);
+			init_shell(new, i);
 		else
 		{
 			new_element = ft_strdup(envp[i]);
