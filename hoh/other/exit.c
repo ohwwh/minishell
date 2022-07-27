@@ -19,12 +19,12 @@ int	isstring_string(char *str)
 {
 	if (!str)
 		return (1);
-	while (*str && *str != '=')
-	{
+	//while (*str && *str != '=')
+	//{
 		if (0 + '0' <= *str && 9 + '0' >= *str)
 			return (0);
-		str ++;
-	}
+		//str ++;
+	//}
 	return (1);
 }
 
@@ -38,11 +38,9 @@ void	shell_exit(int status, char *envp[])
 
 void	exit_shell(char *envp[], char **command)
 {
+	printf("exit\n");
 	if (!command[1])
-	{
-		printf("exit\n");
 		shell_exit(0, envp);
-	}
 	else if (!isdigit_string(command[1]))
 	{
 		printf("minishell: exit: %s: numeric argument required\n", command[1]);
@@ -51,11 +49,8 @@ void	exit_shell(char *envp[], char **command)
 	else if (command[2])
 	{
 		printf("minishell: exit: too many arguements\n");
-		shell_exit(EPERM, envp);
+		errno = 1;
 	}
 	else
-	{
-		printf("exit\n");
 		shell_exit(ft_atoi(command[1]), envp);
-	}
 }

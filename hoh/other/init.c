@@ -16,26 +16,28 @@ static void	ft_clear(char **ret, int index)
 	exit(ENOMEM);
 }
 
-void	init_shell(char **new, char *envp[], int idx)
+void	init_shell(char **new, int idx)
 {
 	char	*pwd;
 	char	*shell;
 
 	pwd = getcwd(0, 1);
 	shell = ft_strjoin("SHELL=", pwd);
+	free(pwd);
+	pwd = 0;
 	if (!shell)
 		ft_clear(new, idx);
 	new[idx] = shell;
-	free(pwd);
-	pwd = 0;
 }
 
-void	init_path(char *envp)
+void	init_path(char **new, char *envp[], int idx)
 {
-	while (*envp != '=')
-		envp ++;
-	envp ++;
-	g_set.g_path = ft_strdup(envp);
+	while (*(envp[idx]) != '=')
+		envp[idx]++;
+	envp[idx]++;
+	g_set.g_path = ft_strdup(envp[idx]);
+	if (!g_set.g_path)
+		ft_clear(new, idx);
 }
 
 void	init_env(char **envp_new[], char *envp[])
@@ -49,15 +51,15 @@ void	init_env(char **envp_new[], char *envp[])
 	while (envp[i])
 	{
 		if (!ft_strncmp("SHELL", envp[i], 5))
-			init_shell(new, envp, i);
+			init_shell(new, i);
 		else
 		{
 			new_element = ft_strdup(envp[i]);
+			if (!new_element)
+				ft_clear(new, i);
 			new[i] = new_element;
 			if (!ft_strncmp("PATH", envp[i], 4))
-				init_path(envp[i]);
-			if (!g_set.g_path || !new_element)
-				ft_clear(new, i);
+				init_path(new, envp, i);
 		}
 		i ++;
 	}
@@ -68,15 +70,13 @@ void	init_env(char **envp_new[], char *envp[])
 void	init_term(char **envp_new[], char *envp[])
 {
 	struct termios	term;
-	char			dummy;
 
-	dummy = 'c';
-	g_set.g_path = &dummy;
+	g_set.g_path = 0;
 	g_set.flag = 0;
 	g_set.errno_temp = 0;
-	tcgetattr(STDOUT_FILENO, &term);
+	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDOUT_FILENO, TCSANOW, &term);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	g_set.temp[0] = dup(0);
 	g_set.temp[1] = dup(1);
 	init_env(envp_new, envp);

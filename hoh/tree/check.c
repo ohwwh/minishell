@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/15 12:45:07 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/15 13:16:08 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/24 11:33:52 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,29 +18,16 @@ bool	is_redir(char *s)
 			ft_strcmp(s, "<") == 0 || ft_strcmp(s, ">") == 0);
 }
 
-int	check_syntax(t_list *l)
+bool	is_redir_char(char c)
 {
-	t_list_node	*n;
-	bool		flag;
+	return (c == '<' || c == '>');
+}
 
-	n = l->front;
-	flag = true;
-	if (l == NULL || l->front == NULL)
-		return (0);
-	while (n)
-	{
-		if (is_redir((char *)n->content))
-		{
-			if (flag)
-				flag = false;
-			else
-			{
-				// syntax error
-				printf("list syntax error\n");
-				return (1);
-			}
-		}
-		n = n->next;
-	}
+int	check_redir(char *s, int *i)
+{
+	if (s[*i] == s[*i + 1])
+		(*i)++;
+	if (s[*i + 1] && (is_redir_char(s[*i + 1]) || s[*i + 1] == '|'))
+		return (1);
 	return (0);
 }

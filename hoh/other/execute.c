@@ -2,7 +2,7 @@
 
 extern t_global_set	g_set;
 
-int	command_with_path(char *envp[], char **command)
+static int	command_with_path(char *envp[], char **command)
 {
 	int	errno_org;
 
@@ -26,6 +26,18 @@ int	command_with_path(char *envp[], char **command)
 	return (0);
 }
 
+static void	print_fail(char **paths, char *org, int i)
+{
+	dup2(g_set.temp[1], 1);
+	if (!paths || !paths[i])
+	{
+		printf("minishell: %s: command not found\n", org);
+		errno = 127;
+	}
+	else
+		printf("minishell: %s: %s\n", org, strerror(errno));
+}
+
 int	execute_fork(char *envp[], char **command)
 {
 	char	**paths;
@@ -46,14 +58,7 @@ int	execute_fork(char *envp[], char **command)
 		if (errno != 2)
 			break ;
 	}
-	dup2(g_set.temp[1], 1);
-	if (!paths || !paths[i])
-	{
-		printf("minishell: %s: command not found\n", org);
-		errno = 127;
-	}
-	else
-		printf("minishell: %s: %s\n", org, strerror(errno));
+	print_fail(paths, org, i);
 	free_arr(paths);
 	return (0);
 }
@@ -76,7 +81,7 @@ int	execute_command(char **envp[], char **command)
 	else if (!ft_strcmp(command[0], "export"))
 		env_export(envp, command);
 	else if (!ft_strcmp(command[0], "pwd"))
-		pwd(command);
+		pwd();
 	else if (!ft_strcmp(command[0], "unset"))
 		unset(envp, command);
 	else if (!ft_strcmp(command[0], "getpid"))
@@ -84,4 +89,15 @@ int	execute_command(char **envp[], char **command)
 	else
 		execute_fork(*envp, command);
 	return (ret);
+}
+
+void	execute_tree(t_tree *tree, char **envp[])
+{
+	tree_heredoc(tree->queue, *envp);
+	if (g_set.flag == 3)
+		return ;
+	if (!tree->root->right)
+		single_command(tree->root->left, envp);
+	else
+		execute_pipe(tree->root, envp, 0);
 }

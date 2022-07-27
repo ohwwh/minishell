@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 22:08:06 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/15 11:56:57 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/17 11:39:20 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,6 @@ t_tree	*new_tree(void)
 	if (t == NULL)
 		return (t);
 	t->root = new_node(PIPE, NULL);
+	t->queue = ft_lstnew();
 	return (t);
 }
