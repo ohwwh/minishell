@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:30:23 by hoh               #+#    #+#             */
+/*   Updated: 2022/07/27 16:09:58 by hoh              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern t_global_set	g_set;
@@ -27,7 +39,7 @@ void	execute_pipe_parent(t_node *node, char **envp[], int *fd, int pid_1)
 			g_set.errno_temp = WEXITSTATUS(status);
 		}
 		else
-			front_command(node->left, envp, fd);
+			back_command(node->right, envp, fd);
 	}
 }
 
@@ -39,7 +51,7 @@ void	execute_pipe_child(t_node *node, char **envp[], int *fd, int *former_fd)
 		close(former_fd[1]);
 		close(former_fd[0]);
 	}
-	back_command(node->right, envp, fd);
+	front_command(node->left, envp, fd);
 }
 
 void	execute_pipe(t_node *node, char **envp[], int *former_fd)
