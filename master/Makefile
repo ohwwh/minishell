@@ -6,7 +6,7 @@
 #    By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/11 12:58:08 by jiheo             #+#    #+#              #
-#    Updated: 2022/07/27 15:14:52 by hoh              ###   ########.fr        #
+#    Updated: 2022/07/27 15:24:51 by hoh              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,20 +37,17 @@ LIB = -l$(LIBFT) -l$(RL) -L$(RL_LIB) -L$(LIBFT_DIR)
 %.o: %.c
 	$(CC) -c $(FLAG) $(INC) $< -o $@
 
-$(PROJECT_NAME): compilelib $(OBJS)
+$(PROJECT_NAME): $(OBJS)
+	make -C $(LIBFT_DIR)
 	$(CC) $(FLAG) $(OBJS) $(LIB) -o $(PROJECT_NAME)
 
 all: $(PROJECT_NAME)
 
-compilelib:
-	cd $(LIBFT_DIR) && make
-	cd ..
-
 clean:
-	rm -rf *.o **/*.o
+	rm -rf $(OBJS)
 
 fclean: clean
-	rm $(PROJECT_NAME)
+	rm -rf $(PROJECT_NAME)
 
 re: fclean
 	make all
