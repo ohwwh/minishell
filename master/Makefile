@@ -27,7 +27,7 @@ LIBFT_DIR = libohw
 LIBFT_INC = $(LIBFT_DIR)/include
 
 RL = readline
-RL_DIR = /Users/jiheo/.brew/opt/readline
+RL_DIR = /Users/hoh/.brew/opt/readline
 RL_LIB = $(RL_DIR)/lib
 RL_INC = $(RL_DIR)/include
 
