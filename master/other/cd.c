@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:29:46 by hoh               #+#    #+#             */
+/*   Updated: 2022/07/27 12:29:47 by hoh              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern t_global_set	g_set;
@@ -8,6 +20,8 @@ static void	set_pwd(char *envp[])
 	char	*temp2;
 	int		pwd_idx;
 
+	if (is_exist(envp, "OLDPWD") == -1)
+		return ;
 	pwd_idx = is_exist(envp, "PWD");
 	if (pwd_idx != -1)
 	{
@@ -42,7 +56,7 @@ static void	cd_oldpwd(char *envp[])
 	}
 }
 
-int	cd(char *envp[], char **command)
+void	cd(char *envp[], char **command)
 {
 	char	*temp;
 
@@ -59,9 +73,7 @@ int	cd(char *envp[], char **command)
 		dup2(g_set.temp[1], 1);
 		printf("minishell: cd: %s: %s\n", command[1], strerror(errno));
 		errno = 1;
-		return (errno);
 	}
 	set_pwd(envp);
 	errno = 0;
-	return (0);
 }

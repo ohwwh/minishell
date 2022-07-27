@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:30:08 by hoh               #+#    #+#             */
+/*   Updated: 2022/07/27 12:30:09 by hoh              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern t_global_set	g_set;
@@ -17,13 +29,21 @@ int	isdigit_string(char *str)
 
 int	isstring_string(char *str)
 {
+	int	i;
+
+	i = 0;
 	if (!str)
 		return (1);
-	while (*str && *str != '=')
+	while (str[i] && str[i] != '=')
 	{
-		if (0 + '0' <= *str && 9 + '0' >= *str)
+		if (0 + '0' <= str[i] && 9 + '0' >= str[i])
 			return (0);
-		str ++;
+		else
+		{
+			if (i == 0)
+				return (1);
+		}
+		i ++;
 	}
 	return (1);
 }
@@ -38,11 +58,9 @@ void	shell_exit(int status, char *envp[])
 
 void	exit_shell(char *envp[], char **command)
 {
+	printf("exit\n");
 	if (!command[1])
-	{
-		printf("exit\n");
 		shell_exit(0, envp);
-	}
 	else if (!isdigit_string(command[1]))
 	{
 		printf("minishell: exit: %s: numeric argument required\n", command[1]);
@@ -54,8 +72,5 @@ void	exit_shell(char *envp[], char **command)
 		shell_exit(EPERM, envp);
 	}
 	else
-	{
-		printf("exit\n");
 		shell_exit(ft_atoi(command[1]), envp);
-	}
 }

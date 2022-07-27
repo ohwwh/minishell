@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:30:03 by hoh               #+#    #+#             */
+/*   Updated: 2022/07/27 12:30:04 by hoh              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	env(char *envp[], char **command)
+void	env(char *envp[], char **command)
 {
 	int	i;
 
@@ -8,9 +20,9 @@ int	env(char *envp[], char **command)
 	if (command[1])
 	{
 		errno = EPERM;
-		return (write(1, "env: too many arguments\n", 24));
+		write(1, "env: too many arguments\n", 24);
+		return ;
 	}
 	while (envp[i])
 		printf("%s\n", envp[i ++]);
-	return (0);
 }

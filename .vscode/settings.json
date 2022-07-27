@@ -3,7 +3,6 @@
         "ostream": "c",
         "libft.h": "c",
         "__node_handle": "c",
-
-
+        "history.h": "c"
     }
 }
