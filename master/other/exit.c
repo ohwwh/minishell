@@ -4,6 +4,8 @@ extern t_global_set	g_set;
 
 int	isdigit_string(char *str)
 {
+	if (!str)
+		return (1);
 	while (*str)
 	{
 		if (0 + '0' > *str || 9 + '0' < *str)
@@ -15,7 +17,9 @@ int	isdigit_string(char *str)
 
 int	isstring_string(char *str)
 {
-	while (*str)
+	if (!str)
+		return (1);
+	while (*str && *str != '=')
 	{
 		if (0 + '0' <= *str && 9 + '0' >= *str)
 			return (0);

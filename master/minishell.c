@@ -36,15 +36,10 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
-static void	sig_handler(int signum)
+void	check_args(int argc, char *argv[])
 {
-	if (signum == SIGINT)
-	{
-		printf("\n");
-		rl_replace_line("", 1);
-		rl_on_new_line();
-		rl_redisplay();
-	}
+	if (argc != 1 || argv == NULL)
+		exit(EPERM);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -53,24 +48,24 @@ int	main(int argc, char *argv[], char *envp[])
 	t_tree	*tree;
 	char	**envp_new;
 
+	check_args(argc, argv);
 	init_term(&envp_new, envp);
 	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
+		g_set.flag = 0;
 		dup2(g_set.temp[0], 0);
 		dup2(g_set.temp[1], 1);
-		pstr = readline("minishell-1.0$ ");
+		pstr = readline("minishell-3.0$ ");
+		g_set.flag = 1;
 		if (!pstr)
 			pstr = "exit";
 		tree = parse(ft_strdup(pstr), envp_new);
 		add_history(pstr);
 		if (tree)
-			execute_tree(tree->root, &envp_new);
+			execute_tree(tree, &envp_new);
 		free(pstr);
 		destroy_tree(tree);
-		tree = 0;
 	}
-	free_arr(envp_new);
-	free(g_set.g_path);
 }

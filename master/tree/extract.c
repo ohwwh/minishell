@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/08 17:06:40 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/15 12:00:08 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/19 12:48:34 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,7 @@ char	*extract(char *s, int *p_from, char *envp[])
 		return (extract_line(s, p_from, envp));
 	else if (s[*p_from] && !is_blank(s[*p_from]) && !is_sep(s[*p_from]))
 		return (extract_word(s, p_from, envp));
+	else if (s[*p_from] == '<' || s[*p_from] == '>')
+		return (extract_rd(s, p_from));
 	return (NULL);
 }

@@ -61,9 +61,15 @@ typedef struct s_param
 }	t_param;
 
 void	init_term(char **envp_new[], char *envp[]);
+<<<<<<< HEAD
 void	cd(char *envp[], char **command);
 void	pwd(void);
 void	echo(char **command);
+=======
+int		cd(char *envp[], char **command);
+int		pwd(char **command);
+int		echo(char **command);
+>>>>>>> c8c814aac00aeed6a721b2bc04f894f81c32e9b6
 void	shell_exit(int status, char *envp[]);
 void	exit_shell(char *envp[], char **command);
 int		isdigit_string(char *str);
