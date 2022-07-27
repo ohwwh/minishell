@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 12:54:27 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/26 17:50:33 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/27 10:39:20 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	heredoc_jobqueue(t_list *l, t_node *n)
 
 void	stop(char *s, t_tree **t, char *msg)
 {
-	if (msg != NULL)
-		print_errmsg(msg);
+	print_errmsg(msg);
 	if (s != NULL)
 		free(s);
 	if (t != NULL)
@@ -103,7 +102,7 @@ t_tree	*parse(char *s, char *envp[])
 	free(s);
 	s = NULL;
 	if (flag)
-		stop(s, &t, "|");
+		stop(s, &t, NULL);
 	if (t != NULL)
 		heredoc_jobqueue(t->queue, t->root);
 	return (t);
