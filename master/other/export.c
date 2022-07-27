@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:30:10 by hoh               #+#    #+#             */
+/*   Updated: 2022/07/27 12:30:11 by hoh              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 extern t_global_set	g_set;
@@ -74,12 +86,11 @@ int	env_export_string(char ***envp, char *arg)
 	return (0);
 }
 
-int	env_export(char ***envp, char **command)
+void	env_export(char ***envp, char **command)
 {
 	int		i;
 
 	i = 1;
 	while (command[i])
 		env_export_string(envp, command[i ++]);
-	return (0);
 }

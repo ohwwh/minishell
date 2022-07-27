@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:29:59 by hoh               #+#    #+#             */
+/*   Updated: 2022/07/27 12:30:00 by hoh              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	nflag(int i, char *arg, int *end)
+static int	nflag(char *arg, int *end)
 {
 	int			n;
 	int			j;
 
 	n = 0;
-	if (i == 1 && !(*end) && arg[0] == '-')
+	if (!(*end) && arg[0] == '-')
 	{
 		j = 1;
 		while (arg[j])
@@ -24,7 +36,13 @@ int	nflag(int i, char *arg, int *end)
 	return (0);
 }
 
-int	echo(char **command)
+static void	write_n(int n)
+{
+	if (n == 0)
+		write(1, "\n", 1);
+}
+
+void	echo(char **command)
 {
 	int	i;
 	int	n;
@@ -36,17 +54,19 @@ int	echo(char **command)
 	end = 0;
 	while (command[i])
 	{
-		isflag = nflag(i, command[i], &end);
-		n += isflag;
-		if (!isflag)
+		if (isflag != -1)
+		{
+			isflag = nflag(command[i], &end);
+			n += isflag;
+		}
+		if (isflag <= 0)
 		{
 			ft_putstr_fd(command[i], 1);
 			if (command[i + 1])
 				write(1, " ", 1);
+			isflag = -1;
 		}
 		i ++;
 	}
-	if (n == 0)
-		write(1, "\n", 1);
-	return (0);
+	write_n(n);
 }

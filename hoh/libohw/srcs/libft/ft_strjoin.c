@@ -12,40 +12,30 @@
 
 #include "libft.h"
 
-static void	ft_strcat(char *s1, char *s2, size_t s1_len)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	idx;
+	char	*ret;
+	int		i;
 
-	idx = 0;
-	while (s2[idx])
+	if (!s1 | !s2)
+		return (0);
+	i = 0;
+	ret = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (ret)
 	{
-		s1[s1_len + idx] = s2[idx];
-		idx++;
+		while (*s1)
+		{
+			ret[i] = *s1;
+			i ++;
+			s1 ++;
+		}
+		while (*s2)
+		{
+			ret[i] = *s2;
+			i ++;
+			s2 ++;
+		}
+		ret[i] = 0;
 	}
-	s1[s1_len + idx] = 0;
-}
-
-char	*ft_strjoin(char *s1, char *s2)
-{
-	char	*res;
-	size_t	s1_len;
-	size_t	s2_len;
-
-	if (s1 == NULL || s2 == NULL)
-	{
-		if (s1 != NULL)
-			return (ft_strdup(s1));
-		else if (s2 != NULL)
-			return (ft_strdup(s2));
-		return (NULL);
-	}
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
-	res = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
-	if (res == NULL)
-		return (NULL);
-	res[0] = 0;
-	ft_strcat(res, s1, 0);
-	ft_strcat(res, s2, ft_strlen(res));
-	return (res);
+	return (ret);
 }

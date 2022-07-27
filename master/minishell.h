@@ -1,21 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/27 12:30:52 by hoh               #+#    #+#             */
+/*   Updated: 2022/07/27 12:31:31 by hoh              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
-#define MINISHELL_H
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <string.h>
-#include <signal.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <termios.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/ioctl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "libohw/includes/libft.h"
+# define MINISHELL_H
+# include <stdio.h>
+# include <stdlib.h>
+# include <stdbool.h>
+# include <dirent.h>
+# include <unistd.h>
+# include <string.h>
+# include <signal.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <termios.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <sys/ioctl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "libohw/includes/libft.h"
 
 typedef struct s_global_set{
 	char	*g_path;
@@ -61,9 +73,9 @@ typedef struct s_param
 }	t_param;
 
 void	init_term(char **envp_new[], char *envp[]);
-int		cd(char *envp[], char **command);
-int		pwd(void);
-int		echo(char **command);
+void	cd(char *envp[], char **command);
+void	pwd(void);
+void	echo(char **command);
 void	shell_exit(int status, char *envp[]);
 void	exit_shell(char *envp[], char **command);
 int		isdigit_string(char *str);
@@ -81,9 +93,9 @@ void	front_command(t_node *node, char **envp[], int *fd);
 int		execute_command(char **envp[], char **command);
 int		execute_fork(char *envp[], char **command);
 void	free_arr(char **arr);
-int		env_export(char ***envp, char **command);
+void	env_export(char ***envp, char **command);
 int		env_export_string(char ***envp, char *command);
-int		env(char *envp[], char **command);
+void	env(char *envp[], char **command);
 int		count_env(char *envp[]);
 void	init_env(char **envp_new[], char *envp[]);
 int		is_exist(char *envp[], char *key);
