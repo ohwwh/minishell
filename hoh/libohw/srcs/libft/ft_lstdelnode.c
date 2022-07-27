@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_checkdigit_address.c                            :+:      :+:    :+:   */
+/*   ft_lstdelnode.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/06 14:45:22 by ohw               #+#    #+#             */
-/*   Updated: 2022/07/27 13:17:24 by hoh              ###   ########.fr       */
+/*   Created: 2022/07/27 13:26:06 by hoh               #+#    #+#             */
+/*   Updated: 2022/07/27 13:26:13 by hoh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-static int	check(unsigned long n, int digit)
+void	ft_lstdelnode(t_list **lst, t_list *target, void (*del)(void *))
 {
-	if (n == 0)
-		return (digit);
-	return (check(n / 16, digit + 1));
-}
+	t_list	*delnode;
+	t_list	*prev;
 
-int	ft_checkdigit_address(void *p)
-{
-	unsigned long	n;
-
-	n = (unsigned long)p;
-	if (!n)
-		return (1);
-	else
-		return (check(n, 0));
+	prev = 0;
+	delnode = *lst;
+	while (delnode)
+	{
+		if (delnode == target)
+		{
+			if (prev)
+				prev->next = delnode->next;
+			else
+				*lst = delnode->next;
+			del(delnode -> content);
+			free(delnode);
+			break ;
+		}
+		prev = delnode;
+		delnode = delnode->next;
+	}
 }

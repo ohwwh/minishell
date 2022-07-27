@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohw <ohw@student.42seoul.kr>               +#+  +:+       +#+        */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/06 14:59:03 by ohw               #+#    #+#             */
-/*   Updated: 2022/02/15 22:29:04 by ohw              ###   ########.fr       */
+/*   Updated: 2022/07/27 13:24:42 by hoh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ extern int	non_nbr(va_list *app, const char **fmt);
 int	ft_printf(const char *f, ...)
 {
 	va_list	ap;
-    int		ret;
+	int		ret;
 
 	va_start(ap, f);
 	ret = 0;

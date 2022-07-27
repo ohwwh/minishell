@@ -1,41 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ohw <ohw@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/20 15:09:55 by ohw               #+#    #+#             */
-/*   Updated: 2021/11/30 20:28:16 by hoh              ###   ########.fr       */
+/*   Created: 2021/11/23 16:37:40 by ohw               #+#    #+#             */
+/*   Updated: 2021/11/30 20:22:21 by hoh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	char	*ret;
-	int		i;
+	t_list	*ret;
+	t_list	*new;
 
-	if (!s1 | !s2)
-		return (0);
-	i = 0;
-	ret = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (ret)
+	ret = 0;
+	while (lst)
 	{
-		while (*s1)
+		new = ft_lstnew(f(lst -> content));
+		if (new)
+			ft_lstadd_back(&ret, new);
+		else
 		{
-			ret[i] = *s1;
-			i ++;
-			s1 ++;
+			ft_lstclear(&ret, del);
+			return (ret);
 		}
-		while (*s2)
-		{
-			ret[i] = *s2;
-			i ++;
-			s2 ++;
-		}
-		ret[i] = 0;
+		lst = lst -> next;
 	}
 	return (ret);
 }

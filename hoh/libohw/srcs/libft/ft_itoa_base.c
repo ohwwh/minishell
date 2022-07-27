@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*   ft_itoa_base.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hoh <marvin@42.fr>                         +#+  +:+       +#+        */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/16 18:41:44 by hoh               #+#    #+#             */
-/*   Updated: 2021/11/30 20:28:34 by hoh              ###   ########.fr       */
+/*   Created: 2022/07/27 13:25:39 by hoh               #+#    #+#             */
+/*   Updated: 2022/07/27 13:27:16 by hoh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,20 @@ char	*ft_itoa_base(int n, int base, int capital)
 	else
 		temp = -(long)n;
 	ret = (char *)malloc(sizeof(char) * (buf = getbuf(n, base)));
-	if (ret)
+	ret[(buf--) - 1] = 0;
+	while (temp)
 	{
-		ret[(buf--) - 1] = 0;
-		while (temp)
-		{
-			if (temp % 10 >= 10 && !capital)
-				ret[(buf--) - 1] = temp % base + 87;
-			else if (temp % 10 >= 10 && capital)
-				ret[(buf--) - 1] = temp % base + 55;
-			else
-				ret[(buf--) - 1] = temp % base + '0';
-			temp /= base;
-		}
-		if (n < 0)
-			ret[buf - 1] = '-';
-		else if (n == 0)
-			ret[buf - 1] = '0';
+		if (temp % 10 >= 10 && !capital)
+			ret[(buf--) - 1] = temp % base + 87;
+		else if (temp % 10 >= 10 && capital)
+			ret[(buf--) - 1] = temp % base + 55;
+		else
+			ret[(buf--) - 1] = temp % base + '0';
+		temp /= base;
 	}
+	if (n < 0)
+		ret[buf - 1] = '-';
+	else if (n == 0)
+		ret[buf - 1] = '0';
 	return (ret);
 }
