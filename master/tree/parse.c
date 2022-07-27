@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 12:54:27 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/27 10:39:20 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/27 11:39:26 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	heredoc_jobqueue(t_list *l, t_node *n)
 
 void	stop(char *s, t_tree **t, char *msg)
 {
-	print_errmsg(msg);
+	if (msg != NULL)
+		print_errmsg(msg);
 	if (s != NULL)
 		free(s);
 	if (t != NULL)
@@ -102,7 +103,7 @@ t_tree	*parse(char *s, char *envp[])
 	free(s);
 	s = NULL;
 	if (flag)
-		stop(s, &t, NULL);
+		stop(s, &t, "newline");
 	if (t != NULL)
 		heredoc_jobqueue(t->queue, t->root);
 	return (t);
