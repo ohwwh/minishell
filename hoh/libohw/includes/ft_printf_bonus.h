@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_printf_bonus.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohw <ohw@student.42seoul.kr>               +#+  +:+       +#+        */
+/*   By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 17:47:29 by ohw               #+#    #+#             */
-/*   Updated: 2022/01/08 14:54:36 by ohw              ###   ########.fr       */
+/*   Updated: 2022/07/27 13:16:17 by hoh              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#ifndef FT_PRINTF_BONUS_H
+# define FT_PRINTF_BONUS_H
 # include "libft.h"
 # include <stdarg.h>
 
