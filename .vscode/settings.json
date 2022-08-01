@@ -3,6 +3,7 @@
         "ostream": "c",
         "libft.h": "c",
         "__node_handle": "c",
-        "readline.h": "c"
+
+
     }
 }

@@ -61,15 +61,9 @@ typedef struct s_param
 }	t_param;
 
 void	init_term(char **envp_new[], char *envp[]);
-<<<<<<< HEAD
-void	cd(char *envp[], char **command);
-void	pwd(void);
-void	echo(char **command);
-=======
 int		cd(char *envp[], char **command);
-int		pwd(char **command);
+int		pwd(void);
 int		echo(char **command);
->>>>>>> master
 void	shell_exit(int status, char *envp[]);
 void	exit_shell(char *envp[], char **command);
 int		isdigit_string(char *str);
@@ -87,13 +81,9 @@ void	front_command(t_node *node, char **envp[], int *fd);
 int		execute_command(char **envp[], char **command);
 int		execute_fork(char *envp[], char **command);
 void	free_arr(char **arr);
-<<<<<<< HEAD
-void	env_export(char ***envp, char **command);
-=======
 int		env_export(char ***envp, char **command);
->>>>>>> master
 int		env_export_string(char ***envp, char *command);
-void	env(char *envp[], char **command);
+int		env(char *envp[], char **command);
 int		count_env(char *envp[]);
 void	init_env(char **envp_new[], char *envp[]);
 int		is_exist(char *envp[], char *key);
