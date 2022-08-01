@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+         #
+#    By: hoh <hoh@student.42.kr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/11 12:58:08 by jiheo             #+#    #+#              #
-#    Updated: 2022/07/24 11:57:50 by jiheo            ###   ########.fr        #
+#    Updated: 2022/07/27 15:24:51 by hoh              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ LIBFT_DIR = libohw
 LIBFT_INC = $(LIBFT_DIR)/include
 
 RL = readline
-RL_DIR = /opt/homebrew/opt/readline
+RL_DIR = /Users/hoh/.brew/opt/readline
 RL_LIB = $(RL_DIR)/lib
 RL_INC = $(RL_DIR)/include
 
@@ -37,20 +37,17 @@ LIB = -l$(LIBFT) -l$(RL) -L$(RL_LIB) -L$(LIBFT_DIR)
 %.o: %.c
 	$(CC) -c $(FLAG) $(INC) $< -o $@
 
-$(PROJECT_NAME): compilelib $(OBJS)
+$(PROJECT_NAME): $(OBJS)
+	make -C $(LIBFT_DIR)
 	$(CC) $(FLAG) $(OBJS) $(LIB) -o $(PROJECT_NAME)
 
 all: $(PROJECT_NAME)
 
-compilelib:
-	cd $(LIBFT_DIR) && make
-	cd ..
-
 clean:
-	rm -rf *.o **/*.o
+	rm -rf $(OBJS)
 
 fclean: clean
-	rm $(PROJECT_NAME)
+	rm -rf $(PROJECT_NAME)
 
 re: fclean
 	make all

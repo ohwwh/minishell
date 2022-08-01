@@ -6,7 +6,7 @@
 /*   By: jiheo <jiheo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/09 16:01:45 by jiheo             #+#    #+#             */
-/*   Updated: 2022/07/24 20:29:24 by jiheo            ###   ########.fr       */
+/*   Updated: 2022/07/26 17:19:13 by jiheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static
 char	*ts_home(int *i, char *envp[])
 {
 	(*i)++;
-	return (ft_strdup(get_value(envp, "HOME")));
+	return (get_value(envp, "HOME"));
 }
 
 static
@@ -61,7 +61,7 @@ char	*_substr(char *s, int *i)
 	int	s_i;
 
 	s_i = *i;
-	while (s[*i] && s[*i] != '$')
+	while (s[*i] && s[*i] != '$' && s[*i] != '~')
 		(*i)++;
 	return (ft_substr(s, s_i, *i - s_i));
 }
